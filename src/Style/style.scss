@@ -1,0 +1,507 @@
+@import './animation.scss';
+
+
+body {
+
+    width: 100%;
+    background-color: #e7e5e5;
+    overflow-x: hidden;
+}
+
+.NavBar_container {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    box-shadow: 3px 3px 3px 1px lightgray;
+    z-index: 10;
+
+    .first_sec {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 100%;
+        flex-grow: 3;
+        width: 10%;
+
+        .logo {
+            width: 150px;
+            height: auto;
+        }
+
+        .menu_btn {
+            width: 70px;
+            cursor: pointer;
+            transition: .5s;
+
+            &:hover,
+            &:active {
+
+                opacity: .5;
+
+            }
+        }
+    }
+
+    .second_sec {
+        text-align: center;
+        flex-grow: 4;
+        width: 50%;
+        padding: 10px;
+        border-left: 1px solid lightgray;
+        border-right: 1px solid lightgray;
+
+        .search {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+            width: 90%;
+            padding: 20px;
+            padding-left: 35px;
+            background-color: #e7e5e5;
+            border-radius: 15px;
+            border: 0;
+        }
+
+        #search_icon {
+            position: relative;
+            left: 30px;
+        }
+
+        @media screen and (max-width: 1190px) {
+            width: 30%;
+        }
+
+        @media screen and (max-width: 910px) {
+            width: 20%;
+        }
+
+
+
+
+    }
+
+    .third_sec {
+
+        flex-grow: 3;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .library_status {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 900;
+            width: 30%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #a4f1a4;
+            box-shadow: 1px 1px 1px 1px lightgray;
+        }
+
+        .librarian_status {
+            background-color: #4682B4;
+            color: white;
+        }
+
+        #bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 40px;
+            transition: .5s;
+
+            &:hover {
+                color: gray;
+                transform: translateY(-10px);
+            }
+        }
+
+    }
+
+    .secondsec_resize {
+        font-size: 30px;
+    }
+
+    @media screen and (max-width: 850px) {}
+}
+
+
+.MenuItem {
+    position: fixed;
+    height: 100%;
+    background-color: white;
+    top: 101px;
+    left: -500px;
+    width: 300px;
+    box-shadow: 0px 3px 3px 2px lightgray;
+    z-index: 10;
+
+    .profile_sec {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        justify-content: space-evenly;
+        margin-top: 10px;
+        flex-wrap: wrap;
+        padding: 5px;
+
+        .profile_img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+
+        }
+
+        .Account_Detail {
+            font-size: small;
+            font-weight: 700;
+        }
+    }
+
+    .menu_sec {
+        margin-top: 10px;
+        font-weight: 800;
+        font-size: smaller;
+        height: 550px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        justify-content: space-around;
+
+        .link_page {
+            width: 80%;
+            background-color: rgb(105, 105, 105);
+            text-decoration: none;
+            color: white;
+
+            padding: 15px;
+            border-radius: 10px;
+            transition: .5s;
+
+            &:hover,
+            &:active {
+                color: black;
+                background-color: lightgrey;
+            }
+        }
+
+        p {
+            background-color: lightcoral;
+            color: white;
+            padding: 15px;
+            width: 80%;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: .5s;
+
+            &:hover {
+
+                background-color: red;
+            }
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        width: 220px;
+    }
+
+}
+
+.Notification_container {
+    position: fixed;
+    overflow: auto;
+    max-height: 500px;
+    top: 11.5%;
+    user-select: none;
+    right: 0;
+    width: 16%;
+    padding: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+
+    .notification_content {
+        width: 100%;
+        border-bottom: 1px solid black;
+
+        .title {
+            overflow-wrap: break-word;
+            max-width: 200px;
+
+        }
+    }
+
+    h2 {
+        padding: 10px;
+        text-align: center;
+        background-color: rgb(99, 99, 99);
+        color: white;
+    }
+}
+
+//Login_container
+.Login_container {
+    background-color: #65A3D8;
+
+    height: 100vh;
+
+    .Login_form {
+        font-weight: 800;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        background-color: white;
+        transform: translate(30vw, 10vh);
+        width: 40%;
+        border-radius: 25px;
+        height: 80vh;
+        box-shadow: 0px 1px 1px 1px lightgray;
+
+        .logo {
+            margin-top: -150px;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+
+        }
+
+        input {
+            margin-top: -100px;
+            width: 80%;
+            padding: 20px;
+            background-color: lightgrey;
+            border-radius: 25px;
+
+        }
+
+        #login-btn {
+            background-color: #4682B4;
+            color: white;
+            cursor: pointer;
+            transition: .5s;
+
+            &:hover {
+                color: black;
+                background-color: white;
+                border: 1px solid black;
+
+            }
+        }
+    }
+}
+
+.loading_container {
+    z-index: 2;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+
+    .loading {
+        width: 200px;
+        height: 200px;
+    }
+
+}
+
+//Pages
+
+.Home_page {
+    height: 100%;
+    z-index: 1;
+    color: black;
+    background-color: white;
+    width: 84%;
+    height: 100%;
+    margin-top: 10px;
+    transition: .5s;
+
+    .Scroll_container {
+        height: 400px;
+        width: 80%;
+        background-color: #65A3D8;
+
+        h2 {
+            position: relative;
+            font-size: 30px;
+            font-weight: 900;
+            margin-left: 80px;
+        }
+
+        .book_container {
+            position: absolute;
+            margin-left: 20px;
+            height: 300px;
+            width: 1000px;
+            overflow: auto;
+            white-space: nowrap;
+            padding: 10px;
+            background-color: #a4f1a4;
+
+            .book {
+                position: absolute;
+                top: 0;
+                margin-right: 10px;
+                font-size: medium;
+                font-weight: 500;
+                width: 200px;
+                background-color: #e7e5e5;
+
+                .book_cover {
+                    width: 200px;
+                    height: 250px;
+                    object-fit: cover;
+                }
+
+                .book_title {
+                    margin-top: 10px;
+                    height: 45px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    width: 150px;
+
+                }
+            }
+        }
+    }
+    .section_title {
+        margin-bottom: 20px;
+        font-size: xx-large;
+        font-weight: 900;
+        text-align: center;
+    }
+
+
+}
+
+//Swiper Style
+
+.slider_container {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    width: 95%;
+   
+    .title {
+        font-size: xx-large;
+        font-weight: 900;
+    }
+
+    .slider {
+
+        padding: 10px;
+
+        .swiper_slide {
+            width: 200px;
+
+            .book {
+                width: 200px;
+
+                .book_title {
+                    
+                    width: 200px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+
+                }
+
+                .book_cover {
+                    object-fit: cover;
+                    width: 200px;
+                    height: 280px;
+                }
+            }
+        }
+
+    }
+
+
+}
+
+.Filter_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    z-index: 9;
+    background-color: white;
+    padding: 10px;
+    padding-bottom: 20px;
+    top: 100px;
+    right: 0;
+    height: 100%;
+    width:220px;
+    box-shadow: 1px 1px 1px 1px lightgray;
+    overflow: auto;
+    font-size: 15px;
+    font-weight: 600;
+    .filter_option {
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+        background-color: #65A3D8;
+        padding: 10px;
+        color: white;
+        text-shadow: 1px 1px lightgray;
+    }
+    #search_cate {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        padding: 10px;
+        background-color: #e2e2e2;
+        &:focus {
+            outline: 1px solid #4682B4;
+        }
+    }
+}
+
+
+.allbook_container {
+    
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    place-items: center;
+    padding-bottom: 50px;
+    
+    .book_container {
+        cursor: pointer;
+        .book_title {
+            width: 200px;
+            height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+           
+        }
+        .book_cover {
+            width: 200px;
+            height: 280px;
+            object-fit: cover;
+        }
+        transition: .5s;
+        &:hover {
+            transform: translateY(-10px);
+        }
+    }
+    .pagination_container {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50% , 0);
+        bottom: 10px;
+
+    }
+    
+}

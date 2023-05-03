@@ -1,0 +1,19 @@
+
+import { Navigate, Outlet } from 'react-router-dom'
+
+const PrivateRoute = ({isSignedin , children}) => {
+  if(isSignedin) {
+    return children ? children: <Outlet/>
+  }
+  else {
+   return <Navigate to={'/login'} replace/>
+  } 
+   
+}
+
+export default PrivateRoute
+
+export const LoginRoute = ({isSignedin , children}) => {
+  if(!isSignedin) return children
+  else return <Navigate to={'/'} replace/>
+}
