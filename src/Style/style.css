@@ -116,15 +116,43 @@ body {
 .NavBar_container .third_sec #bell {
   position: relative;
   cursor: pointer;
-  font-size: 40px;
+  font-size: 35px;
   transition: 0.5s;
 }
+.NavBar_container .third_sec #bell .cart-count {
+  position: relative;
+  text-align: center;
+  font-size: medium;
+  background-color: palevioletred;
+  border-radius: 25px;
+  padding: 7px;
+  color: white;
+  left: -15px;
+}
 .NavBar_container .third_sec #bell:hover {
-  color: gray;
   transform: translateY(-10px);
+}
+.NavBar_container .third_sec .bellanimated {
+  animation: bounceup 1s ease;
 }
 .NavBar_container .secondsec_resize {
   font-size: 30px;
+}
+@keyframes bounceup {
+  0% {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-20px);
+  }
+  80% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 .MenuItem {
   position: fixed;
@@ -164,13 +192,13 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: space-around;
 }
 .MenuItem .menu_sec .link_page {
   width: 80%;
   background-color: rgb(105, 105, 105);
   text-decoration: none;
   color: white;
+  margin-bottom: 20px;
   padding: 15px;
   border-radius: 10px;
   transition: 0.5s;
@@ -356,6 +384,7 @@ body {
 }
 .slider_container .slider .swiper_slide .book {
   width: 200px;
+  transition: 0.5s;
 }
 .slider_container .slider .swiper_slide .book .book_title {
   width: 200px;
@@ -366,6 +395,10 @@ body {
   object-fit: cover;
   width: 200px;
   height: 280px;
+  border: 1px solid black;
+}
+.slider_container .slider .swiper_slide .book:hover {
+  transform: translateY(-10px);
 }
 
 .Filter_container {
@@ -376,7 +409,7 @@ body {
   z-index: 9;
   background-color: white;
   padding: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 100px;
   top: 100px;
   right: 0;
   height: 100%;
@@ -394,6 +427,11 @@ body {
   padding: 10px;
   color: white;
   text-shadow: 1px 1px lightgray;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.Filter_container .filter_option:hover {
+  background-color: black;
 }
 .Filter_container #search_cate {
   width: 100%;
@@ -431,6 +469,7 @@ body {
   width: 200px;
   height: 280px;
   object-fit: cover;
+  border: 1px solid black;
 }
 .allbook_container .book_container:hover {
   transform: translateY(-10px);
@@ -440,6 +479,316 @@ body {
   left: 50%;
   transform: translate(-50%, 0);
   bottom: 10px;
+}
+
+.bookdetail_contianer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: left;
+  width: 100%;
+  background-color: white;
+}
+.bookdetail_contianer .firstsec {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.bookdetail_contianer .firstsec .book_cover {
+  width: 250px;
+  height: 300px;
+  object-fit: cover;
+  border: 1px solid black;
+}
+.bookdetail_contianer .firstsec .detail {
+  margin-left: 100px;
+  width: 500px;
+  overflow-x: scroll;
+}
+.bookdetail_contianer .firstsec .detail .content_table {
+  text-align: left;
+  overflow-wrap: break-word;
+}
+.bookdetail_contianer .firstsec .detail .content_table tr {
+  height: 50px;
+}
+@media screen and (max-width: 870px) {
+  .bookdetail_contianer .firstsec .book_cover {
+    width: 200px;
+    height: 250px;
+  }
+  .bookdetail_contianer .firstsec .detail {
+    margin-left: 50px;
+    width: 300px;
+  }
+}
+.bookdetail_contianer .secondsec {
+  width: 100%;
+  text-align: center;
+}
+.bookdetail_contianer .secondsec .borrow-btn {
+  background-color: #4682B4;
+  color: white;
+  font-weight: 800;
+  font-size: 10px;
+  padding: 10px;
+  transition: 0.5s;
+}
+.bookdetail_contianer .secondsec .borrow-btn:hover {
+  background-color: black;
+  color: white;
+}
+.bookdetail_contianer .secondsec .brrowed {
+  background-color: gray;
+}
+.bookdetail_contianer .secondsec .description {
+  position: relative;
+  top: 20px;
+}
+.bookdetail_contianer .secondsec .description h2 {
+  font-size: 20px;
+  font-weight: 900;
+}
+.bookdetail_contianer .secondsec .description p {
+  position: relative;
+  height: 300px;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  overflow: auto;
+  text-align: left;
+}
+
+.scanentry_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+.scanentry_container .scan_instruction {
+  text-align: center;
+}
+.scanentry_container .scan_instruction h1 {
+  font-size: 30px;
+  font-weight: 900;
+}
+.scanentry_container .scan_instruction h2 {
+  font-size: 25px;
+  color: red;
+}
+.scanentry_container .qrcode_reader {
+  width: 600px;
+  border: 5px solid black;
+}
+
+.student_modal .student_img {
+  width: 30%;
+  border-radius: 50%;
+  object-fit: contain;
+}
+.student_modal .studentDetail_table {
+  text-align: left;
+  width: 100%;
+  margin-top: 10px;
+}
+.student_modal .studentDetail_table th {
+  padding: 10px;
+}
+
+.studentlist_container {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.studentlist_container .header_sec {
+  font-size: 25px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.datatable_container .search_input {
+  background-color: #e2e2e2;
+  padding: 5px;
+  width: 100%;
+}
+.datatable_container .table-btn {
+  background-color: #4682B4;
+  font-weight: 900;
+  padding: 10px;
+  color: white;
+  font-size: small;
+  height: 100%;
+  transition: 0.5s;
+}
+.datatable_container .table-btn:hover {
+  background-color: black;
+}
+.datatable_container .delete {
+  background-color: palevioletred;
+  margin-left: 10px;
+}
+.datatable_container .edit {
+  background-color: lightseagreen;
+  margin-left: 10px;
+}
+
+.booklist_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.booklist_container .header_sec {
+  font-size: 25px;
+  font-weight: 900;
+  background-color: white;
+  padding: 10px;
+  color: black;
+  text-align: center;
+  margin-top: 10px;
+  width: 100%;
+}
+.booklist_container .table_sec {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.checkout_container {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+}
+.checkout_container h1 {
+  font-size: 25px;
+  font-weight: 900;
+}
+.checkout_container .book_container {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  width: 90%;
+  padding: 10px;
+}
+.checkout_container .book_container .book {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 90%;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.checkout_container .book_container .book .book_cover {
+  width: 200px;
+  height: 250px;
+  cursor: pointer;
+  object-fit: cover;
+  border: 1px solid black;
+}
+.checkout_container .book_container .book .book_detail {
+  width: 300px;
+  overflow-wrap: break-word;
+}
+.checkout_container .book_container .book .trash {
+  cursor: pointer;
+  transition: 0.5s;
+}
+.checkout_container .book_container .book .trash:hover {
+  color: gray;
+}
+.checkout_container .book_container .book .trash:active {
+  transform: translateY(-10px);
+}
+.checkout_container .btn {
+  position: relative;
+  margin-top: 20px;
+  background-color: black;
+  padding: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  transition: 0.5s;
+  margin-right: 10px;
+}
+.checkout_container .btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.checked_container {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.checked_container .qrcode {
+  width: 250px;
+  height: 250px;
+}
+
+.borrowedbook_container {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+.borrowedbook_container h1 {
+  font-size: 25px;
+  font-weight: 900;
+  text-align: center;
+}
+.borrowedbook_container .table_container {
+  width: 100%;
+}
+
+.Tablebook_container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.Tablebook_container .bookcover {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+}
+.check_book_container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+.check_book_container img {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+}
+.check_book_container .book_detail {
+  width: 300px;
+}
+.check_book_container .book_detail p {
+  text-align: left;
+  font-weight: 600;
+}
+
+.entry {
+  font-size: 20px;
+  font-weight: 700;
 }
 
 /*# sourceMappingURL=style.css.map */

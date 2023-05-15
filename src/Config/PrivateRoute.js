@@ -17,3 +17,9 @@ export const LoginRoute = ({isSignedin , children}) => {
   if(!isSignedin) return children
   else return <Navigate to={'/'} replace/>
 }
+
+export const LibrarianRoute = ({isSignedin, isLibrarian, children}) => {
+  if(isSignedin && isLibrarian) {
+    return children
+  } else return <Navigate to={'/'} replace/>
+}
