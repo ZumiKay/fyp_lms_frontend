@@ -66,16 +66,18 @@ const ListofStudentPage = () => {
     const [studentdata, setstudent] = useState([]);
  
 
-    const getStudent = async () => {
+    const getStudent = () => {
         let students = [];
-        const res = await axios({
+        axios({
             method: 'get',
             url: env.api + 'getstudent',
             headers: { Authorization: `Bearer ${ctx.user.token.accessToken}` }
+        }).then(res => {
+            ctx.setstudent(students)
+            res.data?.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname , i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry) , i.borrow_book)));
+            setstudent(res.data);
         });
-        res.data?.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname , i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry) , i.borrow_book)));
-        ctx.setstudent(students)
-        setstudent(res.data);
+        
     };
     useEffect(() => {
         getStudent();

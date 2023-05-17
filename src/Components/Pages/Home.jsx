@@ -30,8 +30,7 @@ const Home = ({ book_data }) => {
                     <SliderContainer title={ctx.filter_cat} book={book_data} type="filter" />
                 ) : (
                     <>
-                        <SliderContainer title={'Popular Book'} type="filter" />
-                        <SliderContainer title={'Lastest Book'} type="filter" />{' '}
+                       
                     </>
                 )}
                

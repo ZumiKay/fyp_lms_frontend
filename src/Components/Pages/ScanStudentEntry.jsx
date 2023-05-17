@@ -40,10 +40,6 @@ const ScanStudentEntry = (props) => {
       })
     } 
     else {
-      let data = {
-        operation: 'pickup',
-        ID: ctx.user.user.ID
-      }
       axios({
         method: "post",
         url: env.api + "r-pb",
@@ -51,8 +47,8 @@ const ScanStudentEntry = (props) => {
           Authorization: `Bearer ${ctx.user.token.accessToken}`
         },
         data : {
-          borrow_id : studentdata,
-          ...data 
+          borrow_id : data,
+          operation: 'pickup',
      }}).then(res => {
         setdata(res.data)
         setopen(true)
@@ -96,7 +92,8 @@ const ScanStudentEntry = (props) => {
      {scanned ? <Loading/> :
       <QrScanner onDecode={onNewScanResult} onError={handleError}/>}
       </div>
-      <ResponsiveDialog open={open} data={studentdata} setscan={setscan} setopen={setopen}/>
+      <ResponsiveDialog open={open} type={props.type} data={studentdata} setscan={setscan} setopen={setopen}/>
+     
 
     </div>
   )

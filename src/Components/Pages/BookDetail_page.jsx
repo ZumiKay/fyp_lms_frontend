@@ -57,7 +57,7 @@ const BookDetailPage = ({ book }) => {
                 </div>
             </div>
             <div className="secondsec">
-                {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavaliable')) ? (
+                {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavailable')) ? (
                     <Button onClick={handleAddCart} className="borrow-btn" endIcon={<i class="fa-solid fa-plus"></i>}>
                         Borrow
                     </Button>

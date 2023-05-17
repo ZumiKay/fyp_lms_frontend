@@ -10,7 +10,7 @@ const ListofBorrowedbook = () => {
 
   
   const getborrowedbook = async () => {
-    let bookdetail = []
+    
     let bookdata
     const res = await axios({
         method: 'get',

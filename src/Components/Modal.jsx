@@ -37,7 +37,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export default function ResponsiveDialog(props) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+    const navigate = useNavigate();
     const handleClose = () => {
         props.setopen(false);
         props.setscan(false);
@@ -47,32 +47,76 @@ export default function ResponsiveDialog(props) {
     return (
         <div>
             <Dialog fullScreen={fullScreen} open={props.open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
-                <DialogTitle id="responsive-dialog-title">{'Student Detail'}</DialogTitle>
+                <DialogTitle id="responsive-dialog-title">{props.type === 'scanentry' ? 'Student Detail' : 'Borrow Detail'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText className="student_modal">
-                        <img src={props.data?.profile} className="student_img" alt="profile" srcset="" />
-                        <table className="studentDetail_table">
-                            <tr>
-                                <th>Student ID</th>
-                                <td>{props.data?.ID}</td>
-                            </tr>
-                            <tr>
-                                <th>Student Name</th>
-                                <td>{props.data?.name}</td>
-                            </tr>
-                            <tr>
-                                <th>Faculty</th>
-                                <td>{props.data?.faculty}</td>
-                            </tr>
-                            <tr>
-                                <th>Department</th>
-                                <td>{props.data?.deparment}</td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                            </tr>
-                        </table>
-                    </DialogContentText>
+                    {props.type === 'scanentry' ? (
+                        <DialogContentText className="student_modal">
+                            <img src={props.data?.profile} className="student_img" alt="profile" srcset="" />
+                            <table className="studentDetail_table">
+                                <tr>
+                                    <th>Student ID</th>
+                                    <td>{props.data?.ID}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <td>{props.data?.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>Faculty</th>
+                                    <td>{props.data?.faculty}</td>
+                                </tr>
+                                <tr>
+                                    <th>Department</th>
+                                    <td>{props.data?.deparment}</td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </table>
+                        </DialogContentText>
+                    ) : (
+                        <DialogContentText className="student_modal">
+                            <table className="studentDetail_table">
+                                <tr>
+                                    <th>Borrow ID</th>
+                                    <td>{props.data?.borrow_id}</td>
+                                </tr>
+                                <tr>
+                                    <th>Borrow Date</th>
+                                    <td>{props.data?.borrow_date}</td>
+                                </tr>
+                                <tr>
+                                    <th>Expect Return Date</th>
+                                    <td>{props.data?.expect_return_date}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student</th>
+                                    <td>
+                                        {props.data?.student?.fullname} (ID: {props.data?.student?.ID})
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Department</th>
+                                    <td>{props.data?.student?.department}</td>
+                                </tr>
+                                <tr>
+                                    <th>All Books</th>
+                                </tr>
+                                <tr>
+                                    <td className="book_row">
+                                        {props.data?.Books?.map((i) => (
+                                            <div className="borrowed_book">
+                                                <img onClick={() => navigate(`/book/${i.title}`)} src={i.cover_img} alt="cover" />
+                                                <p>{i.title}</p>
+                                                <p>{i.categories}</p>
+                                                <p>ISBN: {i.ISBN[0].identifier}</p>
+                                            </div>
+                                        ))}
+                                    </td>
+                                </tr>
+                            </table>
+                        </DialogContentText>
+                    )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} autoFocus>
@@ -88,8 +132,8 @@ export function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
     const ctx = useContext(Mycontext);
     const [userData, setdata] = useState({});
-    const fetchdata = async (end) => {
-        axios({
+    const fetchdata = (end) => {
+        return axios({
             method: 'post',
             url: env.api + end,
             headers: {
@@ -116,9 +160,22 @@ export function FormDialog(props) {
                     } else if (err.response.status === 401) {
                         toast.error(err.response.data.message);
                     } else {
-                        toast.error('Opps! Something Broke');
+                        toast.error('Opps! Something Wrong');
                     }
                 });
+        } else if (props.type === 'HD') {
+            fetchdata('register-HD').then(() => {
+                toast.success("Headdepartment Registered" , {duration: 2000});
+                e.target.reset()
+            }).catch((err) => {
+                if (err.response.status === 400) {
+                    toast.error('Please Check All Required Informations', { duration: 2000 });
+                } else if (err.response.status === 401) {
+                    toast.error(err.response.data.message);
+                } else {
+                    toast.error('Opps! Something Wrong');
+                }
+            } )
         } else {
             fetchdata('createbook')
                 .then(() => {
@@ -141,15 +198,15 @@ export function FormDialog(props) {
 
     const handleClose = () => {
         setOpen(false);
-        ctx.setMenu({ ...ctx.openMenu, openform: false });
+        ctx.setMenu({ ...ctx.openMenu, [props.type]: false });
     };
 
     return (
         <div>
-            <Dialog open={ctx.openMenu.openform} onClose={handleClose}>
+            <Dialog open={ctx.openMenu[props.type]} onClose={handleClose}>
                 <DialogTitle>
                     {' '}
-                    {props.type === 'studentlist' ? `${props.action === 'create' ? 'Register Student' : 'Edit Student'}` : `${props.action === 'create' ? 'Register Book' : 'Edit Book'}`}{' '}
+                    {props.type === 'studentlist' ? `${props.action === 'create' ? 'Register Student' : 'Edit Student'}` : props.type === 'HD' ? 'REGISTER HEADDEPARTMENT' :  `${props.action === 'create' ? 'Register Book' : 'Edit Book'}`}{' '}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
@@ -175,6 +232,15 @@ export function FormDialog(props) {
                                     InputLabelProps={{ shrink: true }}
                                     onChange={handleChange}
                                 />
+                            </>
+                        ) : props.type === 'HD' ? (
+                            <>
+                                <TextField autoFocus margin="dense" id="firstname" label="FIRSTNAME" type="text" fullWidth variant="standard" required onChange={handleChange} />
+                                <TextField autoFocus margin="dense" id="lastname" label="LASTNAME" type="text" fullWidth variant="standard" required onChange={handleChange} />
+                                <TextField autoFocus margin="dense" id="ID" label="ID CARD" type="text" fullWidth variant="standard" required onChange={handleChange} />
+                                <TextField autoFocus margin="dense" id="department" label="DEPARTEMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />
+                                <TextField autoFocus margin="dense" id="email" label="EMAIL" type="text" fullWidth variant="standard" required onChange={handleChange} />
+                                <TextField autoFocus margin="dense" id="phone_number" label="PHONENUMBER" type="text" fullWidth variant="standard" required onChange={handleChange} />
                             </>
                         ) : (
                             <>
@@ -222,21 +288,16 @@ export function FormDialog(props) {
 
 export function DeleteDialog(props) {
     const ctx = useContext(Mycontext);
-    const [open, setOpen] = React.useState(false);
+
     const [student, setstudent] = useState('');
     const [showPassword, setShowPassword] = useState({
         pwd1: false,
         pwd2: false
     });
-    const [isvaid, setisvalid] = useState(false);
+
     const [password, setpassword] = useState({
         id: ctx.user.user.ID
     });
-    const handleClickShowPassword = (e) => {
-        console.log(e.target.id);
-        setShowPassword({ ...showPassword, [e.target.id]: !showPassword });
-    };
-
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -272,7 +333,9 @@ export function DeleteDialog(props) {
             axios({
                 method: 'post',
                 url: env.api + 'delete_borrow',
-                headers: env.header,
+                headers: {
+                    Authorization: `Bearer ${ctx.user.token.accessToken}`
+                },
                 data: { id: props.data }
             }).then(() => window.location.reload());
         } else {
@@ -306,7 +369,7 @@ export function DeleteDialog(props) {
                 <DialogTitle id="alert-dialog-title">
                     {props.type === 'studentlist'
                         ? `Are you sure to delete ${props.data?.length} students (All student related data will be deleted)`
-                        : props.type === 'borrowedbook'
+                        : props.type === 'borrowedbook' || props.type === 'returnbook'
                         ? `Are you sure`
                         : 'Change Password'}
                 </DialogTitle>
@@ -383,11 +446,20 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
-
+    const [count, setcount] = useState(0);
     const navigate = useNavigate();
     useEffect(() => {
         console.log(props.data);
     }, []);
+    const totalCountAndIndividualCounts = props.data?.reduce(
+        (result, obj) => {
+            const bookCount = obj.Books?.length;
+            return {
+                totalCount: result.totalCount + bookCount
+            };
+        },
+        { totalCount: 0 }
+    );
 
     const handleClose = () => {
         props.setopen({ ...props.open, [`${props.type[0]}${props.index}`]: false });
@@ -406,13 +478,14 @@ export function FullScreenDialog(props) {
                         </Typography>
                         {props.type.includes('Borrowed') && (
                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                                Total Books: {props.type === ('Borrowed Book') ? props.data?.length : props.type === `Borrowed Book for ${props.name}` ? props.data?.map(i => i.Books.length) : props.data.length }
+                                Total Books:{' '}
+                                {props.type === 'Borrowed Book' ? props.data?.length : props.type === `Borrowed Book for ${props.name}` ? totalCountAndIndividualCounts.totalCount : props.data?.length}
                             </Typography>
                         )}
                     </Toolbar>
                 </AppBar>
                 <List>
-                    {props.type === ('Borrowed Book')
+                    {props.type === 'Borrowed Book'
                         ? props.data.map((book) => (
                               <>
                                   <ListItem>
@@ -431,8 +504,8 @@ export function FullScreenDialog(props) {
                           ))
                         : props.type === `Borrowed Book for ${props.name}`
                         ? props.data?.map((i) => {
-                            console.log(i)
-                            return i.Books.map(Books => (
+                              console.log(i);
+                              return i.Books.map((Books) => (
                                   <>
                                       <ListItem>
                                           <div className="check_book_container">
