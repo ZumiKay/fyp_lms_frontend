@@ -5,40 +5,38 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import env from '../../env';
 import { toast } from 'react-hot-toast';
-import { duration } from '@mui/material';
-import { setimage } from '../Asset';
+import { Loading } from '../Asset';
+
 const CheckoutPage = () => {
     const ctx = useContext(Mycontext);
-    const [borrowid, setid] = useState('');
     const [loading, setloading] = useState(false);
     const [checked, setchecked] = useState('');
     const navigate = useNavigate();
     const handleCheckout = async () => {
-        setloading(true);
-        const res = await axios({
-            method: 'post',
-            url: env.api + 'checkout',
+        try {
+          setloading(true);
+          
+          const response = await axios.post(env.api + 'checkout', {
+            borrowbooks: ctx.bookcart,
+            ID: ctx.user.user.ID,
+            id: ctx.user.user.id
+          }, {
             headers: {
-                Authorization: `Bearer ${ctx.user.token.accessToken}`
-            },
-
-            data: {
-                borrowbooks: ctx.bookcart,
-                ID: ctx.user.user.ID,
-                id: ctx.user.user.id
+              Authorization: `Bearer ${ctx.user.token.accessToken}`
             }
-        })
-            .then((res) => {
-                toast.success('Checkout Complete', { duration: 2000 });
-                setloading(false);
-                setchecked(res.data);
-
-                localStorage.removeItem('cart');
-                ctx.setcart([]);
-            })
-            .catch(() => toast.error('Something Wrong', { duration: 2000 }));
-        console.log(res.data);
-    };
+          });
+          
+          toast.success('Checkout Complete', { duration: 2000 });
+          setloading(false);
+          setchecked(response.data);
+          
+          localStorage.removeItem('cart');
+          ctx.setcart([]);
+        } catch (error) {
+          toast.error('Something went wrong', { duration: 2000 });
+        }
+      };
+      
     const handleCancel = () => {
         localStorage.removeItem('cart');
         ctx.setcart([]);
@@ -64,6 +62,7 @@ const CheckoutPage = () => {
             <h1>BOOK BACKET</h1>
 
             <div className="book_container">
+                {loading && <Loading/>}
                 {checked === '' ? (
                     ctx.bookcart
                         ?.filter(({ userid }) => userid === ctx.user.user.ID)

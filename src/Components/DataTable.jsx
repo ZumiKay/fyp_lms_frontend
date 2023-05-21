@@ -13,7 +13,7 @@ import { Mycontext } from '../Config/context';
 import { DeleteDialog, FormDialog, FullScreenDialog } from './Modal';
 import env from '../env';
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import { Loading } from './Asset';
 
 const columns = [
     { id: 'studentID', label: 'ID', minWidth: 100 },
@@ -44,7 +44,9 @@ const bookcolumns = [
     { id: 'title', label: 'Title', minWidth: 80 },
     { id: 'ISBN', label: 'ISBN', minWidth: 80 },
     { id: 'categories', label: 'Categories', minWidth: 80 },
-    { id: 'status', label: 'Status', minWidth: 80 }
+    { id: 'status', label: 'Status', minWidth: 80 } , 
+   
+
 ];
 const borrowbookcolumns = [
     { id: 'borrowid', label: 'BorrowID', minWidth: 170 },
@@ -75,7 +77,7 @@ export default function DataTable(props) {
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected =
-                props.type === 'studentlist' ? props.data.map((i) => i.studentID) : props.type === 'borrowedbook' ? props.data.map((i) => i.borrowid) : props.data.map((i) => i.ISBN[0].identifier);
+                props.type === 'studentlist' ? props.data.map((i) => i.studentID) : props.type === 'borrowedbook' ? props.data.map((i) => i.borrowid) : props.data.map((i) => i.id);
             setSelected(newSelected);
             return;
         }
@@ -90,7 +92,7 @@ export default function DataTable(props) {
             newSelected = newSelected.concat(selected, name);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
+        } else if (selectedIndex === selected?.length - 1) {
             newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
@@ -107,17 +109,17 @@ export default function DataTable(props) {
         let filter = [];
         if (props.type === 'studentlist') {
             filter = props.data?.filter((stu) => {
-                let deparment = stu.department.replace(/\s+/g, '');
-                if (stu.studentID.includes(searchvalue)) {
+                let department = stu.department?.replace(/\s+/g, '');
+                if (stu.studentID?.includes(searchvalue)) {
                     return stu;
-                } else if (stu.fullname.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) {
+                } else if (stu.fullname?.replace(/\s+/g, '')?.toLowerCase().includes(searchvalue)) {
                     return stu;
                 } else if (stu.email.replace(/\s+/g, '').includes(searchvalue)) return stu;
                 else if (stu.phoneNumber.toString().includes(searchvalue)) return stu;
-                else if (stu.deparment.toLowerCase().includes(searchvalue)) return stu;
+                else if (department.toLowerCase().includes(searchvalue)) return stu;
             });
         }
-        if (props.type === 'borrowedbook') {
+        else if (props.type === 'borrowedbook') {
             filter = props.data?.filter((book) => {
                 let fullname = book.student?.lastname + book.student?.firstname;
                 if (book.borrowid.includes(searchvalue)) {
@@ -131,6 +133,19 @@ export default function DataTable(props) {
                 } else if (fullname.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) return book;
                 else if (book.student.phone_number.toString().includes(searchvalue)) return book;
             });
+        } else {
+            filter = props.data?.filter((book) => {
+                if(book.ISBN[0].identifier.includes(searchvalue)) {
+                    return book
+                }
+                else if(book.title.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)){
+                    return book 
+                } else if (book.categories[0].replace(/\s+/g, '').toLowerCase().includes(searchvalue)) {
+                    return book
+                } else if (book.status.toLowerCase() === searchvalue) {
+                    return book
+                }
+            })
         }
         setfilter(filter);
     };
@@ -161,7 +176,11 @@ export default function DataTable(props) {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center" colSpan={3}>
+                        <TableCell align="center" colSpan={1}>
+                                
+                                
+                            </TableCell>
+                            <TableCell align="center" colSpan={2}>
                                 <input type="text" className="search_input" placeholder="Search" onChange={(e) => setsearch(e.target.value.replace(/\s+/g, '').toLowerCase())} />
                                 
                             </TableCell>
@@ -172,6 +191,9 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [props.type]: true, action: 'create' })} className="table-btn">
                                             REGISTER STUDENT
                                         </button>
+                                        <button onClick={() => ctx.setMenu({...ctx.openMenu , department: true})} className="table-btn">
+                                            CREATE DEPARTMENT
+                                        </button>
                                         {selected.length > 0 && (
                                             <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
                                                 DELETE STUDENT
@@ -180,15 +202,15 @@ export default function DataTable(props) {
                                     </>
                                 ) : props.type === 'booklist' ? (
                                     <>
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [props.type]: true, action: 'create' })} className="table-btn">
+                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Createbook`]: true, action: 'create' })} className="table-btn">
                                             CREATE BOOK
                                         </button>
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [props.type]: true, action: 'edit' })} className="table-btn edit">
+                                        { selected.length === 1 && <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Editbook`]: true, action: 'edit' })} className="table-btn edit">
                                             EDIT BOOK
-                                        </button>
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
+                                        </button>}
+                                        {selected.length > 0 && <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
                                             DELETE BOOK
-                                        </button>
+                                        </button>}
                                     </>
                                 ) : props.type === 'borrowedbook' && selected.length > 0 ? (
                                     <>
@@ -204,8 +226,10 @@ export default function DataTable(props) {
                                 ) : (
                                     <></>
                                 )}
-                                
-                                <FormDialog type={props.type} action={ctx.openMenu.action} />
+                                <FormDialog type={'department'}/>
+                                <FormDialog type={props.type} action={ctx.openMenu.action} selectedbook={selected} />
+                                <FormDialog type={'Createbook'} action={ctx.openMenu.action} selectedbook={selected} />
+                                <FormDialog type={'Editbook'} action={ctx.openMenu.action} selectedbook={selected} />
                                 <DeleteDialog data={selected} type={props.type} />
                             </TableCell>
                             <TableCell align="center" colSpan={1}>
@@ -234,7 +258,7 @@ export default function DataTable(props) {
                     </TableHead>
                     <TableBody>
                         {(searchvalue === '' ? props.data : filterdata)?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                            const isItemSelected = isSelected(props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.ISBN[0].identifier);
+                            const isItemSelected = isSelected(props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id);
                             const labelId = `enhanced-table-checkbox-${index}`;
                             return (
                                 <TableRow
@@ -242,15 +266,15 @@ export default function DataTable(props) {
                                     role="checkbox"
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.ISBN[0].identifier}
+                                    key={props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id}
                                     selected={isItemSelected}
                                     sx={{ cursor: 'pointer' }}
                                 >
                                     <TableCell padding="checkbox">
-                                       { !row.status || (row.status === 'PickedUp' && ctx.user.user.role === 'librarian') || row.status === 'To Pickup' ? <Checkbox
+                                       { !row.status || (row.status === 'PickedUp' && ctx.user.user.role === 'librarian') || row.status === 'To Pickup' || props.type === 'booklist' ? <Checkbox
                                             color="primary"
                                             onClick={(event) =>
-                                                handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.ISBN[0].identifier)
+                                                handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)
                                             }
                                             checked={isItemSelected}
                                             inputProps={{
@@ -259,7 +283,7 @@ export default function DataTable(props) {
                                         /> : (row.status?.includes('return') && ctx.user.user.role === 'librarian' && <Checkbox
                                         color="primary"
                                         onClick={(event) =>
-                                            handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.ISBN[0].identifier)
+                                            handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)
                                         }
                                         checked={isItemSelected}
                                         inputProps={{
@@ -281,7 +305,7 @@ export default function DataTable(props) {
                                                 ) : column.id === 'qrcode' ? (
                                                     <img src={value} alt="qrcode"></img>
                                                 ) : column.id === 'cover_img' ? (
-                                                    column.id === 'cover_img' && <img src={value} alt="cover" />
+                                                    column.id === 'cover_img' && <img style={{width: "200px" , height:"250px"}} src={value} alt="cover" />
                                                 ) : column.id === 'student' && ctx.user.user.role === 'librarian' ? (
                                                     <>
                                                         <h2>
@@ -292,7 +316,10 @@ export default function DataTable(props) {
                                                     </>
                                                 ) : column.id === 'libraryentry' ? (
                                                     <>
-                                                        <p onClick={() => setfullscreen({ ...openfullscreen, [`Library${index}`]: true })}>{value}</p>
+                                                       
+                                                        <button onClick={() => setfullscreen({ ...openfullscreen, [`Library${index}`]: true })} className="table-btn">
+                                                            {value}
+                                                        </button>
                                                         <FullScreenDialog
                                                             setopen={setfullscreen}
                                                             index={index}
@@ -313,7 +340,7 @@ export default function DataTable(props) {
                                                             type={`Borrowed Book for ${row.fullname}`}
                                                             name={row.fullname}
                                                             data={value}
-                                                            length = {value.length}
+                                                            length = {value?.length}
                                                         />
                                                     </>
                                                 ) : (
@@ -321,8 +348,10 @@ export default function DataTable(props) {
                                                 )}
                                                 {column.id === 'ISBN' && row.ISBN[0]?.identifier}
                                             </TableCell>
+                                            
                                         );
                                     })}
+                                    {ctx.loading[props.type] && <Loading/>}
                                 </TableRow>
                             );
                         })}

@@ -23,3 +23,11 @@ export const LibrarianRoute = ({isSignedin, isLibrarian, children}) => {
     return children
   } else return <Navigate to={'/'} replace/>
 }
+
+export const LibrarianandHD = ({isSignedin , isLibrarian , isHD , children}) => {
+  if(isSignedin && (isLibrarian || isHD)) {
+    return children
+  } else {
+    return <Navigate to={'/'} replace/>
+  }
+}

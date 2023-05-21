@@ -1,4 +1,4 @@
-import React , {useContext, useEffect, useState} from 'react'
+import React , {useContext, useState} from 'react'
 import '../../Style/style.css'
 import {QrScanner} from '@yudiel/react-qr-scanner';
 import { toast } from 'react-hot-toast';

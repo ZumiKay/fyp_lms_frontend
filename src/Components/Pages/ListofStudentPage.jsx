@@ -5,8 +5,6 @@ import axios from 'axios';
 import { Mycontext } from '../../Config/context';
 import env, { createData } from '../../env';
 
-
-
 function countVisitsByTimeRange(dates) {
     const now = new Date();
     const past1weeks = 7 * 24 * 60 * 60 * 1000;
@@ -24,34 +22,37 @@ function countVisitsByTimeRange(dates) {
     let visitsBy1week = 0;
     let visitthisweek = 0;
     let result;
-    dates.forEach(({entry_date}) => {
-        const timeDiff = now.getTime() - new Date(entry_date).getTime();
-        if (timeDiff < past2weeks) {
-            visitsBy2Weeks++;
-        } else if (timeDiff < past4Weeks) {
-            visitsBy4Weeks++;
-        } else if (timeDiff < past3Months) {
-            visitsBy3months++;
-        } else if (timeDiff < past6Months) {
-            visitsBy6months++;
-        } else if (timeDiff < pastYears) {
-            visitsByLastYears++;
-        } else if (timeDiff < past1weeks) {
+    dates.forEach(({ createdAt }) => {
+        const entryDate = new Date(createdAt);
+        const timeDiff = now.getTime() - entryDate.getTime();
+        const secondsDiff = Math.floor(timeDiff / 1000);
+        if (secondsDiff < past1weeks / 1000) {
             visitsBy1week++;
+        } else if (secondsDiff < past2weeks / 1000) {
+            visitsBy2Weeks++;
+        } else if (secondsDiff < past4Weeks / 1000 && secondsDiff > past2weeks / 1000) {
+            visitsBy4Weeks++;
+        } else if (secondsDiff < past3Months / 1000 && secondsDiff > past4Weeks / 1000) {
+            visitsBy3months++;
+        } else if (secondsDiff < past6Months / 1000 && secondsDiff > past3Months / 1000) {
+            visitsBy6months++;
+        } else if (secondsDiff < pastYears / 1000 && secondsDiff > past6Months / 1000) {
+            visitsByLastYears++;
         } else {
             visitthisweek++;
         }
     });
+
     if (visitsBy1week > 0) {
-        result = `${visitsBy1week} For the past week'`;
+        result = `${visitsBy1week} For the past week`;
     } else if (visitsBy2Weeks > 0) {
-        result =`${visitsBy2Weeks} For the past 2 weeks`;
+        result = `${visitsBy2Weeks} For the past 2 weeks`;
     } else if (visitsBy4Weeks > 0) {
         result = `${visitsBy4Weeks} For the past 1 month`;
     } else if (visitsBy3months > 0) {
         result = `${visitsBy3months} For the past 3 months`;
     } else if (visitsBy6months > 0) {
-        result =`${visitsBy6months} For the past 6 months`;
+        result = `${visitsBy6months} For the past 6 months`;
     } else if (visitsByLastYears > 0) {
         result = `${visitsByLastYears} For the past year`;
     } else {
@@ -64,20 +65,20 @@ function countVisitsByTimeRange(dates) {
 const ListofStudentPage = () => {
     const ctx = useContext(Mycontext);
     const [studentdata, setstudent] = useState([]);
- 
 
     const getStudent = () => {
+        ctx.setloading({ ...ctx.loading, studentlist: true });
         let students = [];
         axios({
             method: 'get',
             url: env.api + 'getstudent',
             headers: { Authorization: `Bearer ${ctx.user.token.accessToken}` }
-        }).then(res => {
-            ctx.setstudent(students)
-            res.data?.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname , i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry) , i.borrow_book)));
+        }).then((res) => {
+            ctx.setstudent(students);
+            res.data.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname, i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry), i.borrow_book)));
             setstudent(res.data);
+            ctx.setloading({ ...ctx.loading, studentlist: false });
         });
-        
     };
     useEffect(() => {
         getStudent();

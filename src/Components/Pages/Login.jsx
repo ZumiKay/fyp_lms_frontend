@@ -17,31 +17,29 @@ const Login = () => {
     }
     
    
-    const handleSumbit = (e) => {
-        e.preventDefault()
-        setloading(true)
-        axios({
-          method:"post",
-          url: env.api + "login",
-          data: user_data
-        }).then(res => {
-          setloading(false)
-          ctx.sethasLogin(true)
-          Cookie.set('user', JSON.stringify(res.data) , {expires: 7})
-          navigate('/' ,{replace: true})
-          window.location.reload()
-        }).catch(err => {
-        setloading(false)
-         toast.error(err.response.data.message , {
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setloading(true);
+    
+      try {
+        const response = await axios.post(env.api + "login", user_data);
+        setloading(false);
+        ctx.sethasLogin(true);
+        Cookie.set('user', JSON.stringify(response.data), { expires: 7 });
+        navigate('/', { replace: true });
+        window.location.reload();
+      } catch (err) {
+        setloading(false);
+        const errorMessage = err.response?.data?.message || 'An error occurred';
+        toast.error(errorMessage, {
           duration: 2000
-         })
-          
-
-        })
-    }
+        });
+      }
+    };
+    
   return (
     <div className='Login_container'>
-        <form className="Login_form" onSubmit={handleSumbit}>
+        <form className="Login_form" onSubmit={handleSubmit}>
             {loading && <Loading/>}    
     
             <img src={setimage.Logo} alt='logo' className='logo'/>

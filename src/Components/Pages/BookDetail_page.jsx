@@ -58,9 +58,13 @@ const BookDetailPage = ({ book }) => {
             </div>
             <div className="secondsec">
                 {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavailable')) ? (
+                   ctx.user.user.role === 'headdepartment' ?  
+                   <Button className="borrow-btn" style={{backgroundColor:"green"}}>
+                        available
+                    </Button> :  
                     <Button onClick={handleAddCart} className="borrow-btn" endIcon={<i class="fa-solid fa-plus"></i>}>
                         Borrow
-                    </Button>
+                    </Button> 
                 ) : (
                     <Button className="borrow-btn brrowed">Unavaliable</Button>
                 )}

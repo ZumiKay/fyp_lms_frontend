@@ -3,13 +3,11 @@ import '../../Style/style.css'
 import DataTable from '../DataTable'
 import { Mycontext } from '../../Config/context'
 import axios from 'axios'
-import env, { createBorrowedData } from '../../env'
+import env from '../../env'
+
 const ListofBook = () => {
     const ctx = useContext(Mycontext)
-    const getallbook = ctx.book?.allbooks
-    useEffect(() => {
-       
-    } , [])
+
   return (
     <div className='booklist_container'>
         <div className="header_sec">
@@ -34,6 +32,7 @@ export const BorrowedBook = () => {
   }   
 
   const getborrow = () => {
+    ctx.setloading({...ctx.loading , borrowedbook: true})
     axios({
       method: "get",
       url: env.api + "getborrow_book",
@@ -45,6 +44,7 @@ export const BorrowedBook = () => {
       let borrowbook = []
       data?.map(i => borrowbook.push(createBorrowedData(i.borrow_id, i.student , i.Books, i.status, i.borrow_date, i.return_date,i.expect_return_date, i.qrcode)))
       setborrowedbook(borrowbook)
+      ctx.setloading({...ctx.loading , borrowedbook: false})
     })
   }
   useEffect(() => {
@@ -55,6 +55,7 @@ export const BorrowedBook = () => {
     <div className='borrowedbook_container'>
     <h1>List of Borrowed Book</h1>
     <div className="table_container">
+      
         <DataTable type={"borrowedbook"} data={borrowedbook}/>
     </div>
 </div>

@@ -7,7 +7,7 @@ import Login from './Components/Pages/Login';
 import { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { Mycontext } from './Config/context';
-import PrivateRoute, { LibrarianRoute, LoginRoute } from './Config/PrivateRoute';
+import PrivateRoute, { LibrarianRoute, LibrarianandHD, LoginRoute } from './Config/PrivateRoute';
 import BookDetailPage from './Components/Pages/BookDetail_page';
 import axios from 'axios';
 import env from './env';
@@ -16,6 +16,7 @@ import ListofStudentPage from './Components/Pages/ListofStudentPage';
 import ListofBook, { BorrowedBook } from './Components/Pages/ListofBook';
 import CheckoutPage from './Components/Pages/CheckoutPage';
 import ListofBorrowedbook from './Components/Pages/ListofBorrowedbook';
+import Profile from './Components/Pages/Profile';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
     const user = Cookies.get('user');
    
     const getbook = async () => {
+        ctx.setloading({...ctx.loading, booklist: true})
         const res = await axios({
             method: 'get',
             url: env.api + 'getbook',
@@ -32,6 +34,9 @@ function App() {
             }
         });
         const books = res.data;
+        if(res.data) {
+            ctx.setloading({...ctx.loading, booklist: false})
+        }
         let allcategories = books.allcategories.filter((arr, index) => {
             return (
                 index ===
@@ -41,7 +46,7 @@ function App() {
             );
         });
         let filteredbook = books.books.filter((obj, index, self) => index === self.findIndex((o) => o.title === obj.title)) 
-       ctx.setbook({
+        ctx.setbook({
             allcategories: allcategories ,
             allbooks: filteredbook
         })
@@ -103,9 +108,9 @@ function App() {
                 <Route
                     path="/liststudent"
                     element={
-                        <LibrarianRoute isSignedin={user} isLibrarian={ctx.user.user?.role === 'librarian'}>
+                        <LibrarianandHD isSignedin={user} isHD={ctx.user.user?.role === 'headdepartment'} isLibrarian={ctx.user.user?.role === 'librarian'}>
                             <ListofStudentPage/>
-                        </LibrarianRoute>
+                        </LibrarianandHD>
                     }
                 />
                 <Route
@@ -140,7 +145,17 @@ function App() {
                     </PrivateRoute>
                 }
                 />
+                <Route
+                path='/profile'
+                element = {
+                    <PrivateRoute isSignedin={user}>
+                        <Profile/>
+                    </PrivateRoute>
+                }
+                />
+           
             </Routes>
+            
 
         </div>
     );
