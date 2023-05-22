@@ -44,9 +44,7 @@ const bookcolumns = [
     { id: 'title', label: 'Title', minWidth: 80 },
     { id: 'ISBN', label: 'ISBN', minWidth: 80 },
     { id: 'categories', label: 'Categories', minWidth: 80 },
-    { id: 'status', label: 'Status', minWidth: 80 } , 
-   
-
+    { id: 'status', label: 'Status', minWidth: 80 }
 ];
 const borrowbookcolumns = [
     { id: 'borrowid', label: 'BorrowID', minWidth: 170 },
@@ -66,7 +64,7 @@ export default function DataTable(props) {
     const [selected, setSelected] = React.useState([]);
     const [searchvalue, setsearch] = React.useState('');
     const [filterdata, setfilter] = React.useState([]);
-    const [confirm, setconfirm] = React.useState(false)
+
     const [openfullscreen, setfullscreen] = React.useState({});
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -76,8 +74,7 @@ export default function DataTable(props) {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected =
-                props.type === 'studentlist' ? props.data.map((i) => i.studentID) : props.type === 'borrowedbook' ? props.data.map((i) => i.borrowid) : props.data.map((i) => i.id);
+            const newSelected = props.type === 'studentlist' ? props.data.map((i) => i.studentID) : props.type === 'borrowedbook' ? props.data.map((i) => i.borrowid) : props.data.map((i) => i.id);
             setSelected(newSelected);
             return;
         }
@@ -118,8 +115,7 @@ export default function DataTable(props) {
                 else if (stu.phoneNumber.toString().includes(searchvalue)) return stu;
                 else if (department.toLowerCase().includes(searchvalue)) return stu;
             });
-        }
-        else if (props.type === 'borrowedbook') {
+        } else if (props.type === 'borrowedbook') {
             filter = props.data?.filter((book) => {
                 let fullname = book.student?.lastname + book.student?.firstname;
                 if (book.borrowid.includes(searchvalue)) {
@@ -135,39 +131,36 @@ export default function DataTable(props) {
             });
         } else {
             filter = props.data?.filter((book) => {
-                if(book.ISBN[0].identifier.includes(searchvalue)) {
-                    return book
-                }
-                else if(book.title.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)){
-                    return book 
+                if (book.ISBN[0].identifier.includes(searchvalue)) {
+                    return book;
+                } else if (book.title.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)) {
+                    return book;
                 } else if (book.categories[0].replace(/\s+/g, '').toLowerCase().includes(searchvalue)) {
-                    return book
+                    return book;
                 } else if (book.status.toLowerCase() === searchvalue) {
-                    return book
+                    return book;
                 }
-            })
+            });
         }
         setfilter(filter);
     };
-    const handleReturn =  () => {
-       axios({
-            method:"post" ,
-            url: env.api + "r-pb",
+    const handleReturn = () => {
+        axios({
+            method: 'post',
+            url: env.api + 'r-pb',
             headers: {
                 Authorization: `Bearer ${ctx.user.token.accessToken}`
             },
             data: {
-                borrow_id: selected , 
-                operation: "return",
+                borrow_id: selected,
+                operation: 'return',
                 ID: ctx.user.user.ID
             }
-        }).then(() => window.location.reload())
-        
-    }
+        }).then(() => window.location.reload());
+    };
 
     React.useEffect(() => {
         handleSearch();
-        
     }, [searchvalue]);
 
     return (
@@ -176,13 +169,9 @@ export default function DataTable(props) {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                        <TableCell align="center" colSpan={1}>
-                                
-                                
-                            </TableCell>
+                            <TableCell align="center" colSpan={1}></TableCell>
                             <TableCell align="center" colSpan={2}>
                                 <input type="text" className="search_input" placeholder="Search" onChange={(e) => setsearch(e.target.value.replace(/\s+/g, '').toLowerCase())} />
-                                
                             </TableCell>
                             <TableCell align="center" colSpan={2}>
                                 {props.type === 'studentlist' ? (
@@ -191,7 +180,7 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [props.type]: true, action: 'create' })} className="table-btn">
                                             REGISTER STUDENT
                                         </button>
-                                        <button onClick={() => ctx.setMenu({...ctx.openMenu , department: true})} className="table-btn">
+                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, department: true })} className="table-btn">
                                             CREATE DEPARTMENT
                                         </button>
                                         {selected.length > 0 && (
@@ -205,12 +194,16 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Createbook`]: true, action: 'create' })} className="table-btn">
                                             CREATE BOOK
                                         </button>
-                                        { selected.length === 1 && <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Editbook`]: true, action: 'edit' })} className="table-btn edit">
-                                            EDIT BOOK
-                                        </button>}
-                                        {selected.length > 0 && <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
-                                            DELETE BOOK
-                                        </button>}
+                                        {selected.length === 1 && (
+                                            <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Editbook`]: true, action: 'edit' })} className="table-btn edit">
+                                                EDIT BOOK
+                                            </button>
+                                        )}
+                                        {selected.length > 0 && (
+                                            <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
+                                                DELETE BOOK
+                                            </button>
+                                        )}
                                     </>
                                 ) : props.type === 'borrowedbook' && selected.length > 0 ? (
                                     <>
@@ -219,35 +212,37 @@ export default function DataTable(props) {
                                         </button>
                                         {ctx.user.user.role === 'librarian' && (
                                             <button style={{ marginLeft: '20px' }} onClick={handleReturn} className="table-btn">
-                                                 RETURN BOOK
+                                                RETURN BOOK
                                             </button>
                                         )}
                                     </>
                                 ) : (
                                     <></>
                                 )}
-                                <FormDialog type={'department'}/>
+                                <FormDialog type={'department'} />
                                 <FormDialog type={props.type} action={ctx.openMenu.action} selectedbook={selected} />
                                 <FormDialog type={'Createbook'} action={ctx.openMenu.action} selectedbook={selected} />
                                 <FormDialog type={'Editbook'} action={ctx.openMenu.action} selectedbook={selected} />
                                 <DeleteDialog data={selected} type={props.type} />
                             </TableCell>
                             <TableCell align="center" colSpan={1}>
-                               <p> Total: {props.data?.length}</p>
+                                <p> Total: {props.data?.length}</p>
                             </TableCell>
                         </TableRow>
 
                         <TableRow>
                             <TableCell padding="checkbox">
-                                {ctx.user.user.role === 'librarian' && <Checkbox
-                                    color="primary"
-                                    indeterminate={selected.length > 0 && selected.length < props.data?.length}
-                                    checked={props.data?.length > 0 && selected.length === props.data?.length}
-                                    onChange={handleSelectAllClick}
-                                    inputProps={{
-                                        'aria-label': 'select all data'
-                                    }}
-                                />}
+                                {ctx.user.user.role === 'librarian' && (
+                                    <Checkbox
+                                        color="primary"
+                                        indeterminate={selected.length > 0 && selected.length < props.data?.length}
+                                        checked={props.data?.length > 0 && selected.length === props.data?.length}
+                                        onChange={handleSelectAllClick}
+                                        inputProps={{
+                                            'aria-label': 'select all data'
+                                        }}
+                                    />
+                                )}
                             </TableCell>
                             {(props.type === 'booklist' ? bookcolumns : props.type === 'borrowedbook' ? borrowbookcolumns : columns).map((column) => (
                                 <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
@@ -271,25 +266,28 @@ export default function DataTable(props) {
                                     sx={{ cursor: 'pointer' }}
                                 >
                                     <TableCell padding="checkbox">
-                                       { !row.status || (row.status === 'PickedUp' && ctx.user.user.role === 'librarian') || row.status === 'To Pickup' || props.type === 'booklist' ? <Checkbox
-                                            color="primary"
-                                            onClick={(event) =>
-                                                handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)
-                                            }
-                                            checked={isItemSelected}
-                                            inputProps={{
-                                                'aria-labelledby': labelId
-                                            }}
-                                        /> : (row.status?.includes('return') && ctx.user.user.role === 'librarian' && <Checkbox
-                                        color="primary"
-                                        onClick={(event) =>
-                                            handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)
-                                        }
-                                        checked={isItemSelected}
-                                        inputProps={{
-                                            'aria-labelledby': labelId
-                                        }}
-                                    /> ) }
+                                        {!row.status || (row.status === 'PickedUp' && ctx.user.user.role === 'librarian') || row.status === 'To Pickup' || props.type === 'booklist' ? (
+                                            <Checkbox
+                                                color="primary"
+                                                onClick={(event) => handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)}
+                                                checked={isItemSelected}
+                                                inputProps={{
+                                                    'aria-labelledby': labelId
+                                                }}
+                                            />
+                                        ) : (
+                                            row.status?.includes('return') &&
+                                            ctx.user.user.role === 'librarian' && (
+                                                <Checkbox
+                                                    color="primary"
+                                                    onClick={(event) => handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)}
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId
+                                                    }}
+                                                />
+                                            )
+                                        )}
                                     </TableCell>
                                     {(props.type === 'booklist' ? bookcolumns : props.type === 'borrowedbook' ? borrowbookcolumns : columns).map((column) => {
                                         const value = column.id !== 'ISBN' && row[column.id];
@@ -305,7 +303,7 @@ export default function DataTable(props) {
                                                 ) : column.id === 'qrcode' ? (
                                                     <img src={value} alt="qrcode"></img>
                                                 ) : column.id === 'cover_img' ? (
-                                                    column.id === 'cover_img' && <img style={{width: "200px" , height:"250px"}} src={value} alt="cover" />
+                                                    column.id === 'cover_img' && <img style={{ width: '200px', height: '250px' }} src={value} alt="cover" />
                                                 ) : column.id === 'student' && ctx.user.user.role === 'librarian' ? (
                                                     <>
                                                         <h2>
@@ -316,7 +314,6 @@ export default function DataTable(props) {
                                                     </>
                                                 ) : column.id === 'libraryentry' ? (
                                                     <>
-                                                       
                                                         <button onClick={() => setfullscreen({ ...openfullscreen, [`Library${index}`]: true })} className="table-btn">
                                                             {value}
                                                         </button>
@@ -340,18 +337,23 @@ export default function DataTable(props) {
                                                             type={`Borrowed Book for ${row.fullname}`}
                                                             name={row.fullname}
                                                             data={value}
-                                                            length = {value?.length}
+                                                            length={value?.length}
                                                         />
                                                     </>
+                                                ) : column.id === 'borrowdate' || column.id === 'expectreturndate' ? (
+                                                    value !== null ? (
+                                                        `${new Date(value).toLocaleDateString('en')}, ${new Date(value).getHours()}:${new Date(value).getMinutes()}:${new Date(value).getSeconds()}`
+                                                    ) : (
+                                                        ''
+                                                    )
                                                 ) : (
                                                     value
                                                 )}
                                                 {column.id === 'ISBN' && row.ISBN[0]?.identifier}
                                             </TableCell>
-                                            
                                         );
                                     })}
-                                    {ctx.loading[props.type] && <Loading/>}
+                                    {ctx.loading[props.type] && <Loading />}
                                 </TableRow>
                             );
                         })}
