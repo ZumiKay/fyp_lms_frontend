@@ -56,6 +56,7 @@ const NavigationBar = () => {
 
         </div>
         <DeleteDialog type={"password"}/>
+        <DeleteDialog type={"editlibrarian"}/>
         <FormDialog type={'HD'}/>
     </div> : 
         <div className={'NavBar_container'}>
@@ -83,6 +84,7 @@ const NavigationBar = () => {
             </div>
             
             <DeleteDialog type={"password"}/>
+            <DeleteDialog type={"editlibrarian"}/>
             <FormDialog type={'HD'}/>
         </div> 
     );
@@ -139,6 +141,7 @@ const MenuItem = () => {
                     </>
                 )}
                 {ctx.user.user.role !== 'librarian' && <Link className="link_page" onClick={() => ctx.setMenu({...ctx.openMenu , openchangepwd: true})}><i class="fa-solid fa-gear"></i> SETTING</Link>}
+                {ctx.user.user.role === 'librarian' && <Link className='link_page' onClick={() => ctx.setMenu({...ctx.openMenu , editlibrarian: true})}><i class="fa-solid fa-gear"></i> SETTING </Link>}
                 <p onClick={handleLogout}>Logout</p>
                 <FullScreenDialog type='Create Report' open={openreport} setopen={setopenreport} />
             </div>

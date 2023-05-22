@@ -35,6 +35,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { saveAs } from 'file-saver';
+import Cookies from 'js-cookie';
 
 export default function ResponsiveDialog(props) {
     const theme = useTheme();
@@ -460,6 +461,14 @@ export function DeleteDialog(props) {
     const ctx = useContext(Mycontext);
 
     const [student, setstudent] = useState('');
+    const [libraiandata , setlibrarian] = useState({
+        id: ctx.user.user.id,
+        fullname: '' ,
+        oldpwd: '',
+        newpwd: '',
+        ID: '',
+        
+    })
     const [showPassword, setShowPassword] = useState({
         pwd1: false,
         pwd2: false
@@ -475,13 +484,18 @@ export function DeleteDialog(props) {
     const handleChange = (e, type) => {
         if (type === 'student') {
             setstudent(e.target.value);
-        } else {
+        } else if (type === 'librarian') {
+            setlibrarian({...libraiandata , [e.target.id]:e.target.value})
+        }
+        else {
             setpassword({ ...password, [e.target.id]: e.target.value });
         }
     };
     const handleClose = () => {
         if (props.type === 'password') {
             ctx.setMenu({ ...ctx.openMenu, openchangepwd: false });
+        } else if (props.type === 'editlibrarian') {
+            ctx.setMenu({...ctx.openMenu , editlibrarian: false})
         } else {
             ctx.setMenu({ ...ctx.openMenu, opendelete: false });
         }
@@ -519,6 +533,32 @@ export function DeleteDialog(props) {
                     id: props.data
                 }
             }).then(() => window.location.reload());
+        } else if (props.type === 'editlibrarian') {
+            axios({
+                method: "POST" ,
+                url: env.api + "editlibrarian" ,
+                headers: {
+                    Authorization: `Bearer ${ctx.user.token.accessToken}`
+                },
+                data : libraiandata
+            }).then(() => {
+                toast.success("Change Successfully" , {duration: 2000})
+                if (libraiandata.ID !== '' && libraiandata.fullname !== '') {
+                    ctx.user.user.fullname = libraiandata.fullname
+                    ctx.user.user.ID = libraiandata.ID
+                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                }
+                else if(libraiandata.fullname !== '') {
+                    ctx.user.user.fullname = libraiandata.fullname
+                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                } else if (libraiandata.ID !== '') {
+                    ctx.user.user.ID = libraiandata.ID
+                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                } 
+                e.target.reset()
+            }).catch((err) => {
+                toast.error("Something Wrong" , {duration:2000})
+            })
         } else {
             axios({
                 method: 'post',
@@ -542,7 +582,7 @@ export function DeleteDialog(props) {
     return (
         <div>
             <Dialog
-                open={props.type === 'password' ? ctx.openMenu.openchangepwd : ctx.openMenu.opendelete}
+                open={props.type === 'password' ? ctx.openMenu.openchangepwd : props.type === 'editlibrarian' ? ctx.openMenu.editlibrarian : ctx.openMenu.opendelete}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -552,13 +592,88 @@ export function DeleteDialog(props) {
                         ? `Are you sure to delete ${props.data?.length} students (All student related data will be deleted)`
                         : props.type === 'borrowedbook' || props.type === 'returnbook' || props.type === 'booklist'
                         ? `Are you sure`
-                        : 'Change Password'}
+                        : props.type === 'editlibrarian' ? 'Change Librarian Informations' : 'Change Password'}
                 </DialogTitle>
                 <form onSubmit={(e) => handleDelete(e, student)}>
                     <DialogContent>
-                        {props.type !== 'password' ? (
+                        {
+                        props.type === 'editlibrarian' ? (
+                            <>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="fullname"
+                                    label="NEW FULLNAME"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={(e) => handleChange(e , 'librarian')}
+                                />
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="ID"
+                                    label="NEW ID CARD"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={(e) => handleChange(e , 'librarian')}
+                                />
+                                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-password">Old Password</InputLabel>
+                                    <OutlinedInput
+                                        id="oldpwd"
+                                        name="pwd1"
+                                        type={showPassword.pwd1 ? 'text' : 'password'}
+                                        onChange={(e) => handleChange(e , 'librarian')}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => setShowPassword({ ...showPassword, pwd1: !showPassword.pwd1 })}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword.pwd1 ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label="Password"
+                                        
+                                    />
+                                </FormControl>
+                                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-password">New Password</InputLabel>
+                                    <OutlinedInput
+                                        id="newpwd"
+                                        type={showPassword.pwd2 ? 'text' : 'password'}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    id="pwd2"
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => setShowPassword({ ...showPassword, pwd2: !showPassword.pwd2 })}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword.pwd2 ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        onChange={(e) => handleChange(e , 'librarian')}
+                                        label="Password"
+                                        
+                                    />
+                                </FormControl>
+
+                            </>
+                        )
+                        :
+                        props.type !== 'password' ? (
                             <></>
-                        ) : (
+                        ) 
+                        : 
+                        (
                             <>
                                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                                     <InputLabel htmlFor="outlined-adornment-password">Old Password</InputLabel>
@@ -612,7 +727,7 @@ export function DeleteDialog(props) {
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button type="submit" autoFocus>
-                            {props.type === 'password' ? 'Change' : 'Delete'}
+                            {props.type === 'password' ? 'Change' : props.type === 'editlibrarian' ? 'Confirm' : 'Delete'}
                         </Button>
                     </DialogActions>
                 </form>
