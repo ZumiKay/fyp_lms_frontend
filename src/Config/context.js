@@ -10,7 +10,8 @@ export const Allcontext = ({children}) => {
         opendelete: false,
         openchangepwd: false ,
         openfullscreen: false ,
-        search: false
+        search: false,
+        HD: false
        
     })
     const [hasLogin , sethasLogin] = useState(false)

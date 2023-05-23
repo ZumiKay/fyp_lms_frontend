@@ -39,7 +39,7 @@ const Home = ({ book_data }) => {
         } else {
             setchange(false)
         }
-        console.log(ctx.book)
+       
         window.addEventListener('resize' , handleresize) 
 
         return () => window.removeEventListener('resize' , handleresize) 

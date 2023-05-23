@@ -64,7 +64,6 @@ export default function DataTable(props) {
     const [selected, setSelected] = React.useState([]);
     const [searchvalue, setsearch] = React.useState('');
     const [filterdata, setfilter] = React.useState([]);
-
     const [openfullscreen, setfullscreen] = React.useState({});
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -177,10 +176,10 @@ export default function DataTable(props) {
                                 {props.type === 'studentlist' ? (
                                     <>
                                         {' '}
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [props.type]: true, action: 'create' })} className="table-btn">
+                                        <button onClick={() => ctx.setMenu({[props.type]: true , action: 'create'})} className="table-btn">
                                             REGISTER STUDENT
                                         </button>
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, department: true })} className="table-btn">
+                                        <button onClick={() => ctx.setMenu({[props.type]: true, action: 'createdp'})} className="table-btn">
                                             CREATE DEPARTMENT
                                         </button>
                                         {selected.length > 0 && (
@@ -191,11 +190,11 @@ export default function DataTable(props) {
                                     </>
                                 ) : props.type === 'booklist' ? (
                                     <>
-                                        <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Createbook`]: true, action: 'create' })} className="table-btn">
+                                        <button onClick={() => ctx.setMenu({[props.type]: true , action: 'create'})} className="table-btn">
                                             CREATE BOOK
                                         </button>
                                         {selected.length === 1 && (
-                                            <button onClick={() => ctx.setMenu({ ...ctx.openMenu, [`Editbook`]: true, action: 'edit' })} className="table-btn edit">
+                                            <button onClick={() => ctx.setMenu({[props.type]: true , action: 'edit'})} className="table-btn edit">
                                                 EDIT BOOK
                                             </button>
                                         )}
@@ -219,10 +218,7 @@ export default function DataTable(props) {
                                 ) : (
                                     <></>
                                 )}
-                                <FormDialog type={'department'} />
-                                <FormDialog type={props.type} action={ctx.openMenu.action} selectedbook={selected} />
-                                <FormDialog type={'Createbook'} action={ctx.openMenu.action} selectedbook={selected} />
-                                <FormDialog type={'Editbook'} action={ctx.openMenu.action} selectedbook={selected} />
+                                {ctx.openMenu[props.type] && <FormDialog type={props.type} action={ctx.openMenu.action} selectedbook={selected}/>}
                                 <DeleteDialog data={selected} type={props.type} />
                             </TableCell>
                             <TableCell align="center" colSpan={1}>

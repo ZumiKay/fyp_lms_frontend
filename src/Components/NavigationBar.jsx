@@ -85,7 +85,7 @@ const NavigationBar = () => {
             
             <DeleteDialog type={"password"}/>
             <DeleteDialog type={"editlibrarian"}/>
-            <FormDialog type={'HD'}/>
+            {ctx.openMenu.HD && <FormDialog type={'HD'}/>}
         </div> 
     );
 };

@@ -4,6 +4,7 @@ import DataTable from '../DataTable';
 import axios from 'axios';
 import { Mycontext } from '../../Config/context';
 import env, { createData } from '../../env';
+import { Loading } from '../Asset';
 
 function countVisitsByTimeRange(dates) {
     const now = new Date();
@@ -89,6 +90,7 @@ const ListofStudentPage = () => {
                 <h1>List of Students</h1>
             </div>
             <div className="table_data">
+                {ctx.loading.studentlist && <Loading/>}
                 <DataTable data={ctx.student} entry={studentdata} type={'studentlist'} />
             </div>
         </div>

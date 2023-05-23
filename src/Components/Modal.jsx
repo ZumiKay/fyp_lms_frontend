@@ -36,6 +36,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';
+import { Loading } from './Asset';
 
 export default function ResponsiveDialog(props) {
     const theme = useTheme();
@@ -132,13 +133,12 @@ export default function ResponsiveDialog(props) {
 }
 
 export function FormDialog(props) {
-    const [open, setOpen] = React.useState(false);
+    
     const ctx = useContext(Mycontext);
     const [userData, setdata] = useState({
         department: '',
         status: 'available'
     });
-    const [departments, setdep] = useState('');
     const [department, setdepartment] = useState([]);
     const fetchdata = (end) => {
         return axios({
@@ -154,14 +154,16 @@ export function FormDialog(props) {
         if (props.action === 'edit') {
             const findBook = ctx.book.allbooks.find(({ id }) => id === props.selectedbook[0]);
             setdata(findBook);
-            console.log(findBook);
         }
     }, [ctx.book.allbooks, props.action, props.selectedbook]);
     const handleSubmit = (e) => {
+        ctx.setloading({...ctx.loading , formdialog:true})
         e.preventDefault();
         if (props.type === 'studentlist') {
+            if(props.action === 'create') {
             fetchdata('register-student')
                 .then(() => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
                     toast.success('Student Registered', { duration: 2000 });
                     ctx.setstudent((prev) => [
                         ...prev,
@@ -170,6 +172,7 @@ export function FormDialog(props) {
                     e.target.reset();
                 })
                 .catch((err) => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
                     if (err.response.status === 400) {
                         toast.error('Please Check All Required Informations', { duration: 2000 });
                     } else if (err.response.status === 401) {
@@ -178,13 +181,26 @@ export function FormDialog(props) {
                         toast.error('Opps! Something Wrong');
                     }
                 });
+            } else if (props.action === 'createdp') {
+                fetchdata('createdepartment')
+                .then(() => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
+                    toast.success('Department Created', { duration: 2000 });
+                    e.target.reset();
+                })
+                .catch(() => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
+                    toast.error('Error Occured', { duration: 2000 })});
+            }
         } else if (props.type === 'HD') {
             fetchdata('register-HD')
                 .then(() => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
                     toast.success('Headdepartment Registered', { duration: 2000 });
                     e.target.reset();
                 })
                 .catch((err) => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
                     if (err.response.status === 400) {
                         toast.error('Please Check All Required Informations', { duration: 2000 });
                     } else if (err.response.status === 401) {
@@ -193,14 +209,7 @@ export function FormDialog(props) {
                         toast.error('Opps! Something Wrong');
                     }
                 });
-        } else if (props.type === 'department') {
-            fetchdata('createdepartment')
-                .then(() => {
-                    toast.success('Department Created', { duration: 2000 });
-                    e.target.reset();
-                })
-                .catch(() => toast.error('Error Occured', { duration: 2000 }));
-        } else if (props.type === 'Createbook' || props.type === 'Editbook') {
+        } else if (props.type === 'booklist') {
             if (props.action === 'create') {
                 axios({
                     method: 'post',
@@ -221,11 +230,13 @@ export function FormDialog(props) {
                     }
                 })
                     .then(() => {
+                        ctx.setloading({...ctx.loading , formdialog:false})
                         toast.success('Book Created', { duration: 2000 });
                         ctx.setbook((prev) => ({ ...prev, allbooks: [...prev.allbooks, userData] }));
                         e.target.reset();
                     })
                     .catch((err) => {
+                        ctx.setloading({...ctx.loading , formdialog:false})
                         if (err.response.status === 400) {
                             toast.error('Please Check All Required Input');
                         } else {
@@ -251,9 +262,11 @@ export function FormDialog(props) {
                     }
                 })
                     .then(() => {
+                        ctx.setloading({...ctx.loading , formdialog:false})
                         toast.success('Book Updated', { duration: 2000 });
                     })
                     .catch((err) => {
+                        ctx.setloading({...ctx.loading , formdialog:false})
                         if (err.response.status === 400) {
                             toast.error('Please Check All Required Input');
                         } else {
@@ -275,8 +288,9 @@ export function FormDialog(props) {
     };
 
     const handleClose = () => {
-        setOpen(false);
-        ctx.setMenu({ ...ctx.openMenu, [props.type]: false });
+       
+        ctx.setMenu({ ...ctx.openMenu, [props.type]: false});
+       
     };
     const getdepartment = () => {
         axios({
@@ -289,8 +303,11 @@ export function FormDialog(props) {
     };
 
     useEffect(() => {
-        getdepartment();
-    }, []);
+        if(props.type === 'studentlist' || props.type === 'HD') {
+            getdepartment();
+            console.log("Deparment Running")
+        }
+     }, []);
 
     return (
         <div>
@@ -298,16 +315,17 @@ export function FormDialog(props) {
                 <DialogTitle>
                     {' '}
                     {props.type === 'studentlist'
-                        ? `${props.action === 'create' ? 'Register Student' : 'Edit Student'}`
+                        ? `${props.action === 'create' ? 'REGISTER STUDENT' : 'CREATE DEPARTMENT'}`
                         : props.type === 'HD'
                         ? 'REGISTER HEADDEPARTMENT'
                         : `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : 'Edit Book'}`}{' '}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
+                    {ctx.loading.formdialog && <Loading/>}
                     <DialogContent>
                         <DialogContentText>Please Fill in with relevant information</DialogContentText>
 
-                        {props.type === 'studentlist' ? (
+                        {(props.type === 'studentlist' && props.action === 'create') ? (
                             <>
                                 {' '}
                                 <TextField autoFocus margin="dense" name="firstname" label="Firstname" type="text" fullWidth variant="standard" required onChange={handleChange} />
@@ -318,7 +336,7 @@ export function FormDialog(props) {
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                     <Select id="department" value={userData.department} name="department" label="department" onChange={handleChange}>
                                         {department?.map((i) => (
-                                            <MenuItem value={i.department}>{i.department}</MenuItem>
+                                            <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -344,14 +362,14 @@ export function FormDialog(props) {
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="department" value={userData.department} label="department" onChange={handleChange}>
                                         {department?.map((i) => (
-                                            <MenuItem value={i.department}>{i.department}</MenuItem>
+                                            <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <TextField autoFocus margin="dense" name="email" label="EMAIL" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="phone_number" label="PHONENUMBER" type="text" fullWidth variant="standard" required onChange={handleChange} />
                             </>
-                        ) : props.type === 'department' ? (
+                        ) : (props.type === 'studentlist' && props.action === 'createdp') ? (
                             <>
                                 <TextField autoFocus margin="dense" name="faculty" label="FACULTY" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="department" label="DEPARTMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />
@@ -502,6 +520,7 @@ export function DeleteDialog(props) {
     };
     const handleDelete = (e, id) => {
         e.preventDefault();
+        ctx.setloading({...ctx.loading , delete: true})
         if (props.type === 'studentlist') {
             axios({
                 method: 'post',
@@ -511,8 +530,12 @@ export function DeleteDialog(props) {
                     Authorization: `Bearer ${ctx.user.token.accessToken}`
                 }
             })
-                .then(() => window.location.reload())
-                .catch(() => toast.error('Something Wrong', { duration: 2000 }));
+                .then(() => {
+                    ctx.setloading({...ctx.loading , delete: false})
+                    window.location.reload()})
+                .catch(() => {
+                    ctx.setloading({...ctx.loading , delete: false})
+                    toast.error('Something Wrong', { duration: 2000 })});
         } else if (props.type === 'borrowedbook') {
             axios({
                 method: 'post',
@@ -521,7 +544,14 @@ export function DeleteDialog(props) {
                     Authorization: `Bearer ${ctx.user.token.accessToken}`
                 },
                 data: { id: props.data }
-            }).then(() => window.location.reload());
+            }).then(() => {
+                ctx.setloading({...ctx.loading , delete: false})
+                window.location.reload()
+            }).catch (() => {
+                ctx.setloading({...ctx.loading , delete: false})
+                    toast.error('Something Wrong', { duration: 2000 })
+                
+            });
         } else if (props.type === 'booklist') {
             axios({
                 method: 'post',
@@ -532,7 +562,12 @@ export function DeleteDialog(props) {
                 data: {
                     id: props.data
                 }
-            }).then(() => window.location.reload());
+            }).then(() => {
+                ctx.setloading({...ctx.loading , delete: false})
+                window.location.reload()}).catch(() => {
+                    ctx.setloading({...ctx.loading , delete: false})
+                    toast.error('Something Wrong', { duration: 2000 })
+                });
         } else if (props.type === 'editlibrarian') {
             axios({
                 method: "POST" ,
@@ -542,6 +577,7 @@ export function DeleteDialog(props) {
                 },
                 data : libraiandata
             }).then(() => {
+                ctx.setloading({...ctx.loading , delete: false})
                 toast.success("Change Successfully" , {duration: 2000})
                 if (libraiandata.ID !== '' && libraiandata.fullname !== '') {
                     ctx.user.user.fullname = libraiandata.fullname
@@ -557,7 +593,8 @@ export function DeleteDialog(props) {
                 } 
                 e.target.reset()
             }).catch((err) => {
-                toast.error("Something Wrong" , {duration:2000})
+                ctx.setloading({...ctx.loading , delete: false})
+                    toast.error('Something Wrong', { duration: 2000 })
             })
         } else {
             axios({
@@ -569,11 +606,12 @@ export function DeleteDialog(props) {
                 data: password
             })
                 .then((res) => {
+                    ctx.setloading({...ctx.loading , delete: false})
                     toast.success(res.data.message, { duration: 2000 });
                     e.target.reset();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    ctx.setloading({...ctx.loading , delete: false})
                     toast.error(err.response.data.message, { duration: 2000 });
                 });
         }
@@ -595,6 +633,7 @@ export function DeleteDialog(props) {
                         : props.type === 'editlibrarian' ? 'Change Librarian Informations' : 'Change Password'}
                 </DialogTitle>
                 <form onSubmit={(e) => handleDelete(e, student)}>
+                    {ctx.loading.delete && <Loading/>}
                     <DialogContent>
                         {
                         props.type === 'editlibrarian' ? (
@@ -816,6 +855,7 @@ export function FullScreenDialog(props) {
         setexport({ ...exportdata, [event.target.name]: event.target.value });
     };
     const handleSubmit = (e) => {
+        ctx.setloading({...ctx.loading , report: true})
         e.preventDefault();
         axios({
             method: 'post',
@@ -827,6 +867,7 @@ export function FullScreenDialog(props) {
             data: exportdata
         })
             .then((res) => {
+                ctx.setloading({...ctx.loading , report: false})
                 if (exportdata.filetype === 'pdf') {
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement('a');
@@ -843,7 +884,9 @@ export function FullScreenDialog(props) {
                 e.target.reset();
                 toast.success('Export Successfully', { duration: 2000 });
             })
-            .catch(() => toast.error('Something Wrong', { duration: 2000 }));
+            .catch(() => {
+                ctx.setloading({...ctx.loading , report: false})
+                toast.error('Something Wrong', { duration: 2000 })});
     };
 
     return (
@@ -970,6 +1013,7 @@ export function FullScreenDialog(props) {
                     ) : props.type === 'Create Report' ? (
                         <>
                             <form className="report_form" onSubmit={handleSubmit}>
+                                {ctx.loading.report && <Loading/>}
                                 <TextField autoFocus margin="dense" name="name" label="NAME OF REPORT" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>

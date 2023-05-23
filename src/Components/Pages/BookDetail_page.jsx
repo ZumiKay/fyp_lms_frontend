@@ -51,7 +51,7 @@ const BookDetailPage = ({ book }) => {
                         </tr>
                         <tr>
                             <th>PublisherDate</th>
-                            <td>{fitlerbook && `${new Date(fitlerbook[0]?.publisher_date).toLocaleDateString()}`}</td>
+                            <td>{fitlerbook && `${new Date(fitlerbook[0]?.publisher_date).toLocaleDateString('en')}`}</td>
                         </tr>
                     </table>
                 </div>

@@ -4,6 +4,7 @@ import DataTable from '../DataTable'
 import { Mycontext } from '../../Config/context'
 import axios from 'axios'
 import env from '../../env'
+import { Loading } from '../Asset'
 
 const ListofBook = () => {
     const ctx = useContext(Mycontext)
@@ -14,6 +15,7 @@ const ListofBook = () => {
             <h1>List of All Book</h1>
         </div>
         <div className="table_sec">
+          {ctx.loading.booklist && <Loading/>}
             <DataTable type={"booklist"} data={ctx.book?.allbooks}/>
         </div>
 
@@ -55,8 +57,8 @@ export const BorrowedBook = () => {
     <div className='borrowedbook_container'>
     <h1>List of Borrowed Book</h1>
     <div className="table_container">
-      
-        <DataTable type={"borrowedbook"} data={borrowedbook}/>
+      {ctx.loading.borrowedbook && <Loading/>}
+      <DataTable type={"borrowedbook"} data={borrowedbook}/>
     </div>
 </div>
   )
