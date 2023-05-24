@@ -57,7 +57,7 @@ export const BorrowedBook = () => {
     <div className='borrowedbook_container'>
     <h1>List of Borrowed Book</h1>
     <div className="table_container">
-      {ctx.loading.borrowedbook && <Loading/>}
+      {!ctx.loading.borrowedbook && <Loading/>}
       <DataTable type={"borrowedbook"} data={borrowedbook}/>
     </div>
 </div>

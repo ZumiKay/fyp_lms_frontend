@@ -55,7 +55,7 @@ body {
 }
 .NavBar_container .first_sec .resizeinput {
   position: fixed;
-  top: 14%;
+  top: 100px;
   width: 100%;
   right: 0;
   background-color: #e2e2e2;
@@ -270,6 +270,11 @@ body {
   align-items: center;
   text-align: center;
 }
+@media screen and (max-height: 690px) {
+  .MenuItem .menu_sec {
+    padding-bottom: 120px;
+  }
+}
 .MenuItem .menu_sec .link_page {
   width: 80%;
   background-color: rgb(105, 105, 105);
@@ -333,7 +338,7 @@ body {
 
 .Login_container {
   background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
-  height: 100vh;
+  height: 120vh;
 }
 .Login_container .Login_form {
   position: relative;
@@ -347,7 +352,8 @@ body {
   transform: translate(-50%, 10%);
   width: 40%;
   border-radius: 25px;
-  height: 80%;
+  height: 600px;
+  overflow: auto;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 @media screen and (max-width: 768px) {
@@ -398,11 +404,12 @@ body {
 }
 
 .loading_container {
-  z-index: 2;
+  z-index: 10;
   position: fixed;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
+  width: 200px;
 }
 .loading_container .loading {
   width: 200px;
