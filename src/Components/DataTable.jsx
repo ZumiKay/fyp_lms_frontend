@@ -172,7 +172,7 @@ export default function DataTable(props) {
                             <TableCell align="center" colSpan={2}>
                                 <input type="text" className="search_input" placeholder="Search" onChange={(e) => setsearch(e.target.value.replace(/\s+/g, '').toLowerCase())} />
                             </TableCell>
-                            <TableCell align="center" colSpan={2}>
+                            <TableCell align="center" colSpan={3}>
                                 {props.type === 'studentlist' ? (
                                     <>
                                         {' '}

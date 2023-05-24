@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../Style/style.css';
-import { setimage } from './Asset';
+import { Loading, setimage } from './Asset';
 import '../Style/style.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mycontext } from '../Config/context';
@@ -97,17 +97,20 @@ const MenuItem = () => {
     const user_data = ctx.user;
     const [openreport, setopenreport] = useState(false)
     const handleLogout = () => {
+        ctx.setloading({...ctx.loading , logout: true})
         axios({
             method: 'post',
             url: env.api + 'logout',
             data: user_data.token.refreshToken
         }).then(() => {
+            ctx.setloading({...ctx.loading , logout: true})
             Cookies.remove('user');
             window.location.reload();
         });
     };
     return (
         <div className={ctx.openMenu.menu ? 'MenuItem Menu_Animated' : 'MenuItem'}>
+            {ctx.loading.logout && <Loading/>}
             <div className="profile_sec">
                
                 <p onClick={() => navigate('/profile')} className="Account_Detail">
