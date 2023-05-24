@@ -306,7 +306,7 @@ export default function DataTable(props) {
                                                             {value.lastname} {value.firstname}
                                                         </h2>
                                                         <h2> ID: {value.studentID}</h2>
-                                                        <h2> PhoneNumber: {value.phone_number}</h2>
+                                                        <h2>TEL:{value.phonenumber}</h2>
                                                     </>
                                                 ) : column.id === 'libraryentry' ? (
                                                     <>

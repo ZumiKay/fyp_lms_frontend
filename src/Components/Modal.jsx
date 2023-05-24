@@ -71,7 +71,7 @@ export default function ResponsiveDialog(props) {
                                 </tr>
                                 <tr>
                                     <th>Department</th>
-                                    <td>{props.data?.deparment}</td>
+                                    <td>{props.data?.department}</td>
                                 </tr>
                                 <tr>
                                     <th></th>
@@ -1065,7 +1065,7 @@ export function FullScreenDialog(props) {
                                     <p className="entry">{new Date(entry.createdAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                                     <i style={{ color: 'red' }} class="fa-solid fa-arrow-right"></i>
 
-                                    <p className="entry"> {entry.entry_date}</p>
+                                    <p className="entry"> {new Date(entry.createdAt).getDate()}/{new Date(entry.createdAt).getMonth() + 1}/{new Date(entry.createdAt).getFullYear()} {new Date(entry.createdAt).getHours()}:{new Date(entry.createdAt).getMinutes().toString().padStart(2,'0')}:{new Date(entry.createdAt).getSeconds().toString().padStart(2, '0')}</p>
                                 </ListItem>
                                 <Divider />
                             </>

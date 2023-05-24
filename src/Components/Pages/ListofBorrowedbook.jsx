@@ -24,7 +24,7 @@ const ListofBorrowedbook = () => {
       
       bookdata = res.data.map((i) => {
        
-        return createBorrowedData(i.borrow_id , i.Book.Books, i.Book.status , (i.Book.borrow_date),i.Book.return_date,(i.Book.expect_return_date) , i.Book.qrcode)
+        return createBorrowedData(i.borrow_id , i.Book.Books, i.Book.status , (i.Book.borrow_date),i.return_date,(i.Book.expect_return_date) , i.Book.qrcode)
     })
     setborrowed(bookdata)
     ctx.setloading({...ctx.loading , borrowedbook:false})

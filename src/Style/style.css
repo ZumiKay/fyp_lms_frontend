@@ -332,21 +332,33 @@ body {
 }
 
 .Login_container {
-  background-color: #65A3D8;
+  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
   height: 100vh;
 }
 .Login_container .Login_form {
+  position: relative;
+  left: 50%;
   font-weight: 800;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   background-color: white;
-  transform: translate(30vw, 10vh);
+  transform: translate(-50%, 10%);
   width: 40%;
   border-radius: 25px;
-  height: 80vh;
-  box-shadow: 0px 1px 1px 1px lightgray;
+  height: 80%;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+@media screen and (max-width: 768px) {
+  .Login_container .Login_form {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .Login_container .Login_form {
+    width: 100%;
+  }
 }
 .Login_container .Login_form .logo {
   margin-top: -150px;
@@ -354,12 +366,24 @@ body {
   height: 250px;
   object-fit: cover;
 }
+@media screen and (min-width: 2560px) {
+  .Login_container .Login_form .logo {
+    width: 300px;
+    height: 350px;
+  }
+}
 .Login_container .Login_form input {
   margin-top: -100px;
   width: 80%;
   padding: 20px;
   background-color: lightgrey;
   border-radius: 25px;
+}
+@media screen and (min-width: 2560px) {
+  .Login_container .Login_form input {
+    padding: 40px;
+    font-size: xx-large;
+  }
 }
 .Login_container .Login_form #login-btn {
   background-color: #4682B4;

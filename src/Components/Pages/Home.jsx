@@ -78,13 +78,13 @@ const SliderContainer = ({ title, book, type }) => {
     useEffect(() => {
        
         let filteredbook = book?.allbooks?.filter((book) => {
-            if(book?.categories[0].trim().toLowerCase().includes(title.trim().toLowerCase())) {
+            if(book?.categories[0].trim().toLowerCase().includes(title?.trim().toLowerCase())) {
                 return book
             } else if(book?.title.trim().toLowerCase().includes(title?.trim().toLowerCase())) {
                 return book
-            } else if(book?.author[0].trim().toLowerCase().includes(title.trim().toLowerCase())) {
+            } else if(book?.author[0].trim().toLowerCase().includes(title?.trim().toLowerCase())) {
                 return book
-            } else if (book?.ISBN[0].identifier.trim().includes(title.trim())) {
+            } else if (book?.ISBN[0].identifier.trim().includes(title?.trim())) {
                 return book
             }
         })

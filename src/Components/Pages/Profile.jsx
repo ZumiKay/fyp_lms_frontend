@@ -11,7 +11,7 @@ const Profile = () => {
           <table className='profile_table'>
             <tr>
                 <th>Firstname: </th>
-                <td>{ctx.user.user.firstname ? ctx.user.user.fistname : ctx.user.user.fullname.split(' ')[0]}</td>
+                <td>{ctx.user.user.firstname ? ctx.user.user.firstname : ctx.user.user.fullname.split(' ')[0]}</td>
                 <th>Lastname: </th>
                 <td>{ctx.user.user.lastname ? ctx.user.user.lastname : ctx.user.user.fullname.split(' ')[1]}</td>
             </tr>
