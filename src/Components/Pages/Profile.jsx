@@ -10,10 +10,18 @@ const Profile = () => {
           
           <table className='profile_table'>
             <tr>
-                <th>Firstname: </th>
-                <td>{ctx.user.user.firstname ? ctx.user.user.firstname : ctx.user.user.fullname.split(' ')[0]}</td>
+               {ctx.user.user.firstname &&
+               <>
+               <th>Firstname: </th>
+                <td>{ctx.user.user.firstname}</td>
                 <th>Lastname: </th>
-                <td>{ctx.user.user.lastname ? ctx.user.user.lastname : ctx.user.user.fullname.split(' ')[1]}</td>
+                <td>{ctx.user.user.lastname}</td>
+                </>
+                }
+                {!ctx.user.user.firstname && <>
+                <th>Fullname: </th>
+                <td>{ctx.user.user.fullname}</td>
+                </>}
             </tr>
             <tr>
                 <th>ID Card: </th>

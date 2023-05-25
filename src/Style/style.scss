@@ -389,7 +389,7 @@ body {
         transform: translate(-50% , 10%);
         width: 40%;
         border-radius: 25px;
-        height: 600px;
+        height: 75%;
         overflow: auto;
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
@@ -397,7 +397,7 @@ body {
             width: 80%;
         }
         @media screen and (max-width: 425px) {
-            width: 100%;
+            width:90%;
         }
         
         

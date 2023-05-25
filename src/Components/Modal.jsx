@@ -386,6 +386,7 @@ export function FormDialog(props) {
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                     required
                                 />
                                 <TextField
@@ -398,6 +399,7 @@ export function FormDialog(props) {
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                                 <TextField
                                     autoFocus
@@ -410,6 +412,7 @@ export function FormDialog(props) {
                                     variant="standard"
                                     required
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                                 <TextField
                                     autoFocus
@@ -422,6 +425,7 @@ export function FormDialog(props) {
                                     variant="standard"
                                     required
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                                 <TextField
                                     autoFocus
@@ -435,6 +439,7 @@ export function FormDialog(props) {
                                     placeholder="Action & Logic"
                                     required
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                                 {props.action !== 'edit' && (
                                     <TextField
@@ -461,6 +466,7 @@ export function FormDialog(props) {
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                             </>
                         )}

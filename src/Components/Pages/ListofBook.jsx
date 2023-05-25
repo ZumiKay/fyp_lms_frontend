@@ -14,8 +14,9 @@ const ListofBook = () => {
         <div className="header_sec">
             <h1>List of All Book</h1>
         </div>
+        {ctx.loading.booklist && <Loading/>}
         <div className="table_sec">
-          {ctx.loading.booklist && <Loading/>}
+         
             <DataTable type={"booklist"} data={ctx.book?.allbooks}/>
         </div>
 
@@ -56,8 +57,9 @@ export const BorrowedBook = () => {
   return (
     <div className='borrowedbook_container'>
     <h1>List of Borrowed Book</h1>
+    {ctx.loading.borrowedbook && <Loading/>}
     <div className="table_container">
-      {!ctx.loading.borrowedbook && <Loading/>}
+     
       <DataTable type={"borrowedbook"} data={borrowedbook}/>
     </div>
 </div>
