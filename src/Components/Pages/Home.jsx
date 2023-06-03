@@ -140,10 +140,6 @@ const AllbookContainer = ({ book_data }) => {
 const FilterNavigation = ({ book , resize , setopen }) => {
     const [search, setsearch] = useState('');
     const ctx = useContext(Mycontext);
-    useEffect(() => {
-
-
-     } , [])
     return (
         <>
         

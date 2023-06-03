@@ -79,7 +79,9 @@ export default function DataTable(props) {
         }
         setSelected([]);
     };
-
+    const formatdate = (value) => {
+        return `${new Date(value).toLocaleDateString('en')}, ${new Date(value).getHours()}:${new Date(value).getMinutes()}:${new Date(value).getSeconds()}`
+    }
     const handleClick = (event, name) => {
         const selectedIndex = selected.indexOf(name);
         let newSelected = [];
@@ -110,33 +112,49 @@ export default function DataTable(props) {
                     return stu;
                 } else if (stu.fullname?.replace(/\s+/g, '')?.toLowerCase().includes(searchvalue)) {
                     return stu;
-                } else if (stu.email.replace(/\s+/g, '').includes(searchvalue)) return stu;
-                else if (stu.phoneNumber.toString().includes(searchvalue)) return stu;
-                else if (department.toLowerCase().includes(searchvalue)) return stu;
+                } else if (stu.email?.replace(/\s+/g, '').includes(searchvalue)) return stu;
+                else if (stu.phoneNumber?.toString().includes(searchvalue)) return stu;
+                else if (department?.toLowerCase().includes(searchvalue)) return stu;
             });
         } else if (props.type === 'borrowedbook') {
+            
+            if(ctx.user.user.role === 'librarian') {
+            
             filter = props.data?.filter((book) => {
                 let fullname = book.student?.lastname + book.student?.firstname;
+               
                 if (book.borrowid.includes(searchvalue)) {
                     return book;
-                } else if (book.student.studentID.includes(searchvalue)) {
+                } if (book.student?.studentID?.includes(searchvalue)) {
                     return book;
-                } else if (book.borrowdate.toString().includes(searchvalue)) {
+                } if (formatdate(book.borrowdate)?.replace(/\s+/g, '').includes(searchvalue) || book.returndate?.replace(/\s+/g, '').toLowerCase().includes(searchvalue) || formatdate(book.expectreturndate)?.replace(/\s+/g, '').includes(searchvalue)) {
                     return book;
-                } else if (book.returndate?.toString().includes(searchvalue)) {
-                    return book;
-                } else if (fullname.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) return book;
-                else if (book.student.phone_number.toString().includes(searchvalue)) return book;
-            });
+                } if (fullname?.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) return book;
+                if (book.student?.phonenumber?.toString().includes(searchvalue)) return book;
+                if (book.status?.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) return book
+            }); }
+            else if (ctx.user.user.role === 'student') {
+                filter = props.data?.filter((book) => {
+                    
+                    if (book.borrowid?.includes(searchvalue)) {
+                        return book;
+                    } 
+                    if (formatdate(book.borrowdate)?.replace(/\s+/g, '').includes(searchvalue) || formatdate(book.returndate)?.replace(/\s+/g, '').includes(searchvalue) || formatdate(book.expectreturndate)?.replace(/\s+/g, '').includes(searchvalue)) {
+                        return book;
+                    }
+                    
+                   if (book.status?.replace(/\s+/g, '').toLowerCase().includes(searchvalue)) return book
+                });
+            }
         } else {
             filter = props.data?.filter((book) => {
-                if (book.ISBN[0].identifier.includes(searchvalue)) {
+                if (book.ISBN[0]?.identifier?.includes(searchvalue)) {
                     return book;
-                } else if (book.title.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)) {
+                } else if (book.title?.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)) {
                     return book;
-                } else if (book.categories[0].replace(/\s+/g, '').toLowerCase().includes(searchvalue)) {
+                } else if (book.categories[0]?.replace(/\s+/g, '')?.toLowerCase()?.includes(searchvalue)) {
                     return book;
-                } else if (book.status.toLowerCase() === searchvalue) {
+                } else if (book.status?.toLowerCase() === searchvalue) {
                     return book;
                 }
             });
@@ -160,19 +178,22 @@ export default function DataTable(props) {
 
     React.useEffect(() => {
         handleSearch();
+        
     }, [searchvalue]);
+    
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }} className="datatable_container">
-            <TableContainer sx={{ maxHeight: 600 }}>
+        <Paper sx={{width:"100%", overflow: 'hidden' }} className="datatable_container">
+            <TableContainer sx={{ maxHeight:(1180 * window.innerHeight) / 1402}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center" colSpan={1}></TableCell>
-                            <TableCell align="center" colSpan={2}>
+                            <TableCell colSpan={1}></TableCell>
+                            
+                            <TableCell align="center" colSpan={3}>
                                 <input type="text" className="search_input" placeholder="Search" onChange={(e) => setsearch(e.target.value.replace(/\s+/g, '').toLowerCase())} />
                             </TableCell>
-                            <TableCell align="center" colSpan={3}>
+                            <TableCell align="center" colSpan={5}>
                                 {props.type === 'studentlist' ? (
                                     <>
                                         {' '}
@@ -182,6 +203,10 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({[props.type]: true, action: 'createdp'})} className="table-btn">
                                             CREATE DEPARTMENT
                                         </button>
+                                        <button onClick={() => ctx.setMenu({[props.type]: true, action: 'deteledp'})} className="table-btn delete">
+                                            DELETE DEPARTMENT
+                                        </button>
+                                        
                                         {selected.length > 0 && (
                                             <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
                                                 DELETE STUDENT
@@ -209,10 +234,14 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
                                             Detete
                                         </button>
-                                        {ctx.user.user.role === 'librarian' && (
+                                        {(ctx.user.user.role === 'librarian' && selected.length === 1) && (
+                                            <>
+                                            {(props.data?.find(({borrowid}) => borrowid === selected[0]).status.includes('PickedUp')) && 
                                             <button style={{ marginLeft: '20px' }} onClick={handleReturn} className="table-btn">
                                                 RETURN BOOK
                                             </button>
+                                            }   
+                                            </>
                                         )}
                                     </>
                                 ) : (
@@ -226,8 +255,8 @@ export default function DataTable(props) {
                             </TableCell>
                         </TableRow>
 
-                        <TableRow>
-                            <TableCell padding="checkbox">
+                      <TableRow>
+                      <TableCell padding="checkbox" style={{zIndex: '8' , top: 57}}>
                                 {ctx.user.user.role === 'librarian' && (
                                     <Checkbox
                                         color="primary"
@@ -240,12 +269,13 @@ export default function DataTable(props) {
                                     />
                                 )}
                             </TableCell>
+                        
                             {(props.type === 'booklist' ? bookcolumns : props.type === 'borrowedbook' ? borrowbookcolumns : columns).map((column) => (
                                 <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
                                     {column.label}
                                 </TableCell>
                             ))}
-                        </TableRow>
+                            </TableRow>
                     </TableHead>
                     <TableBody>
                         {(searchvalue === '' ? props.data : filterdata)?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {

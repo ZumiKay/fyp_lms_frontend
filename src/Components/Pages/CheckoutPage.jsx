@@ -33,7 +33,7 @@ const CheckoutPage = () => {
           localStorage.removeItem('cart');
           ctx.setcart([]);
         } catch (error) {
-          toast.error('Something went wrong', { duration: 2000 });
+          toast.error('Error Occured', { duration: 2000 });
         }
       };
       

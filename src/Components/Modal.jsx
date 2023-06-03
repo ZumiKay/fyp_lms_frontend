@@ -191,6 +191,11 @@ export function FormDialog(props) {
                 .catch(() => {
                     ctx.setloading({...ctx.loading , formdialog:false})
                     toast.error('Error Occured', { duration: 2000 })});
+            } else if (props.action === 'deteledp') {
+                fetchdata('deletedepartment').then(() => {
+                    ctx.setloading({...ctx.loading , formdialog:false})
+                    window.location.reload()
+                })
             }
         } else if (props.type === 'HD') {
             fetchdata('register-HD')
@@ -292,22 +297,23 @@ export function FormDialog(props) {
         ctx.setMenu({ ...ctx.openMenu, [props.type]: false});
        
     };
-    const getdepartment = () => {
-        axios({
-            method: 'get',
-            url: env.api + 'getdepartment',
-            headers: {
-                Authorization: `Bearer ${ctx.user.token.accessToken}`
-            }
-        }).then((res) => setdepartment(res.data));
-    };
+   
 
     useEffect(() => {
-        if(props.type === 'studentlist' || props.type === 'HD') {
-            getdepartment();
-            console.log("Deparment Running")
+        const getdepartment = () => {
+            if (props.type === 'studentlist' || props.type === 'HD') {
+            axios({
+                method: 'get',
+                url: env.api + 'getdepartment',
+                headers: {
+                    Authorization: `Bearer ${ctx.user.token.accessToken}`
+                }
+            }).then((res) => setdepartment(res.data));
         }
-     }, []);
+        };
+        getdepartment()
+       
+     }, [props.type]);
 
     return (
         <div>
@@ -315,7 +321,10 @@ export function FormDialog(props) {
                 <DialogTitle>
                     {' '}
                     {props.type === 'studentlist'
-                        ? `${props.action === 'create' ? 'REGISTER STUDENT' : 'CREATE DEPARTMENT'}`
+                        ? props.action === 'create' ? 'REGISTER STUDENT' : props.action === 'createdp' ? <>
+                        <h1>CREATE DEPARTMENT</h1>
+                        
+                        </> : <h1>DETELET DEPARTMENT</h1>
                         : props.type === 'HD'
                         ? 'REGISTER HEADDEPARTMENT'
                         : `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : 'Edit Book'}`}{' '}
@@ -323,10 +332,11 @@ export function FormDialog(props) {
                 <form onSubmit={handleSubmit}>
                     {ctx.loading.formdialog && <Loading/>}
                     <DialogContent>
-                        <DialogContentText>Please Fill in with relevant information</DialogContentText>
+                        
 
                         {(props.type === 'studentlist' && props.action === 'create') ? (
                             <>
+                            <DialogContentText>Please Fill in with relevant information</DialogContentText>
                                 {' '}
                                 <TextField autoFocus margin="dense" name="firstname" label="Firstname" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="lastname" label="Lastname" type="text" fullWidth variant="standard" required onChange={handleChange} />
@@ -374,7 +384,20 @@ export function FormDialog(props) {
                                 <TextField autoFocus margin="dense" name="faculty" label="FACULTY" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="department" label="DEPARTMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />
                             </>
-                        ) : (
+                        ) :
+                        (props.type === 'studentlist' && props.action === 'deteledp') ?
+                        <>
+                        <FormControl variant="standard" className="select" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">DEPARTMENT</InputLabel>
+                                    <Select labelId="demo-simple-select-label" name="department" value={userData.department} label="department" onChange={handleChange}>
+                                        {department?.map((i) => (
+                                            <MenuItem value={i?.department}>{i?.department}</MenuItem>
+                                        ))}
+                                    </Select>
+                        </FormControl>
+                        </>
+                        :
+                        (
                             <>
                                 <TextField
                                     autoFocus
@@ -473,7 +496,8 @@ export function FormDialog(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">Register</Button>
+                       
+                        <Button type="submit">{props.action === 'deteledp' ? "DELETE" : "REGSITER"}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -787,7 +811,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
-    const [exportdata, setexport] = useState({});
+    const [exportdata, setexport] = useState({
+       department: ctx.user.user.role === 'headdepartment' && ctx.user.user.department
+    });
     const [department, setdep] = useState([]);
     const [filter, setfilter] = useState('');
     const navigate = useNavigate();
@@ -858,7 +884,9 @@ export function FullScreenDialog(props) {
         }
     }
     const handleChange = (event) => {
-        setexport({ ...exportdata, [event.target.name]: event.target.value });
+       
+            setexport({ ...exportdata, [event.target.name]: event.target.value });
+        
     };
     const handleSubmit = (e) => {
         ctx.setloading({...ctx.loading , report: true})
@@ -890,9 +918,15 @@ export function FullScreenDialog(props) {
                 e.target.reset();
                 toast.success('Export Successfully', { duration: 2000 });
             })
-            .catch(() => {
+            .catch((err) => {
                 ctx.setloading({...ctx.loading , report: false})
-                toast.error('Something Wrong', { duration: 2000 })});
+                if(err.response.status === 500) {
+                    toast.error("An Error Occured" , {duration: 2000})
+                } else {
+                    toast.error("Students not found", {duration: 2000})
+                }
+                
+            });
     };
 
     return (
@@ -1021,14 +1055,14 @@ export function FullScreenDialog(props) {
                             <form className="report_form" onSubmit={handleSubmit}>
                                 {ctx.loading.report && <Loading/>}
                                 <TextField autoFocus margin="dense" name="name" label="NAME OF REPORT" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                <FormControl className="select" fullWidth>
+                               {ctx.user.user.role === 'librarian' ? <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
                                         {department.map((i) => (
                                             <MenuItem value={i.department}>{i.department}</MenuItem>
                                         ))}
                                     </Select>
-                                </FormControl>
+                                </FormControl> :  <TextField autoFocus margin="dense" name="department" value={ctx.user.user.department} label="DEPARTMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />}
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange}>

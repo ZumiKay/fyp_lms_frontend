@@ -2,7 +2,7 @@
 //https://fyplms.as.r.appspot.com/api/
 
 const env = {
-    api: 'https://fyplms.as.r.appspot.com/api/',
+    api: 'http://localhost:4000/api/',
     
 }
 export default env;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../Style/style.css';
 import { Loading, setimage } from './Asset';
 import '../Style/style.css';
@@ -12,8 +12,10 @@ import { DeleteDialog, FormDialog, FullScreenDialog } from './Modal';
 const NavigationBar = () => {
     const ctx = useContext(Mycontext);
     const [change, setchange] = useState(false);
+    const [openmenu , setopenmenu] = useState(false)
+    const ref = useRef(null)
     const navigate = useNavigate()
-    const handleClick = (e) => ctx.setMenu({ ...ctx.openMenu, [e.target.id]: !ctx.openMenu[e.target.id] });
+    const handleClick = (e) => setopenmenu(true);
     const handleresize = () => {
         if (window.innerWidth > 800) {
             setchange(true);
@@ -30,16 +32,24 @@ const NavigationBar = () => {
         } else {
             setchange(false)
         }
+        const handleref = (e) => {
+            if(ref.current && ref.current.contains(e.target)) {
+                setopenmenu(true)
+            }
+        }
+        window.addEventListener('mousedown' , handleref)
         window.addEventListener('resize', handleresize);
-        return () =>  window.removeEventListener('resize', handleresize);
+        return () => {
+            window.removeEventListener('mousedown' , handleref)
+             window.removeEventListener('resize', handleresize)};
     }, []);
     return (
         change ?  <div className={'NavBar_container'}>
            
-        <div className="first_sec">
-            <img id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
+        <div  className="first_sec">
+            <img ref={ref} id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
             <img src={setimage.Logo} alt="png_img" className="logo" />
-            <MenuItem />
+            <MenuItem open={openmenu} setopen={setopenmenu} />
         </div>
         <div className="second_sec">
             <i className="fa-solid fa-magnifying-glass" id="search_icon"></i>
@@ -62,10 +72,10 @@ const NavigationBar = () => {
         <div className={'NavBar_container'}>
            
             <div className="first_sec">
-                <img id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
+                <img ref={ref} id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
                 <i onClick={() => ctx.setMenu({...ctx.openMenu , search: !ctx.openMenu.search})} className="fa-solid fa-magnifying-glass fa-2xl" id="search_icon"></i>
                 {ctx.openMenu.search && <input className="resizeinput" onClick={() => navigate('/')} onChange={handleSearch} type="text" placeholder="Search by title,author,ISBN" />}
-                <MenuItem />
+                <MenuItem open={openmenu} setopen={setopenmenu} />
             </div>
              <div className='second_sec'>
              
@@ -91,9 +101,11 @@ const NavigationBar = () => {
 };
 export default NavigationBar;
 
-const MenuItem = () => {
+const MenuItem = (props) => {
     const ctx = useContext(Mycontext);
     const navigate = useNavigate()
+    const userref = useRef(null)
+    
     const user_data = ctx.user;
     const [openreport, setopenreport] = useState(false)
     const handleLogout = () => {
@@ -108,8 +120,22 @@ const MenuItem = () => {
             window.location.reload();
         });
     };
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (userref.current && !userref.current.contains(event.target)) {
+              props.setopen(false)
+            }
+          };
+      
+          document.addEventListener('mousedown', handleOutsideClick);
+      
+          return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+          };
+
+    } , [ctx])
     return (
-        <div className={ctx.openMenu.menu ? 'MenuItem Menu_Animated' : 'MenuItem'}>
+        <div ref={userref} className={props.open ? 'MenuItem Menu_Animated' : 'MenuItem'}>
             {ctx.loading.logout && <Loading/>}
             <div className="profile_sec">
                
