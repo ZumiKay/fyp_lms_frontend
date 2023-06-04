@@ -15,7 +15,7 @@ const ScanStudentEntry = (props) => {
     const [open, setopen] = useState(false);
     const onNewScanResult = async (data) => {
         setscan(true);
-
+        
         if (data) {
             if (props.type === 'scanentry') {
                 axios({
@@ -78,7 +78,8 @@ const ScanStudentEntry = (props) => {
                     </>
                 )}
             </div>
-            <div className="qrcode_reader">{scanned ? <Loading /> : <QrScanner onDecode={onNewScanResult} onError={handleError} />}</div>
+            {scanned ? <Loading/> : 
+            <div className="qrcode_reader"><QrScanner onDecode={onNewScanResult} onError={handleError} /></div>}
             <ResponsiveDialog open={open} type={props.type} data={studentdata} setscan={setscan} setopen={setopen} />
         </div>
     );

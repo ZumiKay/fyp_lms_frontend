@@ -4,7 +4,7 @@
         left: -500px;
     }
     to {
-        left: 0;
+        left: 0px;
     }
     
 }
@@ -17,10 +17,9 @@
     }
 }
 .Menu_Animated {
-    left: 0;
-    animation: slide_in .5s ease;
+    animation: slide_in .5s ease-in-out;
     animation-fill-mode: forwards;
-    transition: left 0.5s ease;
+    
    
     
 }

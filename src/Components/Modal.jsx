@@ -87,11 +87,17 @@ export default function ResponsiveDialog(props) {
                                 </tr>
                                 <tr>
                                     <th>Borrow Date</th>
-                                    <td>{new Date(props.data?.borrow_date).toLocaleDateString('en')}, {new Date(props.data?.borrow_date).getHours()}:{new Date(props.data?.borrow_date).getMinutes()}:{new Date(props.data?.borrow_date).getSeconds()}</td>
+                                    <td>
+                                        {new Date(props.data?.borrow_date).toLocaleDateString('en')}, {new Date(props.data?.borrow_date).getHours()}:{new Date(props.data?.borrow_date).getMinutes()}:
+                                        {new Date(props.data?.borrow_date).getSeconds()}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Expect Return Date</th>
-                                    <td>{new Date(props.data?.expect_return_date).toLocaleDateString('en')}, {new Date(props.data?.expect_return_date).getHours()}:{new Date(props.data?.expect_return_date).getMinutes()}:{new Date(props.data?.expect_return_date).getSeconds()}</td>
+                                    <td>
+                                        {new Date(props.data?.expect_return_date).toLocaleDateString('en')}, {new Date(props.data?.expect_return_date).getHours()}:
+                                        {new Date(props.data?.expect_return_date).getMinutes()}:{new Date(props.data?.expect_return_date).getSeconds()}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Student</th>
@@ -133,7 +139,6 @@ export default function ResponsiveDialog(props) {
 }
 
 export function FormDialog(props) {
-    
     const ctx = useContext(Mycontext);
     const [userData, setdata] = useState({
         department: '',
@@ -157,55 +162,56 @@ export function FormDialog(props) {
         }
     }, [ctx.book.allbooks, props.action, props.selectedbook]);
     const handleSubmit = (e) => {
-        ctx.setloading({...ctx.loading , formdialog:true})
+        ctx.setloading({ ...ctx.loading, formdialog: true });
         e.preventDefault();
         if (props.type === 'studentlist') {
-            if(props.action === 'create') {
-            fetchdata('register-student')
-                .then(() => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
-                    toast.success('Student Registered', { duration: 2000 });
-                    ctx.setstudent((prev) => [
-                        ...prev,
-                        createData(userData.studentID, userData.firstname + ' ' + userData.lastname, userData.department, userData.email, userData.phone_number, '0 For This Week')
-                    ]);
-                    e.target.reset();
-                })
-                .catch((err) => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
-                    if (err.response.status === 400) {
-                        toast.error('Please Check All Required Informations', { duration: 2000 });
-                    } else if (err.response.status === 401) {
-                        toast.error(err.response.data.message);
-                    } else {
-                        toast.error('Opps! Something Wrong');
-                    }
-                });
+            if (props.action === 'create') {
+                fetchdata('register-student')
+                    .then(() => {
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
+                        toast.success('Student Registered', { duration: 2000 });
+                        ctx.setstudent((prev) => [
+                            ...prev,
+                            createData(userData.studentID, userData.firstname + ' ' + userData.lastname, userData.department, userData.email, userData.phone_number, '0 For This Week')
+                        ]);
+                        e.target.reset();
+                    })
+                    .catch((err) => {
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
+                        if (err.response.status === 400) {
+                            toast.error('Please Check All Required Informations', { duration: 2000 });
+                        } else if (err.response.status === 401) {
+                            toast.error(err.response.data.message);
+                        } else {
+                            toast.error('Opps! Something Wrong');
+                        }
+                    });
             } else if (props.action === 'createdp') {
                 fetchdata('createdepartment')
-                .then(() => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
-                    toast.success('Department Created', { duration: 2000 });
-                    e.target.reset();
-                })
-                .catch(() => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
-                    toast.error('Error Occured', { duration: 2000 })});
+                    .then(() => {
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
+                        toast.success('Department Created', { duration: 2000 });
+                        e.target.reset();
+                    })
+                    .catch(() => {
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
+                        toast.error('Error Occured', { duration: 2000 });
+                    });
             } else if (props.action === 'deteledp') {
                 fetchdata('deletedepartment').then(() => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
-                    window.location.reload()
-                })
+                    ctx.setloading({ ...ctx.loading, formdialog: false });
+                    window.location.reload();
+                });
             }
         } else if (props.type === 'HD') {
             fetchdata('register-HD')
                 .then(() => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
+                    ctx.setloading({ ...ctx.loading, formdialog: false });
                     toast.success('Headdepartment Registered', { duration: 2000 });
                     e.target.reset();
                 })
                 .catch((err) => {
-                    ctx.setloading({...ctx.loading , formdialog:false})
+                    ctx.setloading({ ...ctx.loading, formdialog: false });
                     if (err.response.status === 400) {
                         toast.error('Please Check All Required Informations', { duration: 2000 });
                     } else if (err.response.status === 401) {
@@ -235,13 +241,13 @@ export function FormDialog(props) {
                     }
                 })
                     .then(() => {
-                        ctx.setloading({...ctx.loading , formdialog:false})
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
                         toast.success('Book Created', { duration: 2000 });
                         ctx.setbook((prev) => ({ ...prev, allbooks: [...prev.allbooks, userData] }));
                         e.target.reset();
                     })
                     .catch((err) => {
-                        ctx.setloading({...ctx.loading , formdialog:false})
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
                         if (err.response.status === 400) {
                             toast.error('Please Check All Required Input');
                         } else {
@@ -267,11 +273,11 @@ export function FormDialog(props) {
                     }
                 })
                     .then(() => {
-                        ctx.setloading({...ctx.loading , formdialog:false})
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
                         toast.success('Book Updated', { duration: 2000 });
                     })
                     .catch((err) => {
-                        ctx.setloading({...ctx.loading , formdialog:false})
+                        ctx.setloading({ ...ctx.loading, formdialog: false });
                         if (err.response.status === 400) {
                             toast.error('Please Check All Required Input');
                         } else {
@@ -284,60 +290,59 @@ export function FormDialog(props) {
     const handleChange = (event) => {
         if (event.target.name === 'ISBN') {
             setdata({ ...userData, [event.target.name]: [{ type: 'other', identifier: event.target.value }] });
-        }  else if (event.target.name === 'author' ||event.target.name === 'categories' ) {
+        } else if (event.target.name === 'author' || event.target.name === 'categories') {
             setdata({ ...userData, [event.target.name]: [event.target.value] });
-        } 
-        else {
+        } else {
             setdata({ ...userData, [event.target.name]: event.target.value });
         }
     };
 
     const handleClose = () => {
-       
-        ctx.setMenu({ ...ctx.openMenu, [props.type]: false});
-       
+        ctx.setMenu({ ...ctx.openMenu, [props.type]: false });
     };
-   
 
     useEffect(() => {
         const getdepartment = () => {
             if (props.type === 'studentlist' || props.type === 'HD') {
-            axios({
-                method: 'get',
-                url: env.api + 'getdepartment',
-                headers: {
-                    Authorization: `Bearer ${ctx.user.token.accessToken}`
-                }
-            }).then((res) => setdepartment(res.data));
-        }
+                axios({
+                    method: 'get',
+                    url: env.api + 'getdepartment',
+                    headers: {
+                        Authorization: `Bearer ${ctx.user.token.accessToken}`
+                    }
+                }).then((res) => setdepartment(res.data));
+            }
         };
-        getdepartment()
-       
-     }, [props.type]);
+        getdepartment();
+    }, [props.type]);
 
     return (
         <div>
             <Dialog open={ctx.openMenu[props.type]} onClose={handleClose}>
                 <DialogTitle>
                     {' '}
-                    {props.type === 'studentlist'
-                        ? props.action === 'create' ? 'REGISTER STUDENT' : props.action === 'createdp' ? <>
-                        <h1>CREATE DEPARTMENT</h1>
-                        
-                        </> : <h1>DETELET DEPARTMENT</h1>
-                        : props.type === 'HD'
-                        ? 'REGISTER HEADDEPARTMENT'
-                        : `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : 'Edit Book'}`}{' '}
+                    {props.type === 'studentlist' ? (
+                        props.action === 'create' ? (
+                            'REGISTER STUDENT'
+                        ) : props.action === 'createdp' ? (
+                            <>
+                                <h1>CREATE DEPARTMENT</h1>
+                            </>
+                        ) : (
+                            <h1>DETELET DEPARTMENT</h1>
+                        )
+                    ) : props.type === 'HD' ? (
+                        'REGISTER HEADDEPARTMENT'
+                    ) : (
+                        `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : 'Edit Book'}`
+                    )}{' '}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
-                    {ctx.loading.formdialog && <Loading/>}
+                    {ctx.loading.formdialog && <Loading />}
                     <DialogContent>
-                        
-
-                        {(props.type === 'studentlist' && props.action === 'create') ? (
+                        {props.type === 'studentlist' && props.action === 'create' ? (
                             <>
-                            <DialogContentText>Please Fill in with relevant information</DialogContentText>
-                                {' '}
+                                <DialogContentText>Please Fill in with relevant information</DialogContentText>{' '}
                                 <TextField autoFocus margin="dense" name="firstname" label="Firstname" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="lastname" label="Lastname" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="email" label="Email" type="email" fullWidth variant="standard" required onChange={handleChange} />
@@ -379,25 +384,23 @@ export function FormDialog(props) {
                                 <TextField autoFocus margin="dense" name="email" label="EMAIL" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="phone_number" label="PHONENUMBER" type="text" fullWidth variant="standard" required onChange={handleChange} />
                             </>
-                        ) : (props.type === 'studentlist' && props.action === 'createdp') ? (
+                        ) : props.type === 'studentlist' && props.action === 'createdp' ? (
                             <>
                                 <TextField autoFocus margin="dense" name="faculty" label="FACULTY" type="text" fullWidth variant="standard" required onChange={handleChange} />
                                 <TextField autoFocus margin="dense" name="department" label="DEPARTMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />
                             </>
-                        ) :
-                        (props.type === 'studentlist' && props.action === 'deteledp') ?
-                        <>
-                        <FormControl variant="standard" className="select" fullWidth>
+                        ) : props.type === 'studentlist' && props.action === 'deteledp' ? (
+                            <>
+                                <FormControl variant="standard" className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">DEPARTMENT</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="department" value={userData.department} label="department" onChange={handleChange}>
                                         {department?.map((i) => (
                                             <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
-                        </FormControl>
-                        </>
-                        :
-                        (
+                                </FormControl>
+                            </>
+                        ) : (
                             <>
                                 <TextField
                                     autoFocus
@@ -496,8 +499,8 @@ export function FormDialog(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                       
-                        <Button type="submit">{props.action === 'deteledp' ? "DELETE" : "REGSITER"}</Button>
+
+                        <Button type="submit">{props.action === 'deteledp' ? 'DELETE' : 'REGSITER'}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -509,14 +512,13 @@ export function DeleteDialog(props) {
     const ctx = useContext(Mycontext);
 
     const [student, setstudent] = useState('');
-    const [libraiandata , setlibrarian] = useState({
+    const [libraiandata, setlibrarian] = useState({
         id: ctx.user.user.id,
-        fullname: '' ,
+        fullname: '',
         oldpwd: '',
         newpwd: '',
-        ID: '',
-        
-    })
+        ID: ''
+    });
     const [showPassword, setShowPassword] = useState({
         pwd1: false,
         pwd2: false
@@ -533,9 +535,8 @@ export function DeleteDialog(props) {
         if (type === 'student') {
             setstudent(e.target.value);
         } else if (type === 'librarian') {
-            setlibrarian({...libraiandata , [e.target.id]:e.target.value})
-        }
-        else {
+            setlibrarian({ ...libraiandata, [e.target.id]: e.target.value });
+        } else {
             setpassword({ ...password, [e.target.id]: e.target.value });
         }
     };
@@ -543,14 +544,14 @@ export function DeleteDialog(props) {
         if (props.type === 'password') {
             ctx.setMenu({ ...ctx.openMenu, openchangepwd: false });
         } else if (props.type === 'editlibrarian') {
-            ctx.setMenu({...ctx.openMenu , editlibrarian: false})
+            ctx.setMenu({ ...ctx.openMenu, editlibrarian: false });
         } else {
             ctx.setMenu({ ...ctx.openMenu, opendelete: false });
         }
     };
     const handleDelete = (e, id) => {
         e.preventDefault();
-        ctx.setloading({...ctx.loading , delete: true})
+        ctx.setloading({ ...ctx.loading, delete: true });
         if (props.type === 'studentlist') {
             axios({
                 method: 'post',
@@ -561,11 +562,13 @@ export function DeleteDialog(props) {
                 }
             })
                 .then(() => {
-                    ctx.setloading({...ctx.loading , delete: false})
-                    window.location.reload()})
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    window.location.reload();
+                })
                 .catch(() => {
-                    ctx.setloading({...ctx.loading , delete: false})
-                    toast.error('Something Wrong', { duration: 2000 })});
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    toast.error('Something Wrong', { duration: 2000 });
+                });
         } else if (props.type === 'borrowedbook') {
             axios({
                 method: 'post',
@@ -574,14 +577,15 @@ export function DeleteDialog(props) {
                     Authorization: `Bearer ${ctx.user.token.accessToken}`
                 },
                 data: { id: props.data }
-            }).then(() => {
-                ctx.setloading({...ctx.loading , delete: false})
-                window.location.reload()
-            }).catch (() => {
-                ctx.setloading({...ctx.loading , delete: false})
-                    toast.error('Something Wrong', { duration: 2000 })
-                
-            });
+            })
+                .then(() => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    window.location.reload();
+                })
+                .catch(() => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    toast.error('Something Wrong', { duration: 2000 });
+                });
         } else if (props.type === 'booklist') {
             axios({
                 method: 'post',
@@ -592,40 +596,44 @@ export function DeleteDialog(props) {
                 data: {
                     id: props.data
                 }
-            }).then(() => {
-                ctx.setloading({...ctx.loading , delete: false})
-                window.location.reload()}).catch(() => {
-                    ctx.setloading({...ctx.loading , delete: false})
-                    toast.error('Something Wrong', { duration: 2000 })
+            })
+                .then(() => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    window.location.reload();
+                })
+                .catch(() => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    toast.error('Something Wrong', { duration: 2000 });
                 });
         } else if (props.type === 'editlibrarian') {
             axios({
-                method: "POST" ,
-                url: env.api + "editlibrarian" ,
+                method: 'POST',
+                url: env.api + 'editlibrarian',
                 headers: {
                     Authorization: `Bearer ${ctx.user.token.accessToken}`
                 },
-                data : libraiandata
-            }).then(() => {
-                ctx.setloading({...ctx.loading , delete: false})
-                toast.success("Change Successfully" , {duration: 2000})
-                if (libraiandata.ID !== '' && libraiandata.fullname !== '') {
-                    ctx.user.user.fullname = libraiandata.fullname
-                    ctx.user.user.ID = libraiandata.ID
-                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
-                }
-                else if(libraiandata.fullname !== '') {
-                    ctx.user.user.fullname = libraiandata.fullname
-                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
-                } else if (libraiandata.ID !== '') {
-                    ctx.user.user.ID = libraiandata.ID
-                    Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
-                } 
-                e.target.reset()
-            }).catch((err) => {
-                ctx.setloading({...ctx.loading , delete: false})
-                    toast.error('Something Wrong', { duration: 2000 })
+                data: libraiandata
             })
+                .then(() => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    toast.success('Change Successfully', { duration: 2000 });
+                    if (libraiandata.ID !== '' && libraiandata.fullname !== '') {
+                        ctx.user.user.fullname = libraiandata.fullname;
+                        ctx.user.user.ID = libraiandata.ID;
+                        Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                    } else if (libraiandata.fullname !== '') {
+                        ctx.user.user.fullname = libraiandata.fullname;
+                        Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                    } else if (libraiandata.ID !== '') {
+                        ctx.user.user.ID = libraiandata.ID;
+                        Cookies.set('user', JSON.stringify(ctx.user), { expires: 7 });
+                    }
+                    e.target.reset();
+                })
+                .catch((err) => {
+                    ctx.setloading({ ...ctx.loading, delete: false });
+                    toast.error('Something Wrong', { duration: 2000 });
+                });
         } else {
             axios({
                 method: 'post',
@@ -636,12 +644,12 @@ export function DeleteDialog(props) {
                 data: password
             })
                 .then((res) => {
-                    ctx.setloading({...ctx.loading , delete: false})
+                    ctx.setloading({ ...ctx.loading, delete: false });
                     toast.success(res.data.message, { duration: 2000 });
                     e.target.reset();
                 })
                 .catch((err) => {
-                    ctx.setloading({...ctx.loading , delete: false})
+                    ctx.setloading({ ...ctx.loading, delete: false });
                     toast.error(err.response.data.message, { duration: 2000 });
                 });
         }
@@ -660,41 +668,24 @@ export function DeleteDialog(props) {
                         ? `Are you sure to delete ${props.data?.length} students (All student related data will be deleted)`
                         : props.type === 'borrowedbook' || props.type === 'returnbook' || props.type === 'booklist'
                         ? `Are you sure`
-                        : props.type === 'editlibrarian' ? 'Change Librarian Informations' : 'Change Password'}
+                        : props.type === 'editlibrarian'
+                        ? 'Change Librarian Informations'
+                        : 'Change Password'}
                 </DialogTitle>
                 <form onSubmit={(e) => handleDelete(e, student)}>
-                    {ctx.loading.delete && <Loading/>}
+                    {ctx.loading.delete && <Loading />}
                     <DialogContent>
-                        {
-                        props.type === 'editlibrarian' ? (
+                        {props.type === 'editlibrarian' ? (
                             <>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="fullname"
-                                    label="NEW FULLNAME"
-                                    type="text"
-                                    fullWidth
-                                    variant="standard"
-                                    onChange={(e) => handleChange(e , 'librarian')}
-                                />
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="ID"
-                                    label="NEW ID CARD"
-                                    type="text"
-                                    fullWidth
-                                    variant="standard"
-                                    onChange={(e) => handleChange(e , 'librarian')}
-                                />
+                                <TextField autoFocus margin="dense" id="fullname" label="NEW FULLNAME" type="text" fullWidth variant="standard" onChange={(e) => handleChange(e, 'librarian')} />
+                                <TextField autoFocus margin="dense" id="ID" label="NEW ID CARD" type="text" fullWidth variant="standard" onChange={(e) => handleChange(e, 'librarian')} />
                                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                                     <InputLabel htmlFor="outlined-adornment-password">Old Password</InputLabel>
                                     <OutlinedInput
                                         id="oldpwd"
                                         name="pwd1"
                                         type={showPassword.pwd1 ? 'text' : 'password'}
-                                        onChange={(e) => handleChange(e , 'librarian')}
+                                        onChange={(e) => handleChange(e, 'librarian')}
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <IconButton
@@ -708,7 +699,6 @@ export function DeleteDialog(props) {
                                             </InputAdornment>
                                         }
                                         label="Password"
-                                        
                                     />
                                 </FormControl>
                                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
@@ -729,20 +719,14 @@ export function DeleteDialog(props) {
                                                 </IconButton>
                                             </InputAdornment>
                                         }
-                                        onChange={(e) => handleChange(e , 'librarian')}
+                                        onChange={(e) => handleChange(e, 'librarian')}
                                         label="Password"
-                                        
                                     />
                                 </FormControl>
-
                             </>
-                        )
-                        :
-                        props.type !== 'password' ? (
+                        ) : props.type !== 'password' ? (
                             <></>
-                        ) 
-                        : 
-                        (
+                        ) : (
                             <>
                                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                                     <InputLabel htmlFor="outlined-adornment-password">Old Password</InputLabel>
@@ -812,7 +796,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
     const [exportdata, setexport] = useState({
-       department: ctx.user.user.role === 'headdepartment' && ctx.user.user.department
+        department: ctx.user.user.role === 'headdepartment' && ctx.user.user.department
     });
     const [department, setdep] = useState([]);
     const [filter, setfilter] = useState('');
@@ -850,46 +834,25 @@ export function FullScreenDialog(props) {
         }
     };
     function filterDatesByWeeksOrMonths(dates, duration, unit, type) {
-        const now = new Date();
-        if (type === 'entry') {
-            return dates.filter(({ createdAt }) => {
-                const date = new Date(createdAt);
-                const diffInTime = now.getTime() - date.getTime();
+        const today = new Date();
+        let startDate;
 
-                if (unit === 'weeks') {
-                    const diffInWeeks = Math.floor(diffInTime / (1000 * 60 * 60 * 24 * 7));
-                    return diffInWeeks <= duration;
-                } else if (unit === 'months') {
-                    const diffInMonths = now.getMonth() - date.getMonth() + 12 * (now.getFullYear() - date.getFullYear());
-                    return diffInMonths <= duration;
-                }
-
-                return false;
-            });
+        if (unit === 'weeks') {
+            startDate = new Date(today.getTime() - duration * 7 * 24 * 60 * 60 * 1000);
+        } else if (unit === 'months') {
+            startDate = new Date(today.getTime());
+            startDate.setMonth(startDate.getMonth() - duration);
         } else {
-            return dates.filter(({ borrow_date }) => {
-                const date = new Date(borrow_date);
-                const diffInTime = now.getTime() - date.getTime();
-
-                if (unit === 'weeks') {
-                    const diffInWeeks = Math.floor(diffInTime / (1000 * 60 * 60 * 24 * 7));
-                    return diffInWeeks <= duration;
-                } else if (unit === 'months') {
-                    const diffInMonths = now.getMonth() - date.getMonth() + 12 * (now.getFullYear() - date.getFullYear());
-                    return diffInMonths <= duration;
-                }
-
-                return false;
-            });
+            return [];
         }
+
+        return dates.filter(({ createdAt }) => new Date(createdAt) >= startDate && new Date(createdAt) <= today);
     }
     const handleChange = (event) => {
-       
-            setexport({ ...exportdata, [event.target.name]: event.target.value });
-        
+        setexport({ ...exportdata, [event.target.name]: event.target.value });
     };
     const handleSubmit = (e) => {
-        ctx.setloading({...ctx.loading , report: true})
+        ctx.setloading({ ...ctx.loading, report: true });
         e.preventDefault();
         axios({
             method: 'post',
@@ -901,7 +864,7 @@ export function FullScreenDialog(props) {
             data: exportdata
         })
             .then((res) => {
-                ctx.setloading({...ctx.loading , report: false})
+                ctx.setloading({ ...ctx.loading, report: false });
                 if (exportdata.filetype === 'pdf') {
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement('a');
@@ -919,13 +882,12 @@ export function FullScreenDialog(props) {
                 toast.success('Export Successfully', { duration: 2000 });
             })
             .catch((err) => {
-                ctx.setloading({...ctx.loading , report: false})
-                if(err.response.status === 500) {
-                    toast.error("An Error Occured" , {duration: 2000})
+                ctx.setloading({ ...ctx.loading, report: false });
+                if (err.response.status === 500) {
+                    toast.error('An Error Occured', { duration: 2000 });
                 } else {
-                    toast.error("Students not found", {duration: 2000})
+                    toast.error('Students not found', { duration: 2000 });
                 }
-                
             });
     };
 
@@ -1029,7 +991,7 @@ export function FullScreenDialog(props) {
                         ))
                     ) : props.type === `Borrowed Book for ${props.name}` ? (
                         (filter !== '' ? filterDatesByWeeksOrMonths(props.data, filter.split(' ')[0], filter.split(' ')[1], 'borrow') : props.data)
-                            ?.filter(({ status }) => status !== 'To Pickup')
+                            ?.filter(({ return_date }) => return_date !== null)
                             .map((i) => {
                                 return i.Books.map((Books) => (
                                     <>
@@ -1053,16 +1015,31 @@ export function FullScreenDialog(props) {
                     ) : props.type === 'Create Report' ? (
                         <>
                             <form className="report_form" onSubmit={handleSubmit}>
-                                {ctx.loading.report && <Loading/>}
+                                {ctx.loading.report && <Loading />}
                                 <TextField autoFocus margin="dense" name="name" label="NAME OF REPORT" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                               {ctx.user.user.role === 'librarian' ? <FormControl className="select" fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Department</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
-                                        {department.map((i) => (
-                                            <MenuItem value={i.department}>{i.department}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl> :  <TextField autoFocus margin="dense" name="department" value={ctx.user.user.department} label="DEPARTMENT" type="text" fullWidth variant="standard" required onChange={handleChange} />}
+                                {ctx.user.user.role === 'librarian' ? (
+                                    <FormControl className="select" fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                                        <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
+                                            {department.map((i) => (
+                                                <MenuItem value={i.department}>{i.department}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                ) : (
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        name="department"
+                                        value={ctx.user.user.department}
+                                        label="DEPARTMENT"
+                                        type="text"
+                                        fullWidth
+                                        variant="standard"
+                                        required
+                                        onChange={handleChange}
+                                    />
+                                )}
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange}>
@@ -1105,7 +1082,12 @@ export function FullScreenDialog(props) {
                                     <p className="entry">{new Date(entry.createdAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                                     <i style={{ color: 'red' }} class="fa-solid fa-arrow-right"></i>
 
-                                    <p className="entry"> {new Date(entry.createdAt).getDate()}/{new Date(entry.createdAt).getMonth() + 1}/{new Date(entry.createdAt).getFullYear()} {new Date(entry.createdAt).getHours()}:{new Date(entry.createdAt).getMinutes().toString().padStart(2,'0')}:{new Date(entry.createdAt).getSeconds().toString().padStart(2, '0')}</p>
+                                    <p className="entry">
+                                        {' '}
+                                        {new Date(entry.createdAt).getDate()}/{new Date(entry.createdAt).getMonth() + 1}/{new Date(entry.createdAt).getFullYear()}{' '}
+                                        {new Date(entry.createdAt).getHours()}:{new Date(entry.createdAt).getMinutes().toString().padStart(2, '0')}:
+                                        {new Date(entry.createdAt).getSeconds().toString().padStart(2, '0')}
+                                    </p>
                                 </ListItem>
                                 <Divider />
                             </>

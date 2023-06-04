@@ -153,6 +153,7 @@ const FilterNavigation = ({ book , resize , setopen }) => {
                 ?.filter((i) => i?.some((j) => j.includes(search)))
                 ?.map((cate) => (
                     <p key={book?.allcategories?.indexOf(cate)} onClick={() => ctx.setfilter_cat(cate[0])} style={ctx.filter_cat === cate[0] ? {backgroundColor: 'black'} : { backgroundColor: 'bluecoral' }} className="filter_option">
+                        
                         {' '}
                         {cate}{' '}
                     </p>

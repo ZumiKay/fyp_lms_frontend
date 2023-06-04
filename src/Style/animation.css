@@ -3,7 +3,7 @@
     left: -500px;
   }
   to {
-    left: 0;
+    left: 0px;
   }
 }
 @keyframes slide_out {
@@ -15,8 +15,8 @@
   }
 }
 .Menu_Animated {
-  left: 0;
-  animation: slide_in 0.5s ease;
+  animation: slide_in 0.5s ease-in-out;
   animation-fill-mode: forwards;
-  transition: left 0.5s ease;
-}/*# sourceMappingURL=animation.css.map */
+}
+
+/*# sourceMappingURL=animation.css.map */

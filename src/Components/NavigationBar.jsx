@@ -48,7 +48,7 @@ const NavigationBar = () => {
            
         <div  className="first_sec">
             <img ref={ref} id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
-            <img src={setimage.Logo} alt="png_img" className="logo" />
+            <img onClick={() => navigate('/')} src={setimage.Logo} alt="png_img" className="logo" />
             <MenuItem open={openmenu} setopen={setopenmenu} />
         </div>
         <div className="second_sec">
@@ -79,7 +79,7 @@ const NavigationBar = () => {
             </div>
              <div className='second_sec'>
              
-            <img style={{width:"150px"}} src={setimage.Logo} alt="png_img" className="logo" />
+            <img onClick={() => navigate('/')} style={{width:"150px"}} src={setimage.Logo} alt="png_img" className="logo" />
             
                 </div>
 
