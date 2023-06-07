@@ -11,16 +11,18 @@ const BookDetailPage = ({ book }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         let filterbook = book?.allbooks?.filter((i) => i.title === title);
         setbook(filterbook);
-        
+        ctx.setadded(false)
     }, [book]);
 
     const handleAddCart = () => {
         const prevcart = localStorage.getItem('cart');
         fitlerbook[0].userid = ctx.user.user.ID
+        ctx.setadded(true)
         let storecart = [];
         if (prevcart) {
             let cart = JSON.parse(prevcart);
             storecart = [...cart, fitlerbook[0]];
+           
         } else storecart = fitlerbook;
         fitlerbook[0].status = "unavailable"
         localStorage.setItem('cart', JSON.stringify(storecart));
@@ -58,7 +60,7 @@ const BookDetailPage = ({ book }) => {
             </div>
             <div className="secondsec">
                 {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavailable')) ? (
-                   ctx.user.user.role === 'headdepartment' ?  
+                   ctx.user.user.role !== 'student' ?  
                    <Button className="borrow-btn" style={{backgroundColor:"green"}}>
                         available
                     </Button> :  

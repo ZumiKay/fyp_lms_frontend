@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import '../Style/style.css';
 import { Loading, setimage } from './Asset';
 import '../Style/style.css';
@@ -27,6 +27,7 @@ const NavigationBar = () => {
         ctx.setsearch(e.target.value)
     }
     useEffect(() => {
+       
         if(window.innerWidth > 800) {
             setchange(true)
         } else {
@@ -43,6 +44,7 @@ const NavigationBar = () => {
             window.removeEventListener('mousedown' , handleref)
              window.removeEventListener('resize', handleresize)};
     }, []);
+   
     return (
         change ?  <div className={'NavBar_container'}>
            
@@ -59,8 +61,8 @@ const NavigationBar = () => {
         <div className="third_sec">
             {ctx.user.user.role === 'librarian' ? <p className="library_status librarian_status">Librarian</p> : ctx.user.user.role === 'headdepartment' ? <p className="library_status">HD</p> : <p className="library_status">Library is Open</p>}
             
-           {ctx.user.user.role === 'student' && <i onClick={() => navigate('/bucket')} className={ctx.openMenu[`book${ctx.bookcart.filter(({userid}) => userid === ctx.user.user.ID).length}`] ? "fa-solid fa-cart-shopping bellanimated" : "fa-solid fa-cart-shopping"} id='bell'>
-                <span className='cart-count'>{ctx.bookcart.filter(({userid}) => userid === ctx.user.user.ID).length}</span>
+           {ctx.user.user.role === 'student' && <i onClick={() => navigate('/bucket')} className={ctx.added ? "fa-solid fa-cart-shopping bellanimated" : "fa-solid fa-cart-shopping"} id={'bell'}>
+                <span className={'cart-count'}>{ctx.bookcart.filter(({userid}) => userid === ctx.user.user.ID).length}</span>
             </i>
             }
 
