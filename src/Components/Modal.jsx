@@ -846,7 +846,7 @@ export function FullScreenDialog(props) {
             return [];
         }
 
-        return dates.filter(({ createdAt }) => new Date(createdAt) >= startDate && new Date(createdAt) <= today);
+        return dates.filter(({ createdAt }) => new Date(createdAt) <= startDate);
     }
     const handleChange = (event) => {
         setexport({ ...exportdata, [event.target.name]: event.target.value });
@@ -939,10 +939,12 @@ export function FullScreenDialog(props) {
                                 )}
                             </>
                         )}
-                        {props.type.includes('Library Entry') && (
+                        
+                    </Toolbar>
+                    {props.type.includes('Library Entry') && (
                             <>
                                 <Typography sx={{ ml: 2, flex: 0.5 }} variant="h6" component="div">
-                                    <FormControl fullWidth>
+                                    <FormControl>
                                         <InputLabel variant="standard" htmlFor="uncontrolled-native">
                                             Filter Entry
                                         </InputLabel>
@@ -964,12 +966,11 @@ export function FullScreenDialog(props) {
                                         </NativeSelect>
                                     </FormControl>
                                 </Typography>
-                                <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                                <Typography sx={{ ml: 2, flex: 1 , marginTop:"10px" }} variant="h6" component="div">
                                     Total Entry: {props.data?.length}
                                 </Typography>
                             </>
                         )}
-                    </Toolbar>
                 </AppBar>
                 <List>
                     {props.type === 'Borrowed Book' ? (

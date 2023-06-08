@@ -21,7 +21,7 @@ function countVisitsByTimeRange(dates) {
     let visitsBy6months = 0;
     let visitsByLastYears = 0;
     let visitsBy1week = 0;
-    let visitthisweek = 0;
+   
     let result;
     dates.forEach(({ createdAt }) => {
         const entryDate = new Date(createdAt);
@@ -39,8 +39,6 @@ function countVisitsByTimeRange(dates) {
             visitsBy6months++;
         } else if (secondsDiff < pastYears / 1000 && secondsDiff > past6Months / 1000) {
             visitsByLastYears++;
-        } else {
-            visitthisweek++;
         }
     });
 
@@ -57,7 +55,7 @@ function countVisitsByTimeRange(dates) {
     } else if (visitsByLastYears > 0) {
         result = `${visitsByLastYears} For the past year`;
     } else {
-        result = `${visitthisweek} For this week`;
+        result = 'No Entry'
     }
 
     return result;
