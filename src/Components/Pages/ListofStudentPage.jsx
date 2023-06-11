@@ -8,52 +8,26 @@ import { Loading } from '../Asset';
 
 function countVisitsByTimeRange(dates) {
     const now = new Date();
-    const past1weeks = 7 * 24 * 60 * 60 * 1000;
-    const past2weeks = 2 * 7 * 24 * 60 * 60 * 1000;
-    const past4Weeks = 4 * 7 * 24 * 60 * 60 * 1000;
-    const past3Months = 3 * 30 * 24 * 60 * 60 * 1000;
-    const past6Months = 6 * 30 * 24 * 60 * 60 * 1000;
-    const pastYears = 1 * 365 * 24 * 60 * 60 * 1000;
+    
+    const past6Months = new Date()
+    past6Months.setMonth(now.getMonth() - 6)
+    
 
-    let visitsBy2Weeks = 0;
-    let visitsBy4Weeks = 0;
-    let visitsBy3months = 0;
+    
     let visitsBy6months = 0;
-    let visitsByLastYears = 0;
-    let visitsBy1week = 0;
+    
    
     let result;
     dates.forEach(({ createdAt }) => {
         const entryDate = new Date(createdAt);
-        const timeDiff = now.getTime() - entryDate.getTime();
-        const secondsDiff = Math.floor(timeDiff / 1000);
-        if (secondsDiff < past1weeks / 1000) {
-            visitsBy1week++;
-        } else if (secondsDiff < past2weeks / 1000) {
-            visitsBy2Weeks++;
-        } else if (secondsDiff < past4Weeks / 1000 && secondsDiff > past2weeks / 1000) {
-            visitsBy4Weeks++;
-        } else if (secondsDiff < past3Months / 1000 && secondsDiff > past4Weeks / 1000) {
-            visitsBy3months++;
-        } else if (secondsDiff < past6Months / 1000 && secondsDiff > past3Months / 1000) {
-            visitsBy6months++;
-        } else if (secondsDiff < pastYears / 1000 && secondsDiff > past6Months / 1000) {
-            visitsByLastYears++;
+       
+        if (entryDate >= past6Months && entryDate <= now) {
+           visitsBy6months++
         }
     });
 
-    if (visitsBy1week > 0) {
-        result = `${visitsBy1week} For the past week`;
-    } else if (visitsBy2Weeks > 0) {
-        result = `${visitsBy2Weeks} For the past 2 weeks`;
-    } else if (visitsBy4Weeks > 0) {
-        result = `${visitsBy4Weeks} For the past 1 month`;
-    } else if (visitsBy3months > 0) {
-        result = `${visitsBy3months} For the past 3 months`;
-    } else if (visitsBy6months > 0) {
+    if (visitsBy6months > 0) {
         result = `${visitsBy6months} For the past 6 months`;
-    } else if (visitsByLastYears > 0) {
-        result = `${visitsByLastYears} For the past year`;
     } else {
         result = 'No Entry'
     }
