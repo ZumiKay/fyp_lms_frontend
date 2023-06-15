@@ -59,7 +59,7 @@ const NavigationBar = () => {
         </div>
 
         <div className="third_sec">
-            {ctx.user.user.role === 'librarian' ? <p className="library_status librarian_status">Librarian</p> : ctx.user.user.role === 'headdepartment' ? <p className="library_status">HD</p> : <p className="library_status">Library is Open</p>}
+            {ctx.user.user.role === 'librarian' ? <p className="library_status librarian_status">Librarian</p> : ctx.user.user.role === 'headdepartment' ? <p className="library_status">HD</p> : !(new Date().getHours() > 17) ? <p className="library_status"> Library is Open </p> : <p className='library_status' style={{backgroundColor: "red" , color:"white"}}> Library is Close </p>}
             
            {ctx.user.user.role === 'student' && <i onClick={() => navigate('/bucket')} className={ctx.added ? "fa-solid fa-cart-shopping bellanimated" : "fa-solid fa-cart-shopping"} id={'bell'}>
                 <span className={'cart-count'}>{ctx.bookcart.filter(({userid}) => userid === ctx.user.user.ID).length}</span>

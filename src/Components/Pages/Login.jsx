@@ -13,8 +13,13 @@ const Login = () => {
     const navigate = useNavigate()
     const [loading , setloading] = useState(false)
     const handleChange = (e) => {
-      setuser({...user_data, [e.target.id]: e.target.value})
-    }
+      if (e.target.value.includes(' ')) {
+        e.preventDefault();
+      } else {
+        setuser({...user_data, [e.target.id]: e.target.value.replace(/\s+/g, '')})
+        
+      }
+     }
     
    
     const handleSubmit = async (e) => {

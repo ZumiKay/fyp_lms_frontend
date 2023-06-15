@@ -8,28 +8,27 @@ import { Loading } from '../Asset';
 
 function countVisitsByTimeRange(dates) {
     const now = new Date();
-    
-    const past6Months = new Date()
-    past6Months.setMonth(now.getMonth() - 6)
-    
+    const past1months = new Date()
+    past1months.setMonth(now.getMonth() - 1)
+    const past6Months = new Date();
+    past6Months.setMonth(now.getMonth() - 6);
 
     
     let visitsBy6months = 0;
-    
-   
+
     let result;
     dates.forEach(({ createdAt }) => {
         const entryDate = new Date(createdAt);
        
-        if (entryDate >= past6Months && entryDate <= now) {
-           visitsBy6months++
+        if (entryDate >= past6Months && entryDate >= past1months &&entryDate <= now) {
+            visitsBy6months++;
         }
     });
 
     if (visitsBy6months > 0) {
         result = `${visitsBy6months} For the past 6 months`;
     } else {
-        result = 'No Entry'
+        result = 'No Entry';
     }
 
     return result;
@@ -58,11 +57,12 @@ const ListofStudentPage = () => {
     }, []);
     return (
         <div className="studentlist_container">
+            {ctx.loading.studentlist && <Loading />}
             <div className="header_sec">
                 <h1>List of Students</h1>
             </div>
             <div className="table_data">
-                {ctx.loading.studentlist && <Loading/>}
+                
                 <DataTable data={ctx.student} entry={studentdata} type={'studentlist'} />
             </div>
         </div>

@@ -992,7 +992,7 @@ export function FullScreenDialog(props) {
                         ))
                     ) : props.type === `Borrowed Book for ${props.name}` ? (
                         (filter !== '' ? filterDatesByWeeksOrMonths(props.data, filter.split(' ')[0], filter.split(' ')[1], 'borrow') : props.data)
-                            ?.filter(({ return_date }) => return_date !== null)
+                            ?.filter(({ status }) => status !== "To Pickup")
                             .map((i) => {
                                 return i.Books.map((Books) => (
                                     <>
@@ -1004,6 +1004,7 @@ export function FullScreenDialog(props) {
                                                     <p>{Books.categories}</p>
                                                     <p>{Books.author}</p>
                                                     <p>ISBN: {Books.ISBN[0].identifier}</p>
+                                                    <p>Status: {i.status}</p>
                                                     <p>BorrowDate: {new Date(i.borrow_date).toLocaleDateString('en')}</p>
                                                     <p>ReturnDate: {i.return_date && new Date(i.return_date).toLocaleDateString('en')}</p>
                                                 </div>
@@ -1018,7 +1019,7 @@ export function FullScreenDialog(props) {
                             <form className="report_form" onSubmit={handleSubmit}>
                                 {ctx.loading.report && <Loading />}
                                 <TextField autoFocus margin="dense" name="name" label="NAME OF REPORT" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                {ctx.user.user.role === 'librarian' ? (
+                                
                                     <FormControl className="select" fullWidth>
                                         <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                         <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
@@ -1027,20 +1028,7 @@ export function FullScreenDialog(props) {
                                             ))}
                                         </Select>
                                     </FormControl>
-                                ) : (
-                                    <TextField
-                                        autoFocus
-                                        margin="dense"
-                                        name="department"
-                                        value={ctx.user.user.department}
-                                        label="DEPARTMENT"
-                                        type="text"
-                                        fullWidth
-                                        variant="standard"
-                                        required
-                                        onChange={handleChange}
-                                    />
-                                )}
+                                
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange}>
@@ -1058,7 +1046,7 @@ export function FullScreenDialog(props) {
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information Date</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="informationdate" value={exportdata.informationdate} label="Age" onChange={handleChange}>
-                                        <MenuItem value={'tweek'}>For Current Week</MenuItem>
+                                        <MenuItem value={'1week'}>For Current Week</MenuItem>
                                         <MenuItem value={'2week'}>For Past 2 Weeks</MenuItem>
                                         <MenuItem value={'1month'}>For Past 1 month</MenuItem>
                                         <MenuItem value={'3month'}>For Past 3 months</MenuItem>
