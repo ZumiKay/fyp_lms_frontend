@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react'
 import '../../Style/style.css'
-import { Loading, setimage } from '../Asset'
+import { Loading } from '../Asset'
 import axios from 'axios'
 import env from '../../env'
 import Cookie from 'js-cookie'
 import toast from 'react-hot-toast';
+import Logo from '../../Image/Logo.png'
 import { Mycontext } from '../../Config/context'
 import { useNavigate } from 'react-router-dom'
 const Login = () => {
@@ -52,7 +53,7 @@ const Login = () => {
         <form className="Login_form" onSubmit={handleSubmit}>
             {loading && <Loading/>}    
     
-            <img src={setimage.Logo} alt='logo' className='logo'/>
+            <img src={Logo} alt='logo' className='logo'/>
             <input type={'text'} id="email" onChange={handleChange} placeholder='Email / ID Number' required/>
             <input type="password" onChange={handleChange} id="password" placeholder='Password' required/>
             <input type="submit" onChange={handleChange} value={'Login'} id="login-btn"/> 

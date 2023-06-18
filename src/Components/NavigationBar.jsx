@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../Style/style.css';
 import { Loading, setimage } from './Asset';
+import Logo from '../Image/Logo.png'
 import '../Style/style.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mycontext } from '../Config/context';
@@ -50,7 +51,7 @@ const NavigationBar = () => {
            
         <div  className="first_sec">
             <img ref={ref} id="menu" style={ctx.openMenu.menu ? { opacity: '.5' } : {}} onClick={handleClick} src={setimage.Menu} alt="svg_img" className="menu_btn" />
-            <img onClick={() => navigate('/')} src={setimage.Logo} alt="png_img" className="logo" />
+            <img onClick={() => navigate('/')} src={Logo} alt="png_img" className="logo" />
             <MenuItem open={openmenu} setopen={setopenmenu} />
         </div>
         <div className="second_sec">
@@ -81,7 +82,7 @@ const NavigationBar = () => {
             </div>
              <div className='second_sec'>
              
-            <img onClick={() => navigate('/')} style={{width:"150px"}} src={setimage.Logo} alt="png_img" className="logo" />
+            <img onClick={() => navigate('/')} style={{width:"90px"}} src={Logo} alt="png_img" className="logo" />
             
                 </div>
 
