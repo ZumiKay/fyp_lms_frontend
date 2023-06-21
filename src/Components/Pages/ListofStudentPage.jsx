@@ -37,9 +37,9 @@ function countVisitsByTimeRange(dates) {
 const ListofStudentPage = () => {
     const ctx = useContext(Mycontext);
     const [studentdata, setstudent] = useState([]);
-
+    const [loading , setloading] = useState(false)
     const getStudent = () => {
-        ctx.setloading({ ...ctx.loading, studentlist: true });
+        setloading(true);
         let students = [];
         axios({
             method: 'get',
@@ -49,16 +49,19 @@ const ListofStudentPage = () => {
             ctx.setstudent(students);
             res.data.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname, i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry), i.borrow_book)));
             setstudent(res.data);
-            ctx.setloading({ ...ctx.loading, studentlist: false });
+            setloading(false);
         });
     };
+    
     useEffect(() => {
         getStudent();
+        
     }, []);
     return (
         <div className="studentlist_container">
-            {ctx.loading.studentlist && <Loading />}
+           {loading && <Loading />}
             <div className="header_sec">
+            
                 <h1>List of Students</h1>
             </div>
             <div className="table_data">

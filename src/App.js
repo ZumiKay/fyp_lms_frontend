@@ -51,10 +51,27 @@ function App() {
             allbooks: filteredbook
         })
     };
+    const getDepartment = () => {
+        axios({
+            method: 'get',
+            url: env.api + 'getdepartment',
+            headers: {
+                Authorization: `Bearer ${ctx.user.token.accessToken}`
+            }
+        }).then((res) => ctx.setdep(res.data));
+    };
     useEffect(() => {
-        user ? sethaslogin(true) : sethaslogin(false);
-        getbook();
-    }, []);
+        if(user) {
+            sethaslogin(true)
+            getDepartment()
+            getbook();
+        } else {
+            sethaslogin(false)
+        }
+       
+        
+        
+    }, [user]);
     return (
         <div className="App">
             {user && <NavigationBar />}

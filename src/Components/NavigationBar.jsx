@@ -169,7 +169,7 @@ const MenuItem = (props) => {
                         <Link className="link_page" to={'/scan-entry'}><i class="fa-solid fa-qrcode"></i> SCAN ENTRY</Link>
                         <Link className="link_page" to={'/scanp-r'}> <i class="fa-solid fa-qrcode"></i> SCAN PICKUP</Link>
                        
-                        <Link onClick={() => ctx.setMenu({...ctx.openMenu , HD: true})} className="link_page"><i class="fa-regular fa-calendar-check"></i> ADD HEADDEAPERMENT</Link>
+                        {/* <Link onClick={() => ctx.setMenu({...ctx.openMenu , HD: true})} className="link_page"><i class="fa-regular fa-calendar-check"></i> ADD HEADDEAPERMENT</Link> */}
                     </>
                 )}
                 {ctx.user.user.role !== 'librarian' && <Link className="link_page" onClick={() => ctx.setMenu({...ctx.openMenu , openchangepwd: true})}><i class="fa-solid fa-gear"></i> SETTING</Link>}

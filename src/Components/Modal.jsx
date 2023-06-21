@@ -144,7 +144,7 @@ export function FormDialog(props) {
         department: '',
         status: 'available'
     });
-    const [department, setdepartment] = useState([]);
+    
     const fetchdata = (end) => {
         return axios({
             method: 'post',
@@ -301,20 +301,7 @@ export function FormDialog(props) {
         ctx.setMenu({ ...ctx.openMenu, [props.type]: false });
     };
 
-    useEffect(() => {
-        const getdepartment = () => {
-            if (props.type === 'studentlist' || props.type === 'HD') {
-                axios({
-                    method: 'get',
-                    url: env.api + 'getdepartment',
-                    headers: {
-                        Authorization: `Bearer ${ctx.user.token.accessToken}`
-                    }
-                }).then((res) => setdepartment(res.data));
-            }
-        };
-        getdepartment();
-    }, [props.type]);
+    
 
     return (
         <div>
@@ -350,7 +337,7 @@ export function FormDialog(props) {
                                 <FormControl variant="standard" className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                     <Select id="department" value={userData.department} name="department" label="department" onChange={handleChange}>
-                                        {department?.map((i) => (
+                                        {ctx.dep?.map((i) => (
                                             <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
@@ -376,7 +363,7 @@ export function FormDialog(props) {
                                 <FormControl variant="standard" className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="department" value={userData.department} label="department" onChange={handleChange}>
-                                        {department?.map((i) => (
+                                        {ctx.dep?.map((i) => (
                                             <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
@@ -394,7 +381,7 @@ export function FormDialog(props) {
                                 <FormControl variant="standard" className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">DEPARTMENT</InputLabel>
                                     <Select labelId="demo-simple-select-label" name="department" value={userData.department} label="department" onChange={handleChange}>
-                                        {department?.map((i) => (
+                                        {ctx.dep?.map((i) => (
                                             <MenuItem value={i?.department}>{i?.department}</MenuItem>
                                         ))}
                                     </Select>
@@ -798,7 +785,6 @@ export function FullScreenDialog(props) {
     const [exportdata, setexport] = useState({
         department: ctx.user.user.role === 'headdepartment' && ctx.user.user.department
     });
-    const [department, setdep] = useState([]);
     const [filter, setfilter] = useState('');
     const navigate = useNavigate();
 
@@ -813,19 +799,6 @@ export function FullScreenDialog(props) {
             },
             { totalCount: 0 }
         );
-    useEffect(() => {
-        getDepartment();
-    }, []);
-    const getDepartment = () => {
-        axios({
-            method: 'get',
-            url: env.api + 'getdepartment',
-            headers: {
-                Authorization: `Bearer ${ctx.user.token.accessToken}`
-            }
-        }).then((res) => setdep(res.data));
-    };
-
     const handleClose = () => {
         if (props.type === 'Create Report') {
             props.setopen(false);
@@ -1023,7 +996,9 @@ export function FullScreenDialog(props) {
                                     <FormControl className="select" fullWidth>
                                         <InputLabel id="demo-simple-select-label">Department</InputLabel>
                                         <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
-                                            {department.map((i) => (
+                                        
+                                            <MenuItem value={'all'}>All</MenuItem>
+                                            {ctx.dep.map((i) => (
                                                 <MenuItem value={i.department}>{i.department}</MenuItem>
                                             ))}
                                         </Select>
@@ -1053,13 +1028,7 @@ export function FullScreenDialog(props) {
                                         <MenuItem value={'6month'}>For Past 6 months</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl className="select" fullWidth>
-                                    <InputLabel id="demo-simple-select-label">File type</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="filetype" value={exportdata.filetype} label="Age" onChange={handleChange}>
-                                        <MenuItem value={'excel'}>Excel</MenuItem>
-                                        <MenuItem value={'pdf'}>PDF</MenuItem>
-                                    </Select>
-                                </FormControl>
+                               
 
                                 <button type="submit">Generate Report</button>
                             </form>

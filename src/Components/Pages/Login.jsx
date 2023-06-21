@@ -32,11 +32,8 @@ const Login = () => {
         setloading(false);
         ctx.sethasLogin(true);
         Cookie.set('user', JSON.stringify(response.data), { expires: 7 });
-        if(response.data.user.role === 'librarian') {
-          navigate('/listborrowedbook', { replace: true });
-        } else {
-          navigate('/', { replace: true });
-        }
+        navigate('/', { replace: true });
+        
         
         window.location.reload();
       } catch (err) {

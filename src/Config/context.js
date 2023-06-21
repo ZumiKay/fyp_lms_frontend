@@ -25,6 +25,7 @@ export const Allcontext = ({children}) => {
     const [search , setsearch] = useState('')
     const [loading , setloading] = useState(false)
     const [added, setadded] = useState(false)
+    const [dep , setdep] = useState([])
     return (
         <Mycontext.Provider value={{
             openMenu , setMenu,
@@ -35,7 +36,8 @@ export const Allcontext = ({children}) => {
             bookcart , setcart,
             search , setsearch , 
             loading , setloading , 
-            added , setadded
+            added , setadded , 
+            dep , setdep
         }}>
            {children}
         </Mycontext.Provider>
