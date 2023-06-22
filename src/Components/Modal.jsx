@@ -38,6 +38,7 @@ import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';
 import { Loading } from './Asset';
 
+
 export default function ResponsiveDialog(props) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -782,9 +783,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
-    const [exportdata, setexport] = useState({
-        department: ctx.user.user.role === 'headdepartment' && ctx.user.user.department
-    });
+    const [exportdata, setexport] = useState({});
     const [filter, setfilter] = useState('');
     const navigate = useNavigate();
 
@@ -995,7 +994,7 @@ export function FullScreenDialog(props) {
                                 
                                     <FormControl className="select" fullWidth>
                                         <InputLabel id="demo-simple-select-label">Department</InputLabel>
-                                        <Select labelId="demo-simple-select-label" name="department" value={exportdata.department} label="Age" onChange={handleChange}>
+                                        <Select labelId="demo-simple-select-label" name="department"  value={exportdata.department} label="Age" onChange={handleChange} input={<OutlinedInput label="Department" />}>
                                         
                                             <MenuItem value={'all'}>All</MenuItem>
                                             {ctx.dep.map((i) => (
@@ -1006,21 +1005,21 @@ export function FullScreenDialog(props) {
                                 
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange}>
+                                    <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange} input={<OutlinedInput label="Information" />}>
                                         <MenuItem value={'entry'}>Library Entry only</MenuItem>
                                         <MenuItem value={'entry&borrow'}>Library Entry and Borrowed Book</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information Type</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="informationtype" value={exportdata.informationtype} label="Age" onChange={handleChange}>
+                                    <Select labelId="demo-simple-select-label" name="informationtype" value={exportdata.informationtype} label="Age" onChange={handleChange} input={<OutlinedInput label="Information Type" />}>
                                         <MenuItem value={'short'}>Summarize Information</MenuItem>
                                         <MenuItem value={'detail'}>Full Information</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information Date</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="informationdate" value={exportdata.informationdate} label="Age" onChange={handleChange}>
+                                    <Select labelId="demo-simple-select-label" name="informationdate" value={exportdata.informationdate} label="Age" onChange={handleChange} input={<OutlinedInput label="Information Date" />}>
                                         <MenuItem value={'1week'}>For Current Week</MenuItem>
                                         <MenuItem value={'2week'}>For Past 2 Weeks</MenuItem>
                                         <MenuItem value={'1month'}>For Past 1 month</MenuItem>
