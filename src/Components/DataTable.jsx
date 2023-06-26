@@ -199,12 +199,12 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({[props.type]: true , action: 'create'})} className="table-btn">
                                             REGISTER STUDENT
                                         </button>
-                                        <button onClick={() => ctx.setMenu({[props.type]: true, action: 'createdp'})} className="table-btn">
+                                        {/* <button onClick={() => ctx.setMenu({[props.type]: true, action: 'createdp'})} className="table-btn">
                                             CREATE DEPARTMENT
                                         </button>
                                         <button onClick={() => ctx.setMenu({[props.type]: true, action: 'deteledp'})} className="table-btn delete">
                                             DELETE DEPARTMENT
-                                        </button>
+                                        </button> */}
                                         
                                         {selected.length > 0 && (
                                             <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">

@@ -421,7 +421,7 @@ export function FormDialog(props) {
             const data = res.data;
             let borrowbook = [];
             data?.map((i) => borrowbook.push(createBorrowedDatas(i.borrow_id, i.student, i.Books, i.status, i.borrow_date, i.return_date, i.expect_return_date, i.qrcode)));
-            borrowbook = borrowbook.filter((i) => i.student.studentID === id && i.status !== 'Returned');
+            borrowbook = borrowbook.filter((i) => i.student.studentID === id && i.status !== 'To Pickup');
             if (borrowbook.length === 0) {
                 toast.error('No Borrowed Books Found', { duration: 2000 });
             }
