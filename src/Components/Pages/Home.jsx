@@ -46,7 +46,7 @@ const Home = ({ book_data }) => {
     }
     , [])
     return (
-        <>
+        <div style={{display:'flex' , flexDirection:"row" , width:'100%' , justifyContent:"space-between"}}>
             <div style={ctx.openMenu.search ? {marginTop: "50px"} : {}}  className="Home_page">
             {ctx.search !== '' && <SliderContainer title={ctx.search} book={book_data} type={'search'}/> }
                 {ctx.filter_cat !== '' ? (
@@ -66,7 +66,7 @@ const Home = ({ book_data }) => {
            (openfilter ?  <FilterNavigation book={book_data.allcategories} resize={change} setopen={setopen} />  :  <i onClick={() => setopen(true)} className="fa-sharp fa-solid fa-filter fa-xl filter-icon"></i>)
              : 
             <FilterNavigation book={book_data.allcategories} resize={change} /> }
-        </>
+        </div>
     );
 };
 
@@ -148,11 +148,11 @@ const FilterNavigation = ({ book , resize , setopen }) => {
             <input type="text" id="search_cate" onChange={(e) => {
                 setsearch(e.target.value)
                  }} placeholder="Search Categories" />
-                
+                <p style={{marginBottom:"20px"}}>Filter By Categories</p>
             {book
                 ?.filter((i) => i?.some((j) => j.includes(search)))
                 ?.map((cate) => (
-                    <p key={book?.allcategories?.indexOf(cate)} onClick={() => ctx.setfilter_cat(cate[0])} style={ctx.filter_cat === cate[0] ? {backgroundColor: 'black'} : { backgroundColor: 'bluecoral' }} className="filter_option">
+                    <p key={book?.allcategories?.indexOf(cate)} onClick={() => ctx.setfilter_cat(cate[0])} style={ctx.filter_cat === cate[0] ? {backgroundColor: 'black' , color:"white"} : {color:"#4682B4"}} className="filter_option">
                         
                         {' '}
                         {cate}{' '}

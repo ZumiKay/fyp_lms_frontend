@@ -25,9 +25,15 @@ body {
   overflow-x: hidden;
 }
 
+.cover_img_nav {
+  width: 100%;
+  height: 50px;
+  object-fit: cover;
+}
+
 .NavBar_container {
   position: sticky;
-  top: 0;
+  top: 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -42,6 +48,9 @@ body {
   .NavBar_container {
     justify-content: space-between;
   }
+}
+.NavBar_container .nav_coverimg {
+  width: 300px;
 }
 .NavBar_container .first_sec {
   display: flex;
@@ -65,12 +74,14 @@ body {
   cursor: pointer;
 }
 .NavBar_container .first_sec .menu_btn {
-  width: 70px;
+  width: 60px;
   cursor: pointer;
   transition: 0.5s;
+  padding: 10px;
+  border-radius: 10px;
 }
 .NavBar_container .first_sec .menu_btn:hover, .NavBar_container .first_sec .menu_btn:active {
-  opacity: 0.5;
+  background-color: #e2e2e2;
 }
 @media screen and (max-width: 800px) {
   .NavBar_container .first_sec {
@@ -93,7 +104,7 @@ body {
 }
 @media screen and (max-width: 800px) {
   .NavBar_container .second_sec {
-    flex-grow: 1;
+    flex-grow: 0;
     border: 0;
     width: 50px;
   }
@@ -147,6 +158,38 @@ body {
   .NavBar_container .third_sec {
     flex-grow: 2;
   }
+}
+.NavBar_container .third_sec .profile_sec {
+  background-color: #4682B4;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.NavBar_container .third_sec .profile_sec:hover {
+  background-color: black;
+}
+.NavBar_container .third_sec .logout {
+  padding: 10px;
+  color: red;
+  border-radius: 5px;
+  font-weight: 700;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.NavBar_container .third_sec .logout:hover {
+  background-color: red;
+  color: white;
+}
+.NavBar_container .third_sec .link_page {
+  padding: 10px;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+.NavBar_container .third_sec .link_page:hover {
+  background-color: #e2e2e2;
 }
 .NavBar_container .third_sec .library_status {
   text-align: center;
@@ -208,6 +251,9 @@ body {
     font-size: 10px;
     overflow-wrap: break-word;
   }
+  .NavBar_container .third_sec .profile_sec {
+    font-size: x-small;
+  }
 }
 .NavBar_container .secondsec_resize {
   font-size: 30px;
@@ -236,7 +282,7 @@ body {
   position: fixed;
   height: 100%;
   background-color: white;
-  top: 101px;
+  top: 100px;
   left: -300px;
   width: 300px;
   box-shadow: 0px 3px 3px 2px lightgray;
@@ -279,7 +325,7 @@ body {
   font-size: smaller;
   height: 70%;
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -290,18 +336,22 @@ body {
   }
 }
 .MenuItem .menu_sec .link_page {
-  width: 80%;
-  background-color: rgb(105, 105, 105);
+  width: 90%;
+  color: black;
   text-decoration: none;
-  color: white;
+  text-align: left;
+  font-weight: 800;
   margin-bottom: 20px;
   padding: 15px;
   border-radius: 10px;
   transition: 0.5s;
 }
+.MenuItem .menu_sec .link_page i {
+  padding-right: 30px;
+}
 .MenuItem .menu_sec .link_page:hover, .MenuItem .menu_sec .link_page:active {
-  color: black;
-  background-color: lightgrey;
+  color: white;
+  background-color: black;
 }
 .MenuItem .menu_sec p {
   background-color: lightcoral;
@@ -317,7 +367,7 @@ body {
 }
 @media screen and (max-width: 900px) {
   .MenuItem {
-    width: 220px;
+    width: 250px;
   }
 }
 
@@ -351,8 +401,8 @@ body {
 }
 
 .Login_container {
-  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
   height: 100vh;
+  background-color: #192A56;
 }
 .Login_container .Login_form {
   position: relative;
@@ -566,7 +616,7 @@ body {
   padding-bottom: 100px;
   top: 100px;
   right: 0;
-  height: 100%;
+  height: 90%;
   width: 220px;
   box-shadow: 1px 1px 1px 1px lightgray;
   overflow: auto;
@@ -577,16 +627,16 @@ body {
 .Filter_container .filter_option {
   margin-bottom: 20px;
   width: 100%;
-  text-align: center;
-  background-color: #65A3D8;
+  text-align: left;
   padding: 10px;
-  color: white;
-  text-shadow: 1px 1px lightgray;
+  font-weight: 800;
+  color: #4682B4;
   transition: 0.5s;
+  color: black;
   cursor: pointer;
 }
 .Filter_container .filter_option:hover {
-  background-color: black;
+  background-color: #e2e2e2;
 }
 .Filter_container #search_cate {
   width: 100%;
@@ -668,8 +718,9 @@ body {
   justify-content: left;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: white;
+  font-weight: 500;
 }
 .bookdetail_contianer .firstsec {
   position: relative;
@@ -699,7 +750,11 @@ body {
 .bookdetail_contianer .firstsec .detail {
   margin-left: 100px;
   width: 500px;
-  overflow-x: scroll;
+  overflow-x: auto;
+  background-color: #f1f0f0;
+  padding: 10px;
+  height: 500px;
+  overflow-y: auto;
 }
 .bookdetail_contianer .firstsec .detail .content_table {
   text-align: left;
@@ -723,6 +778,22 @@ body {
   background-color: #4682B4;
   top: 200px;
 }
+.bookdetail_contianer .borrow-btn {
+  background-color: #4682B4;
+  color: white;
+  font-weight: 800;
+  font-size: 10px;
+  padding: 10px;
+  transition: 0.5s;
+  margin-top: 20px;
+}
+.bookdetail_contianer .borrow-btn:hover {
+  background-color: black;
+  color: white;
+}
+.bookdetail_contianer .brrowed {
+  background-color: gray;
+}
 .bookdetail_contianer .secondsec {
   width: 100%;
   text-align: center;
@@ -742,29 +813,6 @@ body {
 }
 .bookdetail_contianer .secondsec .brrowed {
   background-color: gray;
-}
-.bookdetail_contianer .secondsec .description {
-  padding-top: 50px;
-  height: 100%;
-}
-.bookdetail_contianer .secondsec .description h2 {
-  font-size: 20px;
-  font-weight: 900;
-}
-.bookdetail_contianer .secondsec .description p {
-  position: relative;
-  height: 300px;
-  width: 70%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 15px;
-  overflow: auto;
-  text-align: left;
-}
-@media screen and (max-width: 425px) {
-  .bookdetail_contianer .secondsec .description p {
-    width: 100%;
-  }
 }
 
 .scanentry_container {

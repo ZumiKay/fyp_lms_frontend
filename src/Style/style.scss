@@ -7,10 +7,15 @@ body {
     background-color: #e7e5e5;
     overflow-x: hidden;
 }
+.cover_img_nav {
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+}
 
 .NavBar_container {
     position: sticky;
-    top: 0;
+    top: 0px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -24,6 +29,9 @@ body {
     @media screen and (max-width: 500px) {
         justify-content: space-between;
 
+    }
+    .nav_coverimg {
+        width: 300px;
     }
 
 
@@ -53,14 +61,17 @@ body {
         }
 
         .menu_btn {
-            width: 70px;
+            width: 60px;
             cursor: pointer;
             transition: .5s;
-
+            padding: 10px;
+            border-radius: 10px;
             &:hover,
             &:active {
 
-                opacity: .5;
+                background-color: #e2e2e2;
+                
+                
 
             }
         }
@@ -87,7 +98,7 @@ body {
         border-right: 1px solid lightgray;
 
         @media screen and (max-width: 800px) {
-            flex-grow: 1;
+            flex-grow: 0;
             border: 0;
             width: 50px;
 
@@ -136,9 +147,7 @@ body {
 
         }
 
-        @media screen and (max-width: 400px) {
-            .logo {}
-        }
+      
 
 
 
@@ -157,6 +166,42 @@ body {
             flex-grow: 2;
 
 
+        }
+        .profile_sec {
+            background-color: #4682B4;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: .5s;
+            cursor: pointer;
+            &:hover {
+                background-color: black;
+                
+            }
+
+        }
+        .logout {
+            padding: 10px;
+            
+            color: red;
+            border-radius: 5px;
+            font-weight: 700;
+            transition: .5s;
+            cursor: pointer;
+            &:hover {
+                background-color: red;
+                color: white;
+            }
+        }
+        .link_page {
+            
+            padding: 10px;
+            border-radius:5px;
+            transition: .5s;
+            &:hover {
+                background-color: #e2e2e2;
+            }
         }
 
         .library_status {
@@ -234,6 +279,9 @@ body {
                 font-size: 10px;
                 overflow-wrap: break-word;
             }
+            .profile_sec {
+                font-size: x-small;
+            }
 
         }
 
@@ -277,7 +325,7 @@ body {
     position: fixed;
     height: 100%;
     background-color: white;
-    top: 101px;
+    top: 100px;
     left: -300px;
     width: 300px;
     box-shadow: 0px 3px 3px 2px lightgray;
@@ -326,30 +374,36 @@ body {
         font-size: smaller;
         height: 70%;
         display: flex;
-        overflow-y: scroll;
+        overflow-y: auto;
         flex-direction: column;
         align-items: center;
         text-align: center;
-
+        
+        
         @media screen and (max-height : 690px) {
             padding-bottom: 120px;
         }
 
         .link_page {
-            width: 80%;
-            background-color: rgb(105, 105, 105);
+            width: 90%;
+            color: black;
             text-decoration: none;
-            color: white;
+           
+            text-align: left;
+            font-weight: 800;
             margin-bottom: 20px;
             padding: 15px;
             border-radius: 10px;
             transition: .5s;
-
+            i {
+                padding-right: 30px;
+            }
             &:hover,
             &:active {
-                color: black;
-                background-color: lightgrey;
+                color: white;
+                background-color: black;
             }
+            
         }
 
         p {
@@ -369,7 +423,7 @@ body {
     }
 
     @media screen and (max-width: 900px) {
-        width: 220px;
+        width: 250px;
     }
 
 }
@@ -409,9 +463,9 @@ body {
 
 //Login_container
 .Login_container {
-    background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
+    // background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
     height: 100vh;
-
+    background-color: #192A56;
     .Login_form {
         position: relative;
         left: 50%;
@@ -660,9 +714,9 @@ body {
     background-color: white;
     padding: 10px;
     padding-bottom: 100px;
-    top: 100px;
+    top:100px;
     right: 0;
-    height: 100%;
+    height: 90%;
     width: 220px;
     box-shadow: 1px 1px 1px 1px lightgray;
     overflow: auto;
@@ -673,16 +727,17 @@ body {
     .filter_option {
         margin-bottom: 20px;
         width: 100%;
-        text-align: center;
-        background-color: #65A3D8;
+        text-align: left;
         padding: 10px;
-        color: white;
-        text-shadow: 1px 1px lightgray;
+        font-weight: 800;
+        color: #4682B4;
+        
         transition: .5s;
+        color: black;
         cursor: pointer;
 
         &:hover {
-            background-color: black;
+            background-color: #e2e2e2;
         }
     }
 
@@ -784,9 +839,9 @@ body {
     justify-content: left;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: white;
-
+    font-weight: 500;
     .firstsec {
         position: relative;
         display: flex;
@@ -794,7 +849,7 @@ body {
         justify-content: center;
         align-items: center;
         width: 100%;
-
+        
         @media screen and (max-width: 425px) {
             flex-direction: column;
             justify-content: center;
@@ -817,8 +872,11 @@ body {
         .detail {
             margin-left: 100px;
             width: 500px;
-            overflow-x: scroll;
-
+            overflow-x: auto;
+            background-color: #f1f0f0;
+            padding: 10px;
+            height: 500px;
+            overflow-y: auto;
             .content_table {
                 text-align: left;
 
@@ -848,6 +906,27 @@ body {
             background-color: #4682B4;
             top: 200px;
         }
+       
+    }
+    .borrow-btn {
+        background-color: #4682B4;
+        color: white;
+        font-weight: 800;
+        font-size: 10px;
+        padding: 10px;
+        transition: .5s;
+        margin-top: 20px;
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+
+
+    }
+
+    .brrowed {
+        background-color: gray;
     }
 
     .secondsec {
@@ -874,33 +953,6 @@ body {
 
         .brrowed {
             background-color: gray;
-        }
-
-        .description {
-            padding-top: 50px;
-
-            height: 100%;
-
-            h2 {
-                font-size: 20px;
-                font-weight: 900;
-            }
-
-            p {
-                position: relative;
-                height: 300px;
-                width: 70%;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 15px;
-                overflow: auto;
-                text-align: left;
-
-                @media screen and (max-width: 425px) {
-                    width: 100%;
-                }
-            }
-
         }
     }
 

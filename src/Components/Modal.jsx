@@ -345,7 +345,7 @@ export function FormDialog(props) {
                 id: id
             },
             headers: {
-                AutPhorization: `Bearer ${ctx.user.token.accessToken}`
+                Authorization: `Bearer ${ctx.user.token.accessToken}`
             }
         });
         const info = response.data;
@@ -574,7 +574,7 @@ export function FormDialog(props) {
                                             margin="dense"
                                             value={userData.phone_number}
                                             name="phone_number"
-                                            label="Phone Number"
+                                            label="Phone Number (optional)"
                                             type="text"
                                             fullWidth
                                             variant="standard"
@@ -1191,7 +1191,7 @@ export function FullScreenDialog(props) {
     const [filter, setfilter] = useState('');
     const navigate = useNavigate();
 
-    const totalCountAndIndividualCounts = props.data
+    const totalCountAndIndividualCounts = props?.data
         ?.filter(({ status }) => status !== 'To Pickup')
         .reduce(
             (result, obj) => {
@@ -1271,6 +1271,9 @@ export function FullScreenDialog(props) {
         let formated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
         return formated;
     };
+    useEffect(() => {
+        console.log(props.data)
+    } , [])
 
     return (
         <div key={props.index}>
@@ -1283,6 +1286,11 @@ export function FullScreenDialog(props) {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {props.type}
                         </Typography>
+                       {props.type === (`Borrowed Book for ${props.name}`) ?   <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Total: {totalCountAndIndividualCounts?.totalCount}
+                        </Typography> :  <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Total: {props?.data?.length}
+                        </Typography> }
                         
                     </Toolbar>
                     

@@ -26,7 +26,7 @@ function countVisitsByTimeRange(dates) {
     });
 
     if (visitsBy6months > 0) {
-        result = `${visitsBy6months} For the past years`;
+        result = `${visitsBy6months} time(s) for the past years`;
     } else {
         result = 'No Entry';
     }

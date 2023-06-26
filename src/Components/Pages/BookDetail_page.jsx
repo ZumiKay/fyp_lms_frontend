@@ -55,11 +55,24 @@ const BookDetailPage = ({ book }) => {
                             <th>PublisherDate</th>
                             <td>{fitlerbook && `${new Date(fitlerbook[0]?.publisher_date).toLocaleDateString('en')}`}</td>
                         </tr>
+                        <tr style={{height: '100px'}}>
+                            <th>Description</th>
+                            <td style={{height: '100px'}}>{fitlerbook && fitlerbook[0]?.description}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>
+                       
+                
+
+                            </td>
+                        </tr>
                     </table>
+                   
                 </div>
+               
             </div>
-            <div className="secondsec">
-                {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavailable')) ? (
+            {(!ctx.bookcart.find(({ title }) => title === (fitlerbook && fitlerbook[0]?.title)) && (fitlerbook && fitlerbook[0]?.status !== 'unavailable')) ? (
                    ctx.user.user.role !== 'student' ?  
                    <Button className="borrow-btn" style={{backgroundColor:"green"}}>
                         available
@@ -70,11 +83,7 @@ const BookDetailPage = ({ book }) => {
                 ) : (
                     <Button className="borrow-btn brrowed">Unavaliable</Button>
                 )}
-                <div className="description">
-                    <h2>Description</h2>
-                    <p className="description">{fitlerbook && fitlerbook[0]?.description}</p>
-                </div>
-            </div>
+        
         </div>
     );
 };

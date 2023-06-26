@@ -58,7 +58,7 @@ const SummaryStudentInfopage = () => {
             const borrow_id = filterDatesArrayByRange(borrowedbook, i.filter.start, i.filter.end);
             const filteredentry = filterByUniqueDate(entry_date);
             const filteredborrowed = filterByUniqueDate(borrow_id);
-            console.log(filteredentry)
+            
             result = {
                 ...result,
                 [i.name]: {
@@ -240,7 +240,7 @@ const SummaryStudentInfopage = () => {
                             }
                         });
                     }
-                    if (result.hasOwnProperty(lastmonthname)) {
+                    if (result.hasOwnProperty(lastmonthname) && monthenddate !== month) {
                         result[lastmonthname].monthCount++;
                         
                         // Get the unique weeks within the subarray
@@ -444,7 +444,7 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} style={{backgroundColor:"#e2e2e2"}}>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -460,7 +460,7 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <Typography variant="h5" gutterBottom component="div">
                                 LIBRARY ENTRY FOR {row.Date}
                             </Typography>
                             <Table size="small" aria-label="purchases">
@@ -520,7 +520,7 @@ function Row(props) {
                         
                         
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <Typography variant="h5" gutterBottom component="div">
                                 BORROWED BOOK FOR {row.Date}
                             </Typography>
                             <Table size="small" aria-label="purchases">

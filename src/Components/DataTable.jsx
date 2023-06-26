@@ -329,7 +329,7 @@ export default function DataTable(props) {
                                                         <FullScreenDialog index={index} open={openfullscreen[`Borrowed${index}`]} type={`Borrowed Book`} data={value} setopen={setfullscreen} />
                                                     </>
                                                 ) : column.id === 'qrcode' ? (
-                                                    <img src={value} alt="qrcode"></img>
+                                                    value !== '' ? <img src={value} alt="qrcode"></img> : ''
                                                 ) : column.id === 'cover_img' ? (
                                                     column.id === 'cover_img' && <img style={{ width: '200px', height: '250px' }} src={value} alt="cover" />
                                                 ) : column.id === 'student' && ctx.user.user.role === 'librarian' ? (
