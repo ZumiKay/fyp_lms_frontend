@@ -17,6 +17,7 @@ import ListofBook, { BorrowedBook } from './Components/Pages/ListofBook';
 import CheckoutPage from './Components/Pages/CheckoutPage';
 import ListofBorrowedbook from './Components/Pages/ListofBorrowedbook';
 import Profile from './Components/Pages/Profile';
+import SummaryStudentInfopage from './Components/Pages/SummaryStudentInfo_page';
 
 
 function App() {
@@ -127,6 +128,14 @@ function App() {
                     element={
                         <LibrarianandHD isSignedin={user} isHD={ctx.user.user?.role === 'headdepartment'} isLibrarian={ctx.user.user?.role === 'librarian'}>
                             <ListofStudentPage/>
+                        </LibrarianandHD>
+                    }
+                />
+                 <Route
+                    path="/summary-stu"
+                    element={
+                        <LibrarianandHD isSignedin={user} isHD={ctx.user.user?.role === 'headdepartment'} isLibrarian={ctx.user.user?.role === 'librarian'}>
+                           <SummaryStudentInfopage/>
                         </LibrarianandHD>
                     }
                 />

@@ -47,14 +47,13 @@ const bookcolumns = [
     { id: 'status', label: 'Status', minWidth: 80 }
 ];
 const borrowbookcolumns = [
-    { id: 'borrowid', label: 'BorrowID', minWidth: 170 },
-    { id: 'student', label: 'Borrower', minWidth: 100 },
+    { id: 'borrowid', label: 'BorrowID', minWidth: 150 },
+    { id: 'student', label: 'Borrower', minWidth: 150 },
     { id: 'bookdetail', label: 'Books', minWidth: 170 },
-    { id: 'status', label: 'Status', minWidth: 170 },
+    { id: 'status', label: 'Status', minWidth: 100 },
     { id: 'borrowdate', label: 'Borrow Date', minWidth: 170 },
-    { id: 'returndate', label: 'Return Date', minWidth: 170 },
     { id: 'expectreturndate', label: 'Expect Return Date', minWidth: 170 },
-    { id: 'qrcode', label: 'QR CODE', minWidth: 200 }
+    { id: 'qrcode', label: 'QR CODE', minWidth: 150 }
 ];
 
 export default function DataTable(props) {
@@ -234,19 +233,22 @@ export default function DataTable(props) {
                                         <button onClick={() => ctx.setMenu({ ...ctx.openMenu, opendelete: true })} className="table-btn delete">
                                             Detete
                                         </button>
-                                        {(ctx.user.user.role === 'librarian' && selected.length === 1) && (
+                                        {/* {(ctx.user.user.role === 'librarian' && selected.length === 1) && (
                                             <>
-                                            {(props.data?.find(({borrowid}) => borrowid === selected[0]).status.includes('PickedUp')) && 
                                             <button style={{ marginLeft: '20px' }} onClick={handleReturn} className="table-btn">
                                                 RETURN BOOK
                                             </button>
-                                            }   
+                                               
                                             </>
-                                        )}
+                                        )} */}
                                     </>
                                 ) : (
                                     <></>
                                 )}
+                                {ctx.user.user.role === 'librarian' && props.type === 'borrowedbook' && selected.length === 0 && <button style={{ marginLeft: '20px' }} onClick={() => ctx.setMenu({...ctx.openMenu , returnbook: true})} className="table-btn">
+                                                RETURN BOOKS
+                                            </button>}
+                                            {ctx.openMenu.returnbook && <FormDialog type={"returnbook"} borrowedbook={props.data}/>}
                                 {ctx.openMenu[props.type] && <FormDialog type={props.type} action={ctx.openMenu.action} selectedbook={selected}/>}
                                 <DeleteDialog data={selected} type={props.type} />
                             </TableCell>
@@ -302,8 +304,8 @@ export default function DataTable(props) {
                                                 }}
                                             />
                                         ) : (
-                                            row.status?.includes('return') &&
-                                            ctx.user.user.role === 'librarian' && (
+                                            
+        ctx.user.user.role === 'librarian' && (
                                                 <Checkbox
                                                     color="primary"
                                                     onClick={(event) => handleClick(event, props.type === 'studentlist' ? row.studentID : props.type === 'borrowedbook' ? row.borrowid : row.id)}
@@ -348,7 +350,7 @@ export default function DataTable(props) {
                                                             index={index}
                                                             open={openfullscreen[`Library${index}`]}
                                                             type={`Library Entry for ${row.fullname}`}
-                                                            data={props.entry[index]?.library_entry}
+                                                            data={props.entry?.find(({studentID}) => studentID === row.studentID)?.library_entry}
                                                         />
                                                     </>
                                                 ) : column.id === 'borrowedbook' ? (

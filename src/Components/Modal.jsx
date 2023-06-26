@@ -6,13 +6,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../Style/style.css';
 import { TextField } from '@mui/material';
 import { Mycontext } from '../Config/context';
 import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
-import env, { createData } from '../env';
+import env, { createBorrowedData, createBorrowedDatas, createData } from '../env';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -36,8 +36,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';
-import { Loading } from './Asset';
-
+import { Loading, setimage } from './Asset';
+import { QrScanner } from '@yudiel/react-qr-scanner';
 
 export default function ResponsiveDialog(props) {
     const theme = useTheme();
@@ -141,54 +141,87 @@ export default function ResponsiveDialog(props) {
 
 export function FormDialog(props) {
     const ctx = useContext(Mycontext);
+    const [scan, setscan] = useState(false);
+    const [scan1, setscan1] = useState(false);
+    const [type, settype] = useState('scan');
+    const [borrowbooked, setborrowbooked] = useState([]);
+    const [manually, setmuanlly] = useState('scan');
+    const [id, setid] = useState('');
+    const [returned, setreturned] = useState([]);
+    const [returnedall, setreturnall] = useState([]);
+    const ref = useRef(null);
     const [userData, setdata] = useState({
         department: '',
-        status: 'available'
+        status: 'available',
+        firstname: '',
+        lastname: '',
+        studentID: '',
+        dateofbirth: '',
+        email: '',
+        phone_number: '',
+        faculty: 'No Faculty'
     });
-    
-    const fetchdata = (end) => {
+
+    const fetchdata = (end, data) => {
         return axios({
             method: 'post',
             url: env.api + end,
             headers: {
                 Authorization: `Bearer ${ctx.user.token.accessToken}`
             },
-            data: userData
+            data: data
         });
     };
     useEffect(() => {
+        ctx.setloading({ ...ctx.loading, formdialog: false });
         if (props.action === 'edit') {
             const findBook = ctx.book.allbooks.find(({ id }) => id === props.selectedbook[0]);
             setdata(findBook);
         }
     }, [ctx.book.allbooks, props.action, props.selectedbook]);
+    const regiterstudent = (e = '', data) => {
+        fetchdata('register-student', data)
+            .then(() => {
+                ctx.setloading({ ...ctx.loading, formdialog: false });
+                toast.success('Student Registered', { duration: 2000 });
+                ctx.setstudent((prev) => [
+                    ...prev,
+                    createData(userData.studentID, userData.firstname + ' ' + userData.lastname, userData.department, userData.email, userData.phone_number, 'No Entry')
+                ]);
+                if (e !== '') {
+                    e.target.reset();
+                }
+                setdata({
+                    department: '',
+                    firstname: '',
+                    lastname: '',
+                    studentID: '',
+                    dateofbirth: '',
+                    email: '',
+                    phone_number: ''
+                });
+            })
+            .catch((err) => {
+                ctx.setloading({ ...ctx.loading, formdialog: false });
+
+                if (err.response.status === 400) {
+                    toast.error('Please Check All Required Informations', { duration: 2000 });
+                } else if (err.response.status === 401) {
+                    toast.error(err.response.data.message);
+                } else {
+                    toast.error(err.response.data.message);
+                }
+            });
+    };
+
     const handleSubmit = (e) => {
         ctx.setloading({ ...ctx.loading, formdialog: true });
         e.preventDefault();
         if (props.type === 'studentlist') {
             if (props.action === 'create') {
-                fetchdata('register-student')
-                    .then(() => {
-                        ctx.setloading({ ...ctx.loading, formdialog: false });
-                        toast.success('Student Registered', { duration: 2000 });
-                        ctx.setstudent((prev) => [
-                            ...prev,
-                            createData(userData.studentID, userData.firstname + ' ' + userData.lastname, userData.department, userData.email, userData.phone_number, '0 For This Week')
-                        ]);
-                        e.target.reset();
-                    })
-                    .catch((err) => {
-                        ctx.setloading({ ...ctx.loading, formdialog: false });
-                        if (err.response.status === 400) {
-                            toast.error('Please Check All Required Informations', { duration: 2000 });
-                        } else if (err.response.status === 401) {
-                            toast.error(err.response.data.message);
-                        } else {
-                            toast.error('Opps! Something Wrong');
-                        }
-                    });
+                regiterstudent(e, userData);
             } else if (props.action === 'createdp') {
-                fetchdata('createdepartment')
+                fetchdata('createdepartment', userData)
                     .then(() => {
                         ctx.setloading({ ...ctx.loading, formdialog: false });
                         toast.success('Department Created', { duration: 2000 });
@@ -199,13 +232,13 @@ export function FormDialog(props) {
                         toast.error('Error Occured', { duration: 2000 });
                     });
             } else if (props.action === 'deteledp') {
-                fetchdata('deletedepartment').then(() => {
+                fetchdata('deletedepartment', userData).then(() => {
                     ctx.setloading({ ...ctx.loading, formdialog: false });
                     window.location.reload();
                 });
             }
         } else if (props.type === 'HD') {
-            fetchdata('register-HD')
+            fetchdata('register-HD', userData)
                 .then(() => {
                     ctx.setloading({ ...ctx.loading, formdialog: false });
                     toast.success('Headdepartment Registered', { duration: 2000 });
@@ -301,11 +334,156 @@ export function FormDialog(props) {
     const handleClose = () => {
         ctx.setMenu({ ...ctx.openMenu, [props.type]: false });
     };
+    const fetchstudent = async (url) => {
+        let data = {};
+        const id = url.replace('https://my.paragoniu.edu.kh/qr?student_id=', '');
 
-    
+        const response = await axios({
+            method: 'post',
+            url: env.api + 'getstudentapi',
+            data: {
+                id: id
+            },
+            headers: {
+                AutPhorization: `Bearer ${ctx.user.token.accessToken}`
+            }
+        });
+        const info = response.data;
+
+        if (info) {
+            ctx.setloading({ ...ctx.loading, formdialog: false });
+            data = {
+                firstname: info.name.split(' ')[0],
+                lastname: info.name.split(' ')[1],
+                studentID: info.id_number,
+                dateofbirth: null,
+                department: info.department.replace('Department of ', ''),
+                faculty: info.faculty,
+                phone_number: null
+            };
+        }
+
+        setdata(data);
+        settype('!scan');
+    };
+    const Options = () => {
+        return (
+            <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-checkbox-label">TYPE</InputLabel>
+                <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    value={type}
+                    onChange={(e) => {
+                        settype(e.target.value);
+                        setscan(false);
+                    }}
+                    input={<OutlinedInput label="TYPE" />}
+                    fullWidth
+                >
+                    <MenuItem value="scan">SCAN</MenuItem>
+                    <MenuItem value="!scan">MANUALLY</MenuItem>
+                </Select>
+            </FormControl>
+        );
+    };
+
+    const onNewScanResult = (data) => {
+        ctx.setloading({ ...ctx.loading, formdialog: true });
+        if (props.type === 'studentlist' && props.action === 'create') {
+            if (data.includes('https://my.paragoniu.edu.kh/qr?student_id=')) {
+                setscan(true);
+                fetchstudent(data);
+            } else {
+                setscan(true);
+                toast.error('INVALID QR CODE', { duration: 2000 });
+                ctx.setloading({ ...ctx.loading, formdialog: false });
+            }
+        } else if (props.type === 'returnbook' && !scan1) {
+            let id = '';
+            if (data.includes('https://my.paragoniu.edu.kh/qr?student_id=')) {
+                id = data.replace('https://my.paragoniu.edu.kh/qr?student_id=', '');
+            } else {
+                id = data;
+            }
+            getborrow(id);
+            setscan1(true);
+        }
+    };
+    const getborrow = (id) => {
+        axios({
+            method: 'get',
+            url: env.api + 'getborrow_book',
+            headers: {
+                Authorization: `Bearer ${ctx.user.token.accessToken}`
+            }
+        }).then((res) => {
+            const data = res.data;
+            let borrowbook = [];
+            data?.map((i) => borrowbook.push(createBorrowedDatas(i.borrow_id, i.student, i.Books, i.status, i.borrow_date, i.return_date, i.expect_return_date, i.qrcode)));
+            borrowbook = borrowbook.filter((i) => i.student.studentID === id && i.status !== 'Returned');
+            if (borrowbook.length === 0) {
+                toast.error('No Borrowed Books Found', { duration: 2000 });
+            }
+            setborrowbooked(borrowbook);
+            ctx.setloading({ ...ctx.loading, formdialog: false });
+        });
+    };
+    const handleError = (err) => {};
+
+    const handlereturn = (e, borrowid, ISBN) => {
+        const borrowdata = [...borrowbooked];
+        e.preventDefault();
+        const data = {
+            borrowid,
+            ISBN
+        };
+
+        let bookdata = borrowdata.map((i) => {
+            if (i.borrowid === borrowid) {
+                i.bookdetail.map((j) => {
+                    if (j.ISBN === data.ISBN) {
+                        j.status = 'available';
+                        setreturned((prev) => [...prev, j.id]);
+                    }
+                });
+            }
+            return i;
+        });
+
+        setborrowbooked(bookdata);
+    };
+    useEffect(() => {}, []);
+    const handleConfirm = (e) => {
+        ctx.setloading({ ...ctx.loading, formdialog: true });
+        e.preventDefault();
+
+        axios({
+            method: 'POST',
+            url: env.api + 'ir',
+            headers: {
+                Authorization: `Bearer ${ctx.user.token.accessToken}`
+            },
+            data: {
+                borrowbooked: borrowbooked
+            }
+        })
+            .then((res) => {
+                ctx.setloading({ ...ctx.loading, formdialog: false });
+                toast.success('Return Successfully', { duration: 2000 });
+                const data = res.data;
+                let borrowbook = [];
+                data?.map((i) => borrowbook.push(createBorrowedDatas(i.borrow_id, i.student, i.Books, i.status, i.borrow_date, i.return_date, i.expect_return_date, i.qrcode)));
+                ctx.setborrowedrequest(borrowbook);
+            })
+            .catch((err) => {
+                ctx.setloading({ ...ctx.loading, formdialog: false });
+                toast.error(err.response.data.message, { duration: 2000 });
+            });
+    };
 
     return (
-        <div>
+        <div ref={ref}>
             <Dialog open={ctx.openMenu[props.type]} onClose={handleClose}>
                 <DialogTitle>
                     {' '}
@@ -322,7 +500,7 @@ export function FormDialog(props) {
                     ) : props.type === 'HD' ? (
                         'REGISTER HEADDEPARTMENT'
                     ) : (
-                        `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : 'Edit Book'}`
+                        `${props.action === 'create' ? 'Register Book' : props.type === 'department' ? 'CREATE DEPARTMENT' : props.type === 'returnbook' ? 'Scan To Return' : 'Edit Book'}`
                     )}{' '}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
@@ -330,31 +508,99 @@ export function FormDialog(props) {
                     <DialogContent>
                         {props.type === 'studentlist' && props.action === 'create' ? (
                             <>
-                                <DialogContentText>Please Fill in with relevant information</DialogContentText>{' '}
-                                <TextField autoFocus margin="dense" name="firstname" label="Firstname" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                <TextField autoFocus margin="dense" name="lastname" label="Lastname" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                <TextField autoFocus margin="dense" name="email" label="Email" type="email" fullWidth variant="standard" required onChange={handleChange} />
-                                <TextField autoFocus margin="dense" name="studentID" label="StudentID" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                <FormControl variant="standard" className="select" fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Department</InputLabel>
-                                    <Select id="department" value={userData.department} name="department" label="department" onChange={handleChange}>
-                                        {ctx.dep?.map((i) => (
-                                            <MenuItem value={i?.department}>{i?.department}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <TextField autoFocus margin="dense" name="phone_number" label="Phone Number" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    name="dateofbirth"
-                                    label="DateofBirth (Optional)"
-                                    type="date"
-                                    fullWidth
-                                    variant="standard"
-                                    InputLabelProps={{ shrink: true }}
-                                    onChange={handleChange}
-                                />
+                                <Options />
+
+                                {type === '!scan' ? (
+                                    <>
+                                        <DialogContentText>Please Fill in with relevant information</DialogContentText>{' '}
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            value={userData.firstname}
+                                            name="firstname"
+                                            label="Firstname"
+                                            type="text"
+                                            fullWidth
+                                            variant="standard"
+                                            required
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            value={userData.lastname}
+                                            name="lastname"
+                                            label="Lastname"
+                                            type="text"
+                                            fullWidth
+                                            variant="standard"
+                                            required
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            value={userData.email}
+                                            name="email"
+                                            label="Email"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                            required
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            value={userData.studentID}
+                                            name="studentID"
+                                            label="StudentID"
+                                            type="text"
+                                            fullWidth
+                                            variant="standard"
+                                            required
+                                            onChange={handleChange}
+                                        />
+                                        <FormControl variant="standard" className="select" fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                                            <Select id="department" value={userData.department} name="department" label="department" onChange={handleChange}>
+                                                {ctx.dep?.map((i) => (
+                                                    <MenuItem value={i?.department}>{i?.department}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            value={userData.phone_number}
+                                            name="phone_number"
+                                            label="Phone Number"
+                                            type="text"
+                                            fullWidth
+                                            variant="standard"
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            name="dateofbirth"
+                                            label="DateofBirth (Optional)"
+                                            type="date"
+                                            fullWidth
+                                            variant="standard"
+                                            InputLabelProps={{ shrink: true }}
+                                            onChange={handleChange}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        {!scan && (
+                                            <div className="qrcode_reader" style={{ width: '500px' }}>
+                                                <QrScanner onDecode={onNewScanResult} onError={handleError} />
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                             </>
                         ) : props.type === 'HD' ? (
                             <>
@@ -387,6 +633,102 @@ export function FormDialog(props) {
                                         ))}
                                     </Select>
                                 </FormControl>
+                            </>
+                        ) : props.type === 'returnbook' ? (
+                            <>
+                                {!scan1 ? (
+                                    <>
+                                        <FormControl sx={{ m: 1, width: 300 }}>
+                                            <InputLabel id="demo-multiple-name-label">Type</InputLabel>
+                                            <Select
+                                                labelId="demo-multiple-name-label"
+                                                id="demo-multiple-name"
+                                                value={manually}
+                                                onChange={(e) => setmuanlly(e.target.value)}
+                                                label="Type"
+                                                input={<OutlinedInput label="Type" />}
+                                            >
+                                                <MenuItem value={'scan'}>Scan</MenuItem>
+                                                <MenuItem value={'input'}>Manually</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        {manually === 'input' ? (
+                                            <form className="return_manually">
+                                                {scan1 && <Loading />}
+                                                <TextField type="text" placeholder="Student ID" name="studentid" onChange={(e) => setid(e.target.value)} required fullWidth />
+                                                <Button
+                                                    type="action"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        onNewScanResult(id);
+                                                    }}
+                                                    className="enter-btn"
+                                                    variant="contained"
+                                                >
+                                                    ENTER
+                                                </Button>
+                                            </form>
+                                        ) : (
+                                            <>
+                                                <h1 style={{ fontSize: 'medium', fontWeight: '700', color: 'red' }}>Please place student ID QR Code In the RED BOX</h1>
+                                                <div className="qrcode_reader" style={{ width: '500px' }}>
+                                                    <QrScanner onDecode={onNewScanResult} onError={handleError} />
+                                                </div>{' '}
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        {' '}
+                                        {borrowbooked
+                                            ?.filter((f) => !f.bookdetail.every(({ status }) => status === 'available'))
+                                            .map((i, index) => (
+                                                <div key={index} className="returnbook_table">
+                                                    <div className="detail_section">
+                                                        <h3>Borrow ID: </h3>
+
+                                                        <h3>StudentID: </h3>
+
+                                                        <h3>Fullname: </h3>
+                                                        <h3>Borrow Date: </h3>
+                                                        <h3>Expect Return Date: </h3>
+                                                        <h3>Total Books: </h3>
+                                                    </div>
+                                                    <div className="info_section">
+                                                        <h3>{i.borrowid}</h3>
+                                                        <h3>{i.student.studentID}</h3>
+                                                        <h3>{i.student.firstname + ' ' + i.student.lastname}</h3>
+                                                        <h3>
+                                                            {new Date(i.borrowdate).toLocaleDateString('en')}, {new Date(i.borrowdate).getHours()}:{new Date(i.borrowdate).getMinutes()}:
+                                                            {new Date(i.borrowdate).getSeconds()}
+                                                        </h3>
+                                                        <h3>
+                                                            {new Date(i.expectreturndate).toLocaleDateString('en')}, {new Date(i.expectreturndate).getHours()}:
+                                                            {new Date(i.expectreturndate).getMinutes()}:{new Date(i.expectreturndate).getSeconds()}
+                                                        </h3>
+                                                        <h3 style={{ marginLeft: '100px', marginBottom: '50px' }}>{i.bookdetail.length}</h3>
+                                                        <div className="book_row">
+                                                            {i.bookdetail
+                                                                .filter(({ status }) => status !== 'available')
+                                                                .map((j) => (
+                                                                    <div className="book_card">
+                                                                        <img src={j.cover_img} alt="book_cover" />
+                                                                        <div className="bookcard_detail">
+                                                                            <h3>ISBN: {j?.ISBN[0]?.identifier}</h3>
+                                                                            <h3>Title : {j.title}</h3>
+
+                                                                            <button className="return-btn" onClick={(e) => handlereturn(e, i.borrowid, j.ISBN)}>
+                                                                                Return
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                    </>
+                                )}
                             </>
                         ) : (
                             <>
@@ -487,8 +829,70 @@ export function FormDialog(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-
-                        <Button type="submit">{props.action === 'deteledp' ? 'DELETE' : 'REGSITER'}</Button>
+                        {scan && (
+                            <Button
+                                onClick={() => {
+                                    settype('scan');
+                                    setscan(false);
+                                }}
+                            >
+                                Restart
+                            </Button>
+                        )}
+                        {type === '!scan' && <Button type="submit">{props.action === 'deteledp' ? 'DELETE' : 'REGSITER'}</Button>}
+                        {props.action === 'deteledp' && <Button type="submit">DELETE</Button>}
+                        {scan1 && (
+                            <Button
+                                type="submit"
+                                onClick={() => {
+                                    setscan1(false);
+                                    setreturned([]);
+                                }}
+                            >
+                                BACK
+                            </Button>
+                        )}
+                        {(returned.length > 0 || returnedall.length > 0) && (
+                            <>
+                                <Button onClick={handleConfirm} type="submit">
+                                    CONFIRM
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        let resetbook;
+                                        if (returned.length > 0) {
+                                            resetbook = borrowbooked.map((i) => {
+                                                i.bookdetail.map((j) => {
+                                                    returned.map((k) => {
+                                                        if (k === j.id) {
+                                                            j.status = 'unavailable';
+                                                        }
+                                                    });
+                                                });
+                                                return i;
+                                            });
+                                            setreturned([]);
+                                        } else if (returnedall.length > 0) {
+                                            resetbook = borrowbooked?.map((i) => {
+                                                returnedall.map((j) => {
+                                                    if (i.borrowid === j) {
+                                                        i.bookdetail.map((k) => (k.status = 'unvailable'));
+                                                    }
+                                                });
+                                                return i;
+                                            });
+                                            setreturnall([]);
+                                        }
+                                        setborrowbooked(resetbook);
+                                    }}
+                                >
+                                    RESET
+                                </Button>
+                            </>
+                        )}
+                        {props.type === 'studentlist' && props.action === 'createdp' && <Button type="submit">ADD</Button>}
                     </DialogActions>
                 </form>
             </Dialog>
@@ -788,7 +1192,7 @@ export function FullScreenDialog(props) {
     const navigate = useNavigate();
 
     const totalCountAndIndividualCounts = props.data
-        ?.filter(({ return_date }) => return_date !== null)
+        ?.filter(({ status }) => status !== 'To Pickup')
         .reduce(
             (result, obj) => {
                 const bookCount = obj.Books?.length;
@@ -862,6 +1266,11 @@ export function FullScreenDialog(props) {
                 }
             });
     };
+    const returndateformat = (date) => {
+        let d = new Date(date);
+        let formated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+        return formated;
+    };
 
     return (
         <div key={props.index}>
@@ -874,79 +1283,13 @@ export function FullScreenDialog(props) {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {props.type}
                         </Typography>
-                        {props.type.includes('Borrowed') && (
-                            <>
-                                <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                                    Total Books:{' '}
-                                    {props.type === 'Borrowed Book'
-                                        ? props.data?.length
-                                        : props.type === `Borrowed Book for ${props.name}`
-                                        ? totalCountAndIndividualCounts?.totalCount
-                                        : props.data?.length}
-                                </Typography>
-                                {props.type.includes('Borrowed Book for') && (
-                                    <Typography sx={{ ml: 2, flex: 0.5 }} variant="h6" component="div">
-                                        <FormControl fullWidth>
-                                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                                Filter Entry
-                                            </InputLabel>
-                                            <NativeSelect
-                                                value={filter}
-                                                defaultValue={'All'}
-                                                onChange={(e) => setfilter(e.target.value)}
-                                                inputProps={{
-                                                    name: 'age',
-                                                    id: 'uncontrolled-native'
-                                                }}
-                                                style={{ backgroundColor: 'white' }}
-                                            >
-                                                <option value={''}>All</option>
-                                                <option value={'2 weeks'}>past 2 weeks</option>
-                                                <option value={'1 months'}>past 1 months</option>
-                                                <option value={'3 months'}>past 3 months</option>
-                                                <option value={'6 months'}>past 6 months</option>
-                                            </NativeSelect>
-                                        </FormControl>
-                                    </Typography>
-                                )}
-                            </>
-                        )}
                         
                     </Toolbar>
-                    {props.type.includes('Library Entry') && (
-                            <>
-                                <Typography sx={{ ml: 2, flex: 0.5 }} variant="h6" component="div">
-                                    <FormControl>
-                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                            Filter Entry
-                                        </InputLabel>
-                                        <NativeSelect
-                                            value={filter}
-                                            defaultValue={'All'}
-                                            onChange={(e) => setfilter(e.target.value)}
-                                            inputProps={{
-                                                name: 'age',
-                                                id: 'uncontrolled-native'
-                                            }}
-                                            style={{ backgroundColor: 'white' }}
-                                        >
-                                            <option value={''}>All</option>
-                                            <option value={'2 weeks'}>past 2 weeks</option>
-                                            <option value={'1 months'}>past 1 months</option>
-                                            <option value={'3 months'}>past 3 months</option>
-                                            <option value={'6 months'}>past 6 months</option>
-                                        </NativeSelect>
-                                    </FormControl>
-                                </Typography>
-                                <Typography sx={{ ml: 2, flex: 1 , marginTop:"10px" }} variant="h6" component="div">
-                                    Total Entry: {props.data?.length}
-                                </Typography>
-                            </>
-                        )}
+                    
                 </AppBar>
                 <List>
                     {props.type === 'Borrowed Book' ? (
-                        props.data.map((book) => (
+                        props?.data?.map((book) => (
                             <>
                                 <ListItem>
                                     <div className="check_book_container">
@@ -956,6 +1299,8 @@ export function FullScreenDialog(props) {
                                             <p>{book.categories}</p>
                                             <p>{book.author}</p>
                                             <p>ISBN: {book.ISBN[0].identifier}</p>
+                                            <p>Status: {book.return_status ? book.return_status : 'Not Yet Return'}</p>
+                                            <p>Return Date: {book.return_date ? returndateformat(book.return_date) : 'No Return Date'}</p>
                                         </div>
                                     </div>
                                 </ListItem>
@@ -964,7 +1309,7 @@ export function FullScreenDialog(props) {
                         ))
                     ) : props.type === `Borrowed Book for ${props.name}` ? (
                         (filter !== '' ? filterDatesByWeeksOrMonths(props.data, filter.split(' ')[0], filter.split(' ')[1], 'borrow') : props.data)
-                            ?.filter(({ status }) => status !== "To Pickup")
+                            ?.filter(({ status }) => status !== 'To Pickup')
                             .map((i) => {
                                 return i.Books.map((Books) => (
                                     <>
@@ -976,9 +1321,9 @@ export function FullScreenDialog(props) {
                                                     <p>{Books.categories}</p>
                                                     <p>{Books.author}</p>
                                                     <p>ISBN: {Books.ISBN[0].identifier}</p>
-                                                    <p>Status: {i.status}</p>
+                                                    <p>Status: {Books.return_status ? Books.return_status : 'Not Yet Return'}</p>
                                                     <p>BorrowDate: {new Date(i.borrow_date).toLocaleDateString('en')}</p>
-                                                    <p>ReturnDate: {i.return_date && new Date(i.return_date).toLocaleDateString('en')}</p>
+                                                    <p>Return Date: {Books.return_date ? returndateformat(Books.return_date) : 'No Return Date'}</p>
                                                 </div>
                                             </div>
                                         </ListItem>
@@ -991,35 +1336,62 @@ export function FullScreenDialog(props) {
                             <form className="report_form" onSubmit={handleSubmit}>
                                 {ctx.loading.report && <Loading />}
                                 <TextField autoFocus margin="dense" name="name" label="NAME OF REPORT" type="text" fullWidth variant="standard" required onChange={handleChange} />
-                                
-                                    <FormControl className="select" fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Department</InputLabel>
-                                        <Select labelId="demo-simple-select-label" name="department"  value={exportdata.department} label="Age" onChange={handleChange} input={<OutlinedInput label="Department" />}>
-                                        
-                                            <MenuItem value={'all'}>All</MenuItem>
-                                            {ctx.dep.map((i) => (
-                                                <MenuItem value={i.department}>{i.department}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                
+
+                                <FormControl className="select" fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        name="department"
+                                        value={exportdata.department}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        input={<OutlinedInput label="Department" />}
+                                    >
+                                        <MenuItem value={'all'}>All</MenuItem>
+                                        {ctx.dep.map((i) => (
+                                            <MenuItem value={i.department}>{i.department}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="information" value={exportdata.information} label="Age" onChange={handleChange} input={<OutlinedInput label="Information" />}>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        name="information"
+                                        value={exportdata.information}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        input={<OutlinedInput label="Information" />}
+                                    >
                                         <MenuItem value={'entry'}>Library Entry only</MenuItem>
                                         <MenuItem value={'entry&borrow'}>Library Entry and Borrowed Book</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information Type</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="informationtype" value={exportdata.informationtype} label="Age" onChange={handleChange} input={<OutlinedInput label="Information Type" />}>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        name="informationtype"
+                                        value={exportdata.informationtype}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        input={<OutlinedInput label="Information Type" />}
+                                    >
                                         <MenuItem value={'short'}>Summarize Information</MenuItem>
                                         <MenuItem value={'detail'}>Full Information</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl className="select" fullWidth>
                                     <InputLabel id="demo-simple-select-label">Information Date</InputLabel>
-                                    <Select labelId="demo-simple-select-label" name="informationdate" value={exportdata.informationdate} label="Age" onChange={handleChange} input={<OutlinedInput label="Information Date" />}>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        name="informationdate"
+                                        value={exportdata.informationdate}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        input={<OutlinedInput label="Information Date" />}
+                                    >
                                         <MenuItem value={'1week'}>For Current Week</MenuItem>
                                         <MenuItem value={'2week'}>For Past 2 Weeks</MenuItem>
                                         <MenuItem value={'1month'}>For Past 1 month</MenuItem>
@@ -1027,7 +1399,6 @@ export function FullScreenDialog(props) {
                                         <MenuItem value={'6month'}>For Past 6 months</MenuItem>
                                     </Select>
                                 </FormControl>
-                               
 
                                 <button type="submit">Generate Report</button>
                             </form>
@@ -1036,14 +1407,14 @@ export function FullScreenDialog(props) {
                         (filter !== '' ? filterDatesByWeeksOrMonths(props.data, filter.split(' ')[0], filter.split(' ')[1], 'entry') : props.data)?.map((entry) => (
                             <>
                                 <ListItem>
-                                    <p className="entry">{new Date(entry.createdAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                    <p className="entry">{new Date(entry.entry_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                                     <i style={{ color: 'red' }} class="fa-solid fa-arrow-right"></i>
 
                                     <p className="entry">
                                         {' '}
-                                        {new Date(entry.createdAt).getDate()}/{new Date(entry.createdAt).getMonth() + 1}/{new Date(entry.createdAt).getFullYear()}{' '}
-                                        {new Date(entry.createdAt).getHours()}:{new Date(entry.createdAt).getMinutes().toString().padStart(2, '0')}:
-                                        {new Date(entry.createdAt).getSeconds().toString().padStart(2, '0')}
+                                        {new Date(entry.entry_date).getDate()}/{new Date(entry.entry_date).getMonth() + 1}/{new Date(entry.entry_date).getFullYear()}{' '}
+                                        {new Date(entry.entry_date).getHours()}:{new Date(entry.entry_date).getMinutes().toString().padStart(2, '0')}:
+                                        {new Date(entry.entry_date).getSeconds().toString().padStart(2, '0')}
                                     </p>
                                 </ListItem>
                                 <Divider />

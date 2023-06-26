@@ -51,16 +51,20 @@ export const BorrowedBook = () => {
     })
   }
   useEffect(() => {
+   
     getborrow()
   } , [])
+  useEffect(() => {
+    setborrowedbook(ctx.borrowedrequest)
+  
+  } , [ctx.borrowedrequest])
 
   return (
     <div className='borrowedbook_container'>
     <h1>List of Borrowed Book</h1>
     {ctx.loading.borrowedbook && <Loading/>}
     <div className="table_container">
-     
-      <DataTable type={"borrowedbook"} data={borrowedbook}/>
+     <DataTable type={"borrowedbook"} data={borrowedbook}/>
     </div>
 </div>
   )

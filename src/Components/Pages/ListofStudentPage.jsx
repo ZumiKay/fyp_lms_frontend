@@ -26,7 +26,7 @@ function countVisitsByTimeRange(dates) {
     });
 
     if (visitsBy6months > 0) {
-        result = `${visitsBy6months} For the past 6 months`;
+        result = `${visitsBy6months} For the past years`;
     } else {
         result = 'No Entry';
     }
@@ -46,8 +46,9 @@ const ListofStudentPage = () => {
             url: env.api + 'getstudent',
             headers: { Authorization: `Bearer ${ctx.user.token.accessToken}` }
         }).then((res) => {
-            ctx.setstudent(students);
+            
             res.data.map((i) => students.push(createData(i.studentID, i.firstname + ' ' + i.lastname, i.department, i.email, i.phonenumber, countVisitsByTimeRange(i.library_entry), i.borrow_book)));
+            ctx.setstudent(students);
             setstudent(res.data);
             setloading(false);
         });

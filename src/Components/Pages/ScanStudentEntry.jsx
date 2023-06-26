@@ -71,7 +71,9 @@ const ScanStudentEntry = (props) => {
             }
         }
     };
-    const handleError = (err) => {};
+    const handleError = (err) => {
+        
+    };
     const handleChange = (e) => setmanually(e.target.value);
     const handleSubmit = (e) => {
         setscan(true);

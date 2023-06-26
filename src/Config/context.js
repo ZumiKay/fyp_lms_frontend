@@ -14,6 +14,7 @@ export const Allcontext = ({children}) => {
         HD: false
        
     })
+    const [borrowedrequest , setborrowedrequest] = useState([])
     const [hasLogin , sethasLogin] = useState(false)
     const [filter_cat, setfilter_cat] = useState('')
     const user_data = Cookies.get('user');
@@ -37,7 +38,8 @@ export const Allcontext = ({children}) => {
             search , setsearch , 
             loading , setloading , 
             added , setadded , 
-            dep , setdep
+            dep , setdep , 
+            borrowedrequest , setborrowedrequest
         }}>
            {children}
         </Mycontext.Provider>

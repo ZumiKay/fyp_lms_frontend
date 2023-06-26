@@ -24,4 +24,8 @@ export  const createBorrowedData = (borrowid, bookdetail , status,borrowdate,ret
 
     return {borrowid,bookdetail , status , borrowdate , returndate , expectreturndate  , qrcode}
   }
+export const createBorrowedDatas = (borrowid, student, bookdetail , status,borrowdate,returndate, expectreturndate,qrcode) => {
+
+    return {borrowid,student,bookdetail , status , borrowdate , returndate , expectreturndate  , qrcode}
+  }   
   

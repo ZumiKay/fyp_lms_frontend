@@ -190,28 +190,31 @@ body {
                 padding: 7px;
                 color: white;
                 left: -15px;
-                
+
 
             }
-           
+
 
             &:hover {
                 transform: translateY(-10px);
             }
-            
+
 
         }
 
         .bellanimated {
             animation: popup .5s ease;
         }
+
         @keyframes popup {
             0% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
+
             100% {
                 transform: translateY(0);
             }
@@ -242,12 +245,12 @@ body {
 
     @keyframes bounceup {
         0% {
-            
+
             transform: translateY(0px);
         }
 
         60% {
-           
+
             transform: translateY(-20px);
         }
 
@@ -275,7 +278,7 @@ body {
     height: 100%;
     background-color: white;
     top: 101px;
-    left: -500px;
+    left: -300px;
     width: 300px;
     box-shadow: 0px 3px 3px 2px lightgray;
     z-index: 10;
@@ -427,6 +430,7 @@ body {
 
         @media screen and (max-width: 768px) {
             width: 80%;
+
             .logo {
                 width: 150px;
             }
@@ -440,7 +444,7 @@ body {
         .logo {
             margin-top: -100px;
             width: 200px;
-            
+
             object-fit: cover;
 
             @media screen and (min-width: 2560px) {
@@ -493,7 +497,7 @@ body {
     place-items: center;
 
     .loading {
-        
+
         width: 150px;
         height: 150px;
 
@@ -939,14 +943,15 @@ body {
 
         }
     }
+
     .track_manually {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 100px;
         width: 80%;
-       
-        .track_btn{
+
+        .track_btn {
             background-color: black;
             color: white;
             margin-top: 20px;
@@ -954,6 +959,7 @@ body {
             transition: .5s;
             font-weight: 700;
             width: 100%;
+
             &:hover {
                 background-color: #4682B4;
 
@@ -1319,4 +1325,109 @@ body {
 
 
 
+}
+
+.returnbook_table {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+    .detail_section {
+       
+        width: 200px;
+    }
+    h3 {
+        font-weight: 700;
+        font-size: large;
+    }
+    .return-btn {
+        background-color: #0082c8;
+        color: white;
+        padding: 10px;
+        font-weight: 700;
+        width: 100%;
+        border:  0;
+        cursor: pointer;
+        transition: .5s;
+        &:hover {
+            background-color: black;
+        }
+    }
+
+    .info_section {
+        width: 500px;
+        .book_row {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            left: 50%;
+            transform: translate(-45%, 0);
+
+            .book_card {
+                margin-bottom: 10px;
+                img {
+                    border: 1px solid black;
+                    width: 200px;
+                    height: 250px;
+                }
+                .bookcard_detail {
+                    width: 200px;
+                   
+                }
+
+            }
+
+
+
+        }
+    }
+
+
+
+
+}
+.return_manually {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+     .enter-btn {
+        margin-top: 20px;
+     }
+
+}
+
+.summary_container {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .title {
+        font-size: xx-large;
+        font-weight: 800;
+        text-align: center;
+    }
+    .filter_input {
+        
+        width: 80%;
+    }
+    .information_container {
+        
+        width: 90%;
+    }
+    .confirm-btn{ 
+        padding: 10px;
+        background-color: #4682B4;
+        color: white;
+        border: 0;
+        font-weight: 700;
+        transition: .5s;
+        width: 50%;
+        margin-top: 10px;
+        &:hover {
+            background-color: black;
+        }
+    }
 }

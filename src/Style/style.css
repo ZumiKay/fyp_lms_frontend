@@ -1,8 +1,8 @@
 @keyframes slide_in {
-  from {
-    left: -500px;
+  0% {
+    left: -300px;
   }
-  to {
+  100% {
     left: 0px;
   }
 }
@@ -237,7 +237,7 @@ body {
   height: 100%;
   background-color: white;
   top: 101px;
-  left: -500px;
+  left: -300px;
   width: 300px;
   box-shadow: 0px 3px 3px 2px lightgray;
   z-index: 10;
@@ -1101,6 +1101,97 @@ body {
 .profile_page .profile_table td,
 .profile_page .profile_table th {
   padding: 20px;
+}
+
+.returnbook_table {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+}
+.returnbook_table .detail_section {
+  width: 200px;
+}
+.returnbook_table h3 {
+  font-weight: 700;
+  font-size: large;
+}
+.returnbook_table .return-btn {
+  background-color: #0082c8;
+  color: white;
+  padding: 10px;
+  font-weight: 700;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.returnbook_table .return-btn:hover {
+  background-color: black;
+}
+.returnbook_table .info_section {
+  width: 500px;
+}
+.returnbook_table .info_section .book_row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  left: 50%;
+  transform: translate(-45%, 0);
+}
+.returnbook_table .info_section .book_row .book_card {
+  margin-bottom: 10px;
+}
+.returnbook_table .info_section .book_row .book_card img {
+  border: 1px solid black;
+  width: 200px;
+  height: 250px;
+}
+.returnbook_table .info_section .book_row .book_card .bookcard_detail {
+  width: 200px;
+}
+
+.return_manually {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.return_manually .enter-btn {
+  margin-top: 20px;
+}
+
+.summary_container {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.summary_container .title {
+  font-size: xx-large;
+  font-weight: 800;
+  text-align: center;
+}
+.summary_container .filter_input {
+  width: 80%;
+}
+.summary_container .information_container {
+  width: 90%;
+}
+.summary_container .confirm-btn {
+  padding: 10px;
+  background-color: #4682B4;
+  color: white;
+  border: 0;
+  font-weight: 700;
+  transition: 0.5s;
+  width: 50%;
+  margin-top: 10px;
+}
+.summary_container .confirm-btn:hover {
+  background-color: black;
 }
 
 /*# sourceMappingURL=style.css.map */
