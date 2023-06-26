@@ -1071,7 +1071,7 @@ body {
 }
 .check_book_container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: left;
 }
 .check_book_container img {
@@ -1081,6 +1081,10 @@ body {
 }
 .check_book_container .book_detail {
   width: 300px;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: relative;
 }
 .check_book_container .book_detail p {
   text-align: left;
