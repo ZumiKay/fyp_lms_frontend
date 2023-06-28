@@ -26,6 +26,17 @@ const Home = ({ book_data }) => {
             setchange(false)
         }
     }
+    function filterPopularBooks(books, limit) {
+        // Sort books based on ratings in descending order
+        const sortedBooks = books?.sort((a, b) => b.borrow_count - a.borrow_count);
+      
+        // Filter the popular books based on the given limit
+        const popularBooks = sortedBooks?.slice(0, limit);
+      
+        return popularBooks;
+    }
+      
+    const popuplarbook = filterPopularBooks(book_data?.allbooks , 4)
     useEffect(() => {
         if(ctx.filter_cat !== '' ) {
             window.scrollTo({top:0 , behavior: 'smooth'})
@@ -46,7 +57,7 @@ const Home = ({ book_data }) => {
     }
     , [])
     return (
-        <div style={{display:'flex' , flexDirection:"row" , width:'100%' , justifyContent:"space-between"}}>
+        <div>
             <div style={ctx.openMenu.search ? {marginTop: "50px"} : {}}  className="Home_page">
             {ctx.search !== '' && <SliderContainer title={ctx.search} book={book_data} type={'search'}/> }
                 {ctx.filter_cat !== '' ? (
@@ -56,7 +67,10 @@ const Home = ({ book_data }) => {
                        
                     </>
                 )}
-               
+                <h1 className="section_title">Popular Books</h1>
+               <div className='popularbook_wrapper'>
+                {popuplarbook?.map(i => <Popularbook title={i.title} author={i.author} date={new Date(i.publisher_date).getFullYear()} image={i.cover_img}/>)}
+               </div>
                 <h1 className="section_title">All Books</h1>
                 {ctx.loading.booklist && <Loading/>}
                 <AllbookContainer book_data={book_data.allbooks ?? []} />
@@ -92,9 +106,9 @@ const SliderContainer = ({ title, book, type }) => {
     } , [book , title])
     return (
         <div className="slider_container">
-            <h1 className="title">{type === 'filter' ? title : `Search for: ${title}`}</h1>
+            <h1 className="title">{type === 'filter' ? title: type === 'all' ? 'ALL BOOKS' : `Search for: ${title}`}</h1>
             <Swiper modules={[Navigation, A11y]} spaceBetween={50} slidesPerView={'auto'} className="slider">
-                {(filter !== undefined ? filter : [1,2,3,4,5])?.map((i) => (
+                {(filter.length > 0 ? filter : book.allbooks)?.map((i) => (
                     <SwiperSlide className="swiper_slide">
                         <div onClick={() => navigate(`/book/${i.title}`)} className="book">
                             <img src={i.cover_img ? i.cover_img : setimage.Default} alt="" className="book_cover" />
@@ -127,7 +141,8 @@ const AllbookContainer = ({ book_data }) => {
             {slicedData.currentData().map((i) => (
                 <div className="book_container">
                     <img onClick={() => navigate(`/book/${i.title}`)} src={i.cover_img && i.cover_img !== '' ? i.cover_img : setimage.Default} alt="cover" className="book_cover" />
-                    <p className="book_title">{i.title}</p>
+                    <div className="book_title">{i.title}</div>
+                    <p className='detail'>{i.author} - {new Date(i.publisher_date).getFullYear()}</p>
                 </div>
             ))}
             </div>
@@ -163,10 +178,27 @@ const FilterNavigation = ({ book , resize , setopen }) => {
                         }} style={ctx.filter_cat === cate[0] ? {backgroundColor: 'black' , color:"white"} : {color:"#4682B4"}} className="filter_option">
                         
                         {' '}
-                        {cate}{' '}
+                        {cate[0].toUpperCase()}{' '}
                     </p>
                 ))}
         </div>
         </>
     );
 };
+
+const Popularbook = (props) => {
+    const navigate = useNavigate()
+
+    return (
+        <div onClick={() => navigate(`/book/${props.title}`)} className="popularbook_container">
+            <div  className="book_container">
+                <img src={props.image} className='cover_img' alt="bookcover" />
+                <div className="book_detail">
+                    <p className="title">{props.title}</p>
+                    <p className='subtitle'>{props.author} - {props.date}</p>
+                </div>
+            </div>
+        </div>
+    )
+
+}

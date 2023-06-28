@@ -13,6 +13,7 @@ const Login = () => {
     const ctx = useContext(Mycontext)
     const navigate = useNavigate()
     const [loading , setloading] = useState(false)
+    const [reset , setreset] = useState(false)
     const handleChange = (e) => {
       if (e.target.value.includes(' ')) {
         e.preventDefault();
@@ -44,18 +45,40 @@ const Login = () => {
         });
       }
     };
+  const handleResetPWD  = (e) => {
+    e.preventDefault()
+    setloading(true)
+    axios({
+      method:"post" , 
+      url : env.api + "resetstudent" ,
+      data: user_data
+    }).then((res) => {
+      setloading(false)
+      e.target.reset()
+      toast.success(res.data.message , {duration: 2000})
+    }).catch((err) => {
+      setloading(false)
+      toast.error(err.response?.data?.message , {duration:2000}) 
+    })
+  }
     
   return (
     <div className='Login_container'>
-        <form className="Login_form" onSubmit={handleSubmit}>
-            {loading && <Loading/>}    
-    
+       {loading && <Loading/>}
+        {!reset ? <form className="Login_form" onSubmit={handleSubmit}>
+               
             <img src={Logo} alt='logo' className='logo'/>
             <input type={'text'} id="email" onChange={handleChange} placeholder='Email / ID Number' required/>
             <input type="password" onChange={handleChange} id="password" placeholder='Password' required/>
             <input type="submit" onChange={handleChange} value={'Login'} id="login-btn"/> 
-         
-        </form> 
+            <p onClick={() => setreset(true)} className='forgot'>Forgot Password ?</p>
+        </form>  : <form className="Login_form" onSubmit={handleResetPWD}>
+        <img src={Logo} alt='logo' className='logo'/>
+        <input type="text" id='email' onChange={handleChange} placeholder='Email or ID Number' required />
+        <button className='login-btn' type='submit'>CONFIRM</button>
+        <p onClick={() => setreset(false)} className='forgot'>Has an account ?</p>
+          </form>}
+        
     </div>
     
   )

@@ -34,38 +34,24 @@ const BookDetailPage = ({ book }) => {
             <div className="firstsec">
                 <img className="book_cover" src={fitlerbook && fitlerbook[0]?.cover_img} alt="cover" />
                 <div className="detail">
-                    <table className="content_table">
+                    <h1 className='title'>{fitlerbook && fitlerbook[0]?.title}</h1>
+                    <p className='detail_text'>By {fitlerbook && fitlerbook[0]?.author}</p>
+                    <p className='detail_text des'>{fitlerbook && fitlerbook[0]?.description}</p>
+
+                    <table className='detail_table'>
+                        <div>
                         <tr>
-                            <th>Title</th>
-                            <td>{fitlerbook && fitlerbook[0]?.title}</td>
-                        </tr>
-                        <tr>
-                            <th>Author</th>
-                            <td>{fitlerbook && fitlerbook[0]?.author}</td>
-                        </tr>
-                        <tr>
-                            <th>Categories</th>
-                            <td>{fitlerbook && fitlerbook[0]?.categories}</td>
-                        </tr>
-                        <tr>
-                            <th>ISBN</th>
-                            <td>{fitlerbook && fitlerbook[0]?.ISBN[0].identifier}</td>
-                        </tr>
-                        <tr>
-                            <th>PublisherDate</th>
+                            <th>Publisher Date </th>
                             <td>{fitlerbook && `${new Date(fitlerbook[0]?.publisher_date).toLocaleDateString('en')}`}</td>
                         </tr>
-                        <tr style={{height: '100px'}}>
-                            <th>Description</th>
-                            <td style={{height: '100px'}}>{fitlerbook && fitlerbook[0]?.description}</td>
-                        </tr>
                         <tr>
-                            <th></th>
-                            <td>
-                       
-                
-
-                            </td>
+                            <th>Categories </th>
+                            <td>{fitlerbook && fitlerbook[0]?.categories}</td>
+                        </tr>
+                        </div>
+                        <tr>
+                            <th>ISBN </th>
+                            <td>{fitlerbook && fitlerbook[0]?.ISBN[0].identifier}</td>
                         </tr>
                     </table>
                    

@@ -4,7 +4,7 @@
 body {
 
     width: 100%;
-    background-color: #e7e5e5;
+    background-color: white;
     overflow-x: hidden;
 }
 .cover_img_nav {
@@ -21,9 +21,9 @@ body {
     align-items: center;
     justify-content: space-evenly;
     width: 100%;
-    height: 100px;
+    height: 70px;
     background-color: white;
-    box-shadow: 3px 3px 3px 1px lightgray;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     z-index: 10;
 
     @media screen and (max-width: 500px) {
@@ -41,7 +41,7 @@ body {
         align-items: center;
         justify-content: space-evenly;
         height: 100%;
-        flex-grow: 3;
+        flex-grow: 1;
         width: 10%;
 
         .resizeinput {
@@ -50,7 +50,7 @@ body {
             width: 100%;
             right: 0;
             background-color: #e2e2e2;
-            border: 1px solid black;
+            
             padding: 10px;
 
         }
@@ -90,13 +90,13 @@ body {
     }
 
     .second_sec {
-        text-align: center;
-        flex-grow: 4;
-        width: 50%;
+        
+        flex-grow: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 600px;
         padding: 10px;
-        border-left: 1px solid lightgray;
-        border-right: 1px solid lightgray;
-
         @media screen and (max-width: 800px) {
             flex-grow: 0;
             border: 0;
@@ -112,12 +112,16 @@ body {
         .search {
             font-family: Arial, Helvetica, sans-serif;
             font-size: medium;
-            width: 90%;
-            padding: 20px;
+            width: 500px;
+           
+            padding: 10px;
             padding-left: 35px;
-            background-color: #e7e5e5;
-            border-radius: 15px;
-            border: 0;
+            border: 1px solid lightgray;
+            border-radius: 10px;
+            @media screen {
+                
+            }
+            
         }
 
         #search_icon {
@@ -156,12 +160,13 @@ body {
 
     .third_sec {
 
-        flex-grow: 3;
+        flex-grow: 4;
         display: flex;
         flex-direction: row;
-        align-items: center;
-        justify-content: space-evenly;
-
+        align-items: right;
+        padding-right: 20px;
+        justify-content: right;
+        
         @media screen and (max-width: 800px) {
             flex-grow: 2;
 
@@ -175,12 +180,47 @@ body {
             font-weight: 700;
             transition: .5s;
             cursor: pointer;
+            user-select: none;
             &:hover {
                 background-color: black;
+               
                 
             }
+          
 
         }
+        .drop_down {
+            position: fixed;
+            top: 70px;
+            width: 170px;
+            right: 0;
+            height: 300px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            background-color: white;
+            padding: 10px;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            .link_page {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                
+                p {
+                    text-align: center;
+                   
+                    width: 100%;
+                }
+                &:hover , :active {
+                    background-color: black;
+                    color: white;
+                }
+                
+            }
+        } 
         .logout {
             padding: 10px;
             
@@ -325,10 +365,10 @@ body {
     position: fixed;
     height: 100%;
     background-color: white;
-    top: 100px;
+    top: 70px;
     left: -300px;
     width: 300px;
-    box-shadow: 0px 3px 3px 2px lightgray;
+    box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
     z-index: 10;
     transition: .5s;
 
@@ -404,6 +444,10 @@ body {
                 background-color: black;
             }
             
+        }
+        .linkselected {
+            color: white;
+            background-color: black;
         }
 
         p {
@@ -481,13 +525,26 @@ body {
         height: 90%;
         overflow: auto;
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-
+        padding: 30px;
+        
         @media screen and (max-width: 768px) {
             width: 80%;
 
             .logo {
                 width: 150px;
             }
+        }
+        .forgot {
+            font-weight: 700;
+            color: lightcoral;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: .5s;
+            &:hover , :active {
+                color: black;
+            }
+
+
         }
 
         @media screen and (max-width: 425px) {
@@ -509,7 +566,7 @@ body {
         }
 
         input {
-            margin-top: -100px;
+            margin-top: 0px;
             width: 80%;
             padding: 20px;
             background-color: lightgrey;
@@ -532,6 +589,20 @@ body {
                 background-color: white;
                 border: 1px solid black;
 
+            }
+        }
+        .login-btn {
+            background-color: #4682B4;
+            color: white;
+            font-weight: 700;
+            transition: .5s;
+            padding: 10px;
+            border-radius: 25px;
+            width: 80%;
+            &:hover {
+                color: black; 
+                background-color: white;
+                border: 1px solid black;
             }
         }
     }
@@ -633,6 +704,14 @@ body {
         font-size: xx-large;
         font-weight: 900;
         text-align: center;
+        border-bottom: 1px solid lightgray;
+    }
+    .popularbook_wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
     }
 
 
@@ -640,7 +719,7 @@ body {
 
 .filter-icon {
     position: fixed;
-    z-index: 9;
+    z-index: 10;
     right: 2%;
     top: 15%;
     padding: 15px;
@@ -714,11 +793,11 @@ body {
     background-color: white;
     padding: 10px;
     padding-bottom: 100px;
-    top:100px;
+    top:70px;
     right: 0;
     height: 90%;
     width: 220px;
-    box-shadow: 1px 1px 1px 1px lightgray;
+   
     overflow: auto;
     font-size: 15px;
     font-weight: 600;
@@ -773,31 +852,46 @@ body {
 
 .allbook_container {
 
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
+    
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 50px;
-
+    height: 100%;
+    
+    padding-left: 20px;
     .book {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: auto auto auto auto ;
+        row-gap: 0;
         width: 100%;
         place-items: center;
-
+        
+        @media screen and (max-width : 1338px) {
+            grid-template-columns: auto auto auto;
+        }
+        @media screen and (max-width: 920px) {
+            grid-template-columns: auto auto;
+        }
+        @media screen and (max-width : 622px) {
+            grid-template-columns: auto;
+            padding-left: 80px;
+       
+        }
         .book_container {
+            display: flex;
+            flex-direction: column;
             cursor: pointer;
-
+            width: 300px;
+            height: 400px;
+            
             .book_title {
                 width: 200px;
-                height: 30px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-
+                max-height: 60px;
+                font-weight: 700;
+                font-size: 20px;
+                overflow-y: scroll;
+            }
+            .detail {
+                font-weight: 400;
+                font-size: 13px;
             }
 
             .book_cover {
@@ -818,11 +912,11 @@ body {
 
 
     .pagination_container {
-
+        display: grid;
+        place-content: center;
         width: 100%;
         margin-top: 20px;
         padding-left: 40px;
-
         @media screen and (max-width: 570px) {
             width: 90%;
             height: 50px;
@@ -839,67 +933,85 @@ body {
     justify-content: left;
     align-items: center;
     width: 100%;
-    height: 100vh;
     background-color: white;
     font-weight: 500;
     .firstsec {
         position: relative;
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 800px;
         
-        @media screen and (max-width: 425px) {
-            flex-direction: column;
-            justify-content: center;
-            padding-top: 20px;
-            width: 80%;
-
-
-            .detail {
-                padding-top: 50px;
-            }
-        }
 
         .book_cover {
             width: 250px;
             height: 300px;
             object-fit: cover;
-            border: 1px solid black;
+            background-color: blue($color: #000000);
+            padding: 5px;
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
         }
 
         .detail {
-            margin-left: 100px;
-            width: 500px;
-            overflow-x: auto;
-            background-color: #f1f0f0;
-            padding: 10px;
-            height: 500px;
-            overflow-y: auto;
-            .content_table {
-                text-align: left;
 
+            .title {
+                font-size: xx-large;
+                font-weight: 800;
+                max-width: 400px;
                 overflow-wrap: break-word;
+                overflow-x: hidden;
+                overflow-y: hidden;
 
+            }
+            .detail_text {
+                font-size: medium;
+                font-weight: 500;
+                max-height: 500px;
+                max-width: 400px;
+                overflow-wrap: break-word;
+                overflow-y: scroll;
+                overflow-x: hidden;
+               
+            }
+            .des {
+                margin-top: 50px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid gray;
+            }
+            .detail_table {
+                margin-top: 50px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
                 tr {
-                    height: 50px;
+                    th {
+                        padding-right: 20px;
+                    }
+                    td {
+                        max-width: 100px;
+                        overflow-wrap: break-word;
+                        overflow-x: hidden;
+                        
+                    }
                 }
             }
+           
         }
-
-
-        @media screen and (max-width: 870px) {
-            .book_cover {
-                width: 200px;
-                height: 250px;
-            }
-
-            .detail {
-                margin-left: 50px;
-                width: 300px;
-            }
-        }
+       @media screen and (max-width: 800px) {
+            width: 700px;
+       }
+       @media screen and (max-width: 697px) {
+        width: 100%;
+       flex-direction: column;
+       justify-content: center;
+       align-items: center;
+       .detail {
+        margin-top: 50px;
+       }
+       }
+      
 
         .resizeinput {
             position: absolute;
@@ -916,6 +1028,7 @@ body {
         padding: 10px;
         transition: .5s;
         margin-top: 20px;
+        width: 50%;
 
         &:hover {
             background-color: black;
@@ -942,6 +1055,7 @@ body {
             padding: 10px;
             transition: .5s;
             margin-top: 20px;
+            width: 100%;
 
             &:hover {
                 background-color: black;
@@ -1320,7 +1434,20 @@ body {
         margin-top: 10px;
         margin-bottom: 50px;
     }
+    .date_range {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 50px;
+        width: 50%;
+        label {
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
+        }
+    }
     button {
         padding: 10px;
         background-color: #4682B4;
@@ -1343,7 +1470,9 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    overflow-x: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
+
 
     h1 {
         font-size: x-large;
@@ -1357,9 +1486,9 @@ body {
     .profile_table {
 
 
-        background-color: white;
+        background-color: whitesmoke;
         margin-top: 50px;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+        
         text-align: left;
         width: 80%;
         height: 250px;
@@ -1487,4 +1616,93 @@ body {
             background-color: black;
         }
     }
+}
+.detail_filter {
+    cursor: pointer;
+    transition: .5s;
+    user-select: none;
+    &:hover , :active {
+       color: gray;
+    }
+}
+.filter_toolbar {
+    background-color: #e2e2e2;
+    
+    .filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: black;
+        font-weight: 700;
+    }
+}
+
+.popularbook_container {
+    width: 500px;
+    height: 300px;
+    background-color: #F5F5F5;
+    
+    margin-bottom: 10px;
+    border-radius: 10px;
+    
+   
+    @media screen and (max-width: 1204px) {
+        position: relative;
+        left: 50%;
+        transform: translate(-50% , 0);
+        margin-left: 0;
+        
+    }
+    @media screen and (max-width: 497px) {
+        width: 400px;
+        height: 300px;
+        margin-left: 0;
+    }
+    @media screen and (max-width : 400px) {
+        width:300px;
+        height: 300px;
+        margin-left: 0;
+        
+    }
+    .book_container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 70%;
+        color: black;
+        position: relative;
+        left: 5%;
+        transform: translate(0 , 90%);
+        .cover_img {
+            width: 100px;
+            height: 140px;
+            object-fit: cover;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+        }
+        
+       
+        
+        .book_detail {
+          
+            width: 200px;
+           
+            .title {
+                font-size: larger;
+                font-weight: 700;
+                width: 200px;
+                max-height: 100px;
+                overflow-wrap: break-word;
+                overflow-y: auto;
+                overflow-x: hidden;
+            } 
+            .subtitle {
+                font-size: small;
+                font-weight: 500;
+            }
+        }
+
+    }
+    
+
 }

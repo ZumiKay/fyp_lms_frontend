@@ -34,7 +34,7 @@ const ScanStudentEntry = (props) => {
             .then((res) => {
                 setdata(res.data);
                 setopen(true);
-                document.body.style.backgroundColor = 'white';
+                
             })
             .catch((err) => {
                 setscan(false);
@@ -62,7 +62,7 @@ const ScanStudentEntry = (props) => {
                     .then((res) => {
                         setdata(res.data);
                         setopen(true);
-                        document.body.style.backgroundColor = 'white';
+                        
                     })
                     .catch((err) => {
                         setscan(false);

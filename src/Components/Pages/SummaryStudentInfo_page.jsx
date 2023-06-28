@@ -123,72 +123,16 @@ const SummaryStudentInfopage = () => {
         return filteredDates;
     }
 
-    // function countMonthsInRange(datesArray, startDate, endDate) {
-    //     const result = {};
-    //     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    //     // Get the start and end months of the range
-    //     const startYear = new Date(startDate).getFullYear();
-    //     const startMonth = new Date(startDate).getMonth();
-    //     const endYear = new Date(endDate).getFullYear();
-    //     const endMonth = new Date(endDate).getMonth();
-
-    //     // Initialize the result object with counts for all months and weeks
-    //     for (let year = startYear; year <= endYear; year++) {
-    //         const isStartYear = year === startYear;
-    //         const isEndYear = year === endYear;
-    //         const start = isStartYear ? startMonth : 0;
-    //         const end = isEndYear ? endMonth : 11;
-
-    //         for (let month = start; month <= end; month++) {
-    //             const monthName = `${monthNames[month]}`;
-    //             result[monthName] = { monthCount: 0, weekly: {} };
-
-    //             // Initialize all four weeks for each month
-    //             for (let week = 1; week <= 4; week++) {
-    //                 result[monthName].weekly[week] = 0;
-    //             }
-    //         }
-    //     }
-
-    //     // Iterate through the datesArray and count the occurrences of months and weeks
-    //     datesArray.forEach((dates) => {
-    //         if (dates.length > 0) {
-    //             dates.forEach((date) => {
-    //                 const year = new Date(date).getFullYear();
-    //                 const month = new Date(date).getMonth();
-    //                 const week = Math.ceil(new Date(date).getDate() / 7);
-
-    //                 // Check if the month is within the specified range
-    //                 if ((year > startYear || (year === startYear && month >= startMonth)) && (year < endYear || (year === endYear && month <= endMonth))) {
-    //                     const monthName = `${monthNames[month]}`;
-    //                     if (result.hasOwnProperty(monthName)) {
-    //                         result[monthName].monthCount += 1;
-                            
-    //                         if (result[monthName].weekly.hasOwnProperty(week)) {
-    //                             result[monthName].weekly[week] += 1;
-    //                         }
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     return result;
-    // }
-
 
     function countMonthsInRange(datesArray, startDate, endDate) {
         const result = {};
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
-        // Get the start and end months of the range
         const startYear = new Date(startDate).getFullYear();
         const startMonth = new Date(startDate).getMonth();
         const endYear = new Date(endDate).getFullYear();
         const endMonth = new Date(endDate).getMonth();
     
-        // Initialize the result object with counts for all months and weeks
         for (let year = startYear; year <= endYear; year++) {
             const isStartYear = year === startYear;
             const isEndYear = year === endYear;
@@ -203,8 +147,6 @@ const SummaryStudentInfopage = () => {
                 }
             }
         }
-    
-        // Iterate through the datesArray and count the occurrences of months and weeks
         datesArray.forEach((subarray) => {
             if (Array.isArray(subarray)) {
                 const subarrayStartDate = new Date(subarray[0]);
@@ -263,18 +205,6 @@ const SummaryStudentInfopage = () => {
     
         return result;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
     const handlefilterrange = (event) => {
         const {
             target: { value }
@@ -444,17 +374,17 @@ function Row(props) {
 
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} style={{backgroundColor:"#e2e2e2"}}>
+            <TableRow sx={{ '& > *': { borderBottom: '10px solid white' , paddingTop:"20px" , backgroundColor:"#4682B4"  , fontWeight:"900" , fontSize:"medium"} }}>
                 <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                    <IconButton aria-label="expand row" style={{color:"white"}} size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={{color:"white"}}>
                     {row.Date}
                 </TableCell>
-                <TableCell align="right">{row.library_entry}</TableCell>
-                <TableCell align="right">{row.borrowedbook}</TableCell>
+                <TableCell style={{color:"white"}} align="right">{row.library_entry}</TableCell>
+                <TableCell style={{color:"white"}} align="right">{row.borrowedbook}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

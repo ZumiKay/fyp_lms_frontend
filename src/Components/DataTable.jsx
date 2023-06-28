@@ -258,7 +258,7 @@ export default function DataTable(props) {
                         </TableRow>
 
                       <TableRow>
-                      <TableCell padding="checkbox" style={{zIndex: '8' , top: 57}}>
+                      <TableCell padding="checkbox" style={{zIndex: '8' , top: 57 , backgroundColor:"lightgray"}}>
                                 {ctx.user.user.role === 'librarian' && (
                                     <Checkbox
                                         color="primary"
@@ -273,7 +273,7 @@ export default function DataTable(props) {
                             </TableCell>
                         
                             {(props.type === 'booklist' ? bookcolumns : props.type === 'borrowedbook' ? borrowbookcolumns : columns).map((column) => (
-                                <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
+                                <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth , fontWeight:"900", backgroundColor:"lightgray" , fontSize:"medium"}}>
                                     {column.label}
                                 </TableCell>
                             ))}

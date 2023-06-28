@@ -15,7 +15,7 @@
     "@types/react-transition-group": "^4.4.5",
     "@yudiel/react-qr-scanner": "^1.1.8",
     "axios": "^1.4.0",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.8",
     "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",

@@ -10,9 +10,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../Style/style.css';
 import { TextField } from '@mui/material';
 import { Mycontext } from '../Config/context';
-import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
-import env, { createBorrowedData, createBorrowedDatas, createData } from '../env';
+import env, { createBorrowedDatas, createData } from '../env';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -23,7 +22,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-
 import ListItem from '@mui/material/ListItem';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -36,7 +34,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';
-import { Loading, setimage } from './Asset';
+import { Loading } from './Asset';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 
 export default function ResponsiveDialog(props) {
@@ -46,7 +44,6 @@ export default function ResponsiveDialog(props) {
     const handleClose = () => {
         props.setopen(false);
         props.setscan(false);
-        document.body.style.backgroundColor = '#e7e5e5';
     };
 
     return (
@@ -308,6 +305,8 @@ export function FormDialog(props) {
                 })
                     .then(() => {
                         ctx.setloading({ ...ctx.loading, formdialog: false });
+                        e.target.reset();
+                        ctx.setbook((prev) => ({ ...prev, allbooks: [...prev.allbooks, userData] }));
                         toast.success('Book Updated', { duration: 2000 });
                     })
                     .catch((err) => {
@@ -368,7 +367,7 @@ export function FormDialog(props) {
     };
     const Options = () => {
         return (
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, width: 300}}>
                 <InputLabel id="demo-multiple-checkbox-label">TYPE</InputLabel>
                 <Select
                     labelId="demo-multiple-checkbox-label"
@@ -508,7 +507,9 @@ export function FormDialog(props) {
                     <DialogContent>
                         {props.type === 'studentlist' && props.action === 'create' ? (
                             <>
+                                <div style={{position:'relative' , left:"50%" ,transform:"translate(-33%,0)"}}>
                                 <Options />
+                                </div>
 
                                 {type === '!scan' ? (
                                     <>
@@ -829,6 +830,9 @@ export function FormDialog(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
+                        {props.type === 'booklist' &&  <Button type='submit'>
+                                CONFIRM
+                            </Button>}
                         {scan && (
                             <Button
                                 onClick={() => {
@@ -1189,6 +1193,8 @@ export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
     const [exportdata, setexport] = useState({});
     const [filter, setfilter] = useState('');
+    const [tofilter , settofilter] = useState(false)
+    
     const navigate = useNavigate();
 
     const totalCountAndIndividualCounts = props?.data
@@ -1271,9 +1277,8 @@ export function FullScreenDialog(props) {
         let formated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
         return formated;
     };
-    useEffect(() => {
-        console.log(props.data)
-    } , [])
+
+   
 
     return (
         <div key={props.index}>
@@ -1288,11 +1293,13 @@ export function FullScreenDialog(props) {
                         </Typography>
                        {props.type === (`Borrowed Book for ${props.name}`) ?   <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Total: {totalCountAndIndividualCounts?.totalCount}
-                        </Typography> :  <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        </Typography> : props.type === 'Create Report' ? '' : <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Total: {props?.data?.length}
                         </Typography> }
                         
                     </Toolbar>
+                   
+                 
                     
                 </AppBar>
                 <List>
@@ -1390,25 +1397,19 @@ export function FullScreenDialog(props) {
                                         <MenuItem value={'detail'}>Full Information</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl className="select" fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Information Date</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        name="informationdate"
-                                        value={exportdata.informationdate}
-                                        label="Age"
-                                        onChange={handleChange}
-                                        input={<OutlinedInput label="Information Date" />}
-                                    >
-                                        <MenuItem value={'1week'}>For Current Week</MenuItem>
-                                        <MenuItem value={'2week'}>For Past 2 Weeks</MenuItem>
-                                        <MenuItem value={'1month'}>For Past 1 month</MenuItem>
-                                        <MenuItem value={'3month'}>For Past 3 months</MenuItem>
-                                        <MenuItem value={'6month'}>For Past 6 months</MenuItem>
-                                    </Select>
-                                </FormControl>
+                    
+                                <div className='date_range'>
+                                <label htmlFor="">Start Date
+                                <TextField type='date' name='startdate' onChange={handleChange} required/>
+                                </label>
+                                <label htmlFor="">End Date
+                                <TextField type='date' name='enddate' onChange={handleChange} required/>
+                                </label>
+                                
+                                </div>
+                                
 
-                                <button type="submit">Generate Report</button>
+                                <button type="submit">Export Report</button>
                             </form>
                         </>
                     ) : (
