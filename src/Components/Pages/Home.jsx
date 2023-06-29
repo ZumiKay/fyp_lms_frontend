@@ -27,10 +27,9 @@ const Home = ({ book_data }) => {
         }
     }
     function filterPopularBooks(books, limit) {
-        // Sort books based on ratings in descending order
+        
         const sortedBooks = books?.sort((a, b) => b.borrow_count - a.borrow_count);
       
-        // Filter the popular books based on the given limit
         const popularBooks = sortedBooks?.slice(0, limit);
       
         return popularBooks;
@@ -122,7 +121,7 @@ const SliderContainer = ({ title, book, type }) => {
 };
 
 const AllbookContainer = ({ book_data }) => {
-    const pageSize = 6;
+    const pageSize = 12;
     const trackpage = localStorage.getItem('page')
     const [currentPage, setcurrentPage] = useState(trackpage !== null ? JSON.parse(trackpage) : 1);
     const count = Math.ceil(book_data.length / pageSize);

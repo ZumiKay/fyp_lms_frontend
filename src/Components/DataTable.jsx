@@ -374,7 +374,13 @@ export default function DataTable(props) {
                                                     ) : (
                                                         ''
                                                     )
-                                                ) : (
+                                                ) : column.id === 'status' ? (
+                                                    <p className='status' style={value === 'To Pickup' ? {backgroundColor:"#4682B4"} : value === 'PickedUp' ? {backgroundColor:"palevioletred"} : {backgroundColor: 'lightseagreen'}}>
+                                                        {value}
+                                                    </p>
+                                                    ) :
+                                                
+                                                (
                                                     value
                                                 )}
                                                 {column.id === 'ISBN' && row.ISBN[0]?.identifier}

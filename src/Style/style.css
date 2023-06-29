@@ -807,6 +807,9 @@ body {
   width: 100%;
   background-color: white;
   font-weight: 500;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 10%);
 }
 .bookdetail_contianer .firstsec {
   position: relative;
@@ -885,8 +888,8 @@ body {
 .bookdetail_contianer .borrow-btn {
   background-color: #4682B4;
   color: white;
-  font-weight: 800;
-  font-size: 10px;
+  font-weight: 900;
+  font-size: medium;
   padding: 10px;
   transition: 0.5s;
   margin-top: 20px;
@@ -1039,6 +1042,13 @@ body {
 }
 .datatable_container .table-btn:hover {
   background-color: black;
+}
+.datatable_container .status {
+  font-weight: 900;
+  padding: 10px;
+  color: white;
+  font-size: small;
+  text-align: center;
 }
 .datatable_container .delete {
   background-color: palevioletred;
