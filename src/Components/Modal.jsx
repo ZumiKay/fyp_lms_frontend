@@ -1193,7 +1193,6 @@ export function FullScreenDialog(props) {
     const ctx = useContext(Mycontext);
     const [exportdata, setexport] = useState({});
     const [filter, setfilter] = useState('');
-    const [tofilter , settofilter] = useState(false)
     
     const navigate = useNavigate();
 
@@ -1247,19 +1246,8 @@ export function FullScreenDialog(props) {
         })
             .then((res) => {
                 ctx.setloading({ ...ctx.loading, report: false });
-                if (exportdata.filetype === 'pdf') {
-                    const url = window.URL.createObjectURL(new Blob([res.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', `${exportdata.name}.pdf`);
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    window.URL.revokeObjectURL(url);
-                } else {
-                    const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                    saveAs(blob, `${exportdata.name}.xlsx`);
-                }
+                const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                saveAs(blob, `${exportdata.name}.xlsx`);
                 e.target.reset();
                 toast.success('Export Successfully', { duration: 2000 });
             })
@@ -1400,10 +1388,10 @@ export function FullScreenDialog(props) {
                     
                                 <div className='date_range'>
                                 <label htmlFor="">Start Date
-                                <TextField type='date' name='startdate' onChange={handleChange} required/>
+                                <TextField type='date' name='startdate' onChange={handleChange} required fullWidth/>
                                 </label>
                                 <label htmlFor="">End Date
-                                <TextField type='date' name='enddate' onChange={handleChange} required/>
+                                <TextField type='date' name='enddate' onChange={handleChange} required fullWidth/>
                                 </label>
                                 
                                 </div>

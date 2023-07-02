@@ -46,7 +46,7 @@ body {
 
         .resizeinput {
             position: fixed;
-            top: 100px;
+            top: 70px;
             width: 100%;
             right: 0;
             background-color: #e2e2e2;
@@ -414,6 +414,7 @@ body {
         font-size: smaller;
         height: 70%;
         display: flex;
+        overflow-x: hidden;
         overflow-y: auto;
         flex-direction: column;
         align-items: center;
@@ -704,15 +705,38 @@ body {
         margin-bottom: 20px;
         font-size: xx-large;
         font-weight: 900;
-        text-align: center;
+        text-align: left;
         border-bottom: 1px solid lightgray;
+        width: 100%;
+        margin-left: 20px;
+        border-left: 5px solid #0082c8;
+        padding-left: 10px;
+
+        
     }
     .popularbook_wrapper {
         width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
+       display: grid;
+       grid-template-columns: auto auto;
+       place-items: center;
+       @media screen and (max-width: 970px) {
+            grid-template-columns: auto;
+            position: relative;
+            width: fit-content;
+            left: 50%;
+            transform: translate(-40% , 0);
+            
+        }
+        @media screen and (max-width: 562px) {
+            transform: translate(-50% , 0);
+        }
+       
+        @media screen and (max-width: 1200px) {
+          
+        }
+        @media screen and (max-width: 768px) {
+           
+        }
     }
 
 
@@ -720,9 +744,9 @@ body {
 
 .filter-icon {
     position: fixed;
-    z-index: 10;
-    right: 2%;
-    top: 15%;
+    z-index: 9;
+    right: 10%;
+    top: 10%;
     padding: 15px;
     background-color: white;
     border-radius: 25px;
@@ -860,29 +884,40 @@ body {
     padding-left: 20px;
     .book {
         display: grid;
-        grid-template-columns: auto auto auto auto ;
+        grid-template-columns: auto auto auto ;
         row-gap: 0;
         width: 100%;
         place-items: center;
+        row-gap: 20px;
+        column-gap: 20px;
         
-        @media screen and (max-width : 1338px) {
-            grid-template-columns: auto auto auto;
-        }
-        @media screen and (max-width: 920px) {
+        @media screen and (max-width: 945px) {
             grid-template-columns: auto auto;
+            width: fit-content;
+            position: relative;
+            left: 50%;
+            transform: translate(-45% , 0);
         }
         @media screen and (max-width : 622px) {
             grid-template-columns: auto;
             padding-left: 80px;
        
         }
+        @media screen and (max-width: 558px) {
+            width: fit-content;
+            transform: translate(-65% , 0);
+            
+        }
         .book_container {
             display: flex;
             flex-direction: column;
             cursor: pointer;
+            padding: 10px;
+            align-items: center;
             width: 300px;
             height: 400px;
-            
+            background-color:whitesmoke;
+           
             .book_title {
                 width: 200px;
                 max-height: 60px;
@@ -899,7 +934,8 @@ body {
                 width: 200px;
                 height: 280px;
                 object-fit: cover;
-                border: 1px solid black;
+                border-radius: 10px;
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             }
 
             transition: .5s;
@@ -1020,7 +1056,7 @@ body {
         .resizeinput {
             position: absolute;
             background-color: #4682B4;
-            top: 200px;
+            top: 100px;
         }
        
     }
@@ -1102,7 +1138,7 @@ body {
 
     .qrcode_reader {
         width: 600px;
-        border: 5px solid black;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
         @media screen and (max-width : 598px) {
             width: 100%;
@@ -1450,12 +1486,13 @@ body {
         flex-direction: row;
         align-items: center;
         margin-bottom: 50px;
-        width: 50%;
+        width: 100%;
         label {
             font-weight: 700;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
 
         }
     }
@@ -1652,7 +1689,6 @@ body {
     width: 500px;
     height: 300px;
     background-color: #F5F5F5;
-    
     margin-bottom: 10px;
     border-radius: 10px;
     
@@ -1662,17 +1698,26 @@ body {
         left: 50%;
         transform: translate(-50% , 0);
         margin-left: 0;
+        width: 400px;
+        height: 200px;
         
     }
+    @media screen and (max-width: 970px) {
+            width: 400px;
+            height: 300px;
+            
+    }
+    
     @media screen and (max-width: 497px) {
         width: 400px;
         height: 300px;
         margin-left: 0;
     }
     @media screen and (max-width : 400px) {
-        width:300px;
+        width:fit-content;
         height: 300px;
         margin-left: 0;
+        
         
     }
     .book_container {
@@ -1691,8 +1736,12 @@ body {
             object-fit: cover;
             box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
         }
-        
-       
+        @media screen and (max-width: 1204px) {
+            transform: translate(0 , 20%);
+            .book_detail {
+                margin-left: 20px;
+            }
+        }
         
         .book_detail {
           

@@ -154,23 +154,50 @@ const NavigationBar = () => {
             </div>
 
             <div className="third_sec">
-                {ctx.user.user.role === 'student' && (
-                    <i
-                        onClick={() => navigate('/bucket')}
-                        className={
-                            ctx.openMenu[`book${ctx.bookcart.filter(({ userid }) => userid === ctx.user.user.ID).length}`] ? 'fa-solid fa-cart-shopping bellanimated' : 'fa-solid fa-cart-shopping'
-                        }
-                        id="bell"
-                    >
-                        <span className="cart-count">{ctx.bookcart.filter(({ userid }) => userid === ctx.user.user.ID).length}</span>
-                    </i>
-                )}
-                <div className="profile_sec">
-                    <p onClick={() => navigate('/profile')} className="Account_Detail">
-                        {ctx.user.user.role !== 'librarian' ? convertToPascalCase(`${ctx.user.user.firstname + ' ' + ctx.user.user.lastname}`) : convertToPascalCase(ctx.user.user?.fullname)}
-                    </p>
+                    {ctx.user.user.role === 'student' && (
+                        <i onClick={() => navigate('/bucket')} className={ctx.added ? 'fa-solid fa-cart-shopping bellanimated' : 'fa-solid fa-cart-shopping'} id={'bell'}>
+                            <span className={'cart-count'}>{ctx.bookcart.filter(({ userid }) => userid === ctx.user.user.ID).length}</span>
+                        </i>
+                    )}
+                    <div className="profile_sec">
+                        <p
+                            onClick={() => {
+                                
+                                setopenprofile(!openprofile);
+                            }}
+                            className="Account_Detail"
+                        >
+                            {ctx.user.user.role !== 'librarian' ? `${ctx.user.user.firstname + ' ' + ctx.user.user.lastname}` : `${ctx.user.user?.fullname}`}
+                        </p>
+                    </div>
+
+                    {openprofile && (
+                        <div ref={profref} className="drop_down">
+                            <Link className="link_page" to={'/profile'}>
+                                
+                            <i class="fa-solid fa-user fa-xl"></i>
+                              <p>Profile</p>  
+                                </Link>
+                            {ctx.user.user.role !== 'librarian' && (
+                                <Link className="link_page" onClick={() => ctx.setMenu({ ...ctx.openMenu, openchangepwd: true })}>
+                                    
+                                <i class="fa-solid fa-gear fa-xl"></i>
+                                <p>Settings</p>
+                            </Link>
+                            )}
+                            {ctx.user.user.role === 'librarian' && (
+                                <Link className="link_page" onClick={() => ctx.setMenu({ ...ctx.openMenu, editlibrarian: true })}>
+                                    
+                                    <i class="fa-solid fa-gear fa-xl"></i>
+                                    <p>Settings</p>
+                                </Link>
+                            )}
+                            <p className="logout" onClick={handleLogout}>
+                                SIGNOUT
+                            </p>
+                        </div>
+                    )}
                 </div>
-            </div>
 
             <DeleteDialog type={'password'} />
             <DeleteDialog type={'editlibrarian'} />
@@ -329,19 +356,8 @@ const MenuItemformobile = (props) => {
                         <i class="fa-solid fa-address-book"></i> SUMMARY STUDENTS
                     </Link>
                 )}
-                {ctx.user.user.role !== 'librarian' && (
-                    <Link className="link_page" onClick={() => ctx.setMenu({ ...ctx.openMenu, openchangepwd: true })}>
-                        <i class="fa-solid fa-gear"></i> SETTING
-                    </Link>
-                )}
-                {ctx.user.user.role === 'librarian' && (
-                    <Link className="link_page" onClick={() => ctx.setMenu({ ...ctx.openMenu, editlibrarian: true })}>
-                        <i class="fa-solid fa-gear"></i> SETTING{' '}
-                    </Link>
-                )}
-                <p className="logout" onClick={handleLogout}>
-                    SIGNOUT
-                </p>
+               
+               
                 <FullScreenDialog type="Create Report" open={openreport} setopen={setopenreport} />
             </div>
         </div>

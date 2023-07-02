@@ -248,6 +248,7 @@ const SummaryStudentInfopage = () => {
             result1.push(createDatas(i.name, result[i.name].entry.total, result[i.name].borrowedbook.total, result[i.name].entry.monthly, result[i.name].borrowedbook.monthly));
         });
         setdata(result1)
+       
         
     };
     const handleDepartment = (e) => {
@@ -261,7 +262,7 @@ const SummaryStudentInfopage = () => {
 
         const semesterFilters = [
             { startMonth: 10, endMonth: 2 },
-            { startMonth: 2, endMonth: 6 },
+            { startMonth: 2, endMonth: 7 },
             { startMonth: 7, endMonth: 9 }
         ];
 

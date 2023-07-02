@@ -62,7 +62,7 @@ body {
 }
 .NavBar_container .first_sec .resizeinput {
   position: fixed;
-  top: 100px;
+  top: 70px;
   width: 100%;
   right: 0;
   background-color: #e2e2e2;
@@ -354,6 +354,7 @@ body {
   font-size: smaller;
   height: 70%;
   display: flex;
+  overflow-x: hidden;
   overflow-y: auto;
   flex-direction: column;
   align-items: center;
@@ -611,22 +612,38 @@ body {
   margin-bottom: 20px;
   font-size: xx-large;
   font-weight: 900;
-  text-align: center;
+  text-align: left;
   border-bottom: 1px solid lightgray;
+  width: 100%;
+  margin-left: 20px;
+  border-left: 5px solid #0082c8;
+  padding-left: 10px;
 }
 .Home_page .popularbook_wrapper {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto;
+  place-items: center;
 }
-
+@media screen and (max-width: 970px) {
+  .Home_page .popularbook_wrapper {
+    grid-template-columns: auto;
+    position: relative;
+    width: fit-content;
+    left: 50%;
+    transform: translate(-40%, 0);
+  }
+}
+@media screen and (max-width: 562px) {
+  .Home_page .popularbook_wrapper {
+    transform: translate(-50%, 0);
+  }
+}
 .filter-icon {
   position: fixed;
-  z-index: 10;
-  right: 2%;
-  top: 15%;
+  z-index: 9;
+  right: 10%;
+  top: 10%;
   padding: 15px;
   background-color: white;
   border-radius: 25px;
@@ -735,19 +752,20 @@ body {
 }
 .allbook_container .book {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto;
   row-gap: 0;
   width: 100%;
   place-items: center;
+  row-gap: 20px;
+  column-gap: 20px;
 }
-@media screen and (max-width: 1338px) {
-  .allbook_container .book {
-    grid-template-columns: auto auto auto;
-  }
-}
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 945px) {
   .allbook_container .book {
     grid-template-columns: auto auto;
+    width: fit-content;
+    position: relative;
+    left: 50%;
+    transform: translate(-45%, 0);
   }
 }
 @media screen and (max-width: 622px) {
@@ -756,12 +774,21 @@ body {
     padding-left: 80px;
   }
 }
+@media screen and (max-width: 558px) {
+  .allbook_container .book {
+    width: fit-content;
+    transform: translate(-65%, 0);
+  }
+}
 .allbook_container .book .book_container {
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  padding: 10px;
+  align-items: center;
   width: 300px;
   height: 400px;
+  background-color: whitesmoke;
   transition: 0.5s;
 }
 .allbook_container .book .book_container .book_title {
@@ -779,7 +806,8 @@ body {
   width: 200px;
   height: 280px;
   object-fit: cover;
-  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .allbook_container .book .book_container:hover {
   transform: translateY(-10px);
@@ -883,7 +911,7 @@ body {
 .bookdetail_contianer .firstsec .resizeinput {
   position: absolute;
   background-color: #4682B4;
-  top: 200px;
+  top: 100px;
 }
 .bookdetail_contianer .borrow-btn {
   background-color: #4682B4;
@@ -946,7 +974,7 @@ body {
 }
 .scanentry_container .qrcode_reader {
   width: 600px;
-  border: 5px solid black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 @media screen and (max-width: 598px) {
   .scanentry_container .qrcode_reader {
@@ -1229,13 +1257,14 @@ body {
   flex-direction: row;
   align-items: center;
   margin-bottom: 50px;
-  width: 50%;
+  width: 100%;
 }
 .report_form .date_range label {
   font-weight: 700;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 .report_form button {
   padding: 10px;
@@ -1408,6 +1437,14 @@ body {
     left: 50%;
     transform: translate(-50%, 0);
     margin-left: 0;
+    width: 400px;
+    height: 200px;
+  }
+}
+@media screen and (max-width: 970px) {
+  .popularbook_container {
+    width: 400px;
+    height: 300px;
   }
 }
 @media screen and (max-width: 497px) {
@@ -1419,7 +1456,7 @@ body {
 }
 @media screen and (max-width: 400px) {
   .popularbook_container {
-    width: 300px;
+    width: fit-content;
     height: 300px;
     margin-left: 0;
   }
@@ -1440,6 +1477,14 @@ body {
   height: 140px;
   object-fit: cover;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+}
+@media screen and (max-width: 1204px) {
+  .popularbook_container .book_container {
+    transform: translate(0, 20%);
+  }
+  .popularbook_container .book_container .book_detail {
+    margin-left: 20px;
+  }
 }
 .popularbook_container .book_container .book_detail {
   width: 200px;

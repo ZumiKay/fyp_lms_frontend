@@ -375,7 +375,7 @@ export default function DataTable(props) {
                                                         ''
                                                     )
                                                 ) : column.id === 'status' ? (
-                                                    <p className='status' style={value === 'To Pickup' ? {backgroundColor:"#4682B4"} : value === 'PickedUp' ? {backgroundColor:"palevioletred"} : {backgroundColor: 'lightseagreen'}}>
+                                                    <p className='status' style={value === 'To Pickup' ? {backgroundColor:"#4682B4"} : value === 'PickedUp' ? {backgroundColor:"palevioletred"} : value === 'available' || value.includes('Returned')  ? {backgroundColor: 'lightseagreen'} : {backgroundColor:"black"}}>
                                                         {value}
                                                     </p>
                                                     ) :
