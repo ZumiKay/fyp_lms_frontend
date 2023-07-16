@@ -870,7 +870,7 @@ export function FormDialog(props) {
                                             resetbook = borrowbooked.map((i) => {
                                                 i.bookdetail.map((j) => {
                                                     returned.map((k) => {
-                                                        if (k === j.id) {
+                                                        if (k === j.id && j?.return_date !== null) {
                                                             j.status = 'unavailable';
                                                         }
                                                     });
@@ -881,7 +881,7 @@ export function FormDialog(props) {
                                         } else if (returnedall.length > 0) {
                                             resetbook = borrowbooked?.map((i) => {
                                                 returnedall.map((j) => {
-                                                    if (i.borrowid === j) {
+                                                    if (i.borrowid === j && i.status === 'PickedUp') {
                                                         i.bookdetail.map((k) => (k.status = 'unvailable'));
                                                     }
                                                 });

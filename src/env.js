@@ -30,13 +30,13 @@ export const createBorrowedDatas = (borrowid, student, bookdetail , status,borro
   }   
   
 export function convertToPascalCase(text) {
-    // Split the text into an array of words
+    
     const words = text.toLowerCase().split(' ');
   
-    // Capitalize the first letter of each word
+    
     const pascalWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
   
-    // Join the words together without spaces
+   
     const pascalCaseText = pascalWords.join('');
   
     return pascalCaseText;

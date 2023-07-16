@@ -248,6 +248,7 @@ const SummaryStudentInfopage = () => {
             result1.push(createDatas(i.name, result[i.name].entry.total, result[i.name].borrowedbook.total, result[i.name].entry.monthly, result[i.name].borrowedbook.monthly));
         });
         setdata(result1)
+        console.log(filterrange)
        
         
     };
