@@ -474,6 +474,7 @@ export function FormDialog(props) {
                 let borrowbook = [];
                 data?.map((i) => borrowbook.push(createBorrowedDatas(i.borrow_id, i.student, i.Books, i.status, i.borrow_date, i.return_date, i.expect_return_date, i.qrcode)));
                 ctx.setborrowedrequest(borrowbook);
+                window.location.reload()
             })
             .catch((err) => {
                 ctx.setloading({ ...ctx.loading, formdialog: false });
@@ -906,7 +907,7 @@ export function FormDialog(props) {
 
 export function DeleteDialog(props) {
     const ctx = useContext(Mycontext);
-
+    const [errmess , seterr] = useState('')
     const [student, setstudent] = useState('');
     const [libraiandata, setlibrarian] = useState({
         id: ctx.user.user.id,
@@ -927,13 +928,27 @@ export function DeleteDialog(props) {
         event.preventDefault();
     };
 
+    function containsSpecialCharacter(inputString) {
+        const specialCharactersRegex = /[!@#\$%\^&*\(\)_+]/;
+        return specialCharactersRegex.test(inputString) && inputString.length > 8;
+    }
+
     const handleChange = (e, type) => {
+        const {id , value} = e.target
+        seterr('')
         if (type === 'student') {
-            setstudent(e.target.value);
+            setstudent(value);
         } else if (type === 'librarian') {
-            setlibrarian({ ...libraiandata, [e.target.id]: e.target.value });
+            if(id === 'newpwd' && containsSpecialCharacter(value)) {
+                setlibrarian({ ...libraiandata, [e.target.id]: value });
+            } else if(id !== 'newpwd') {
+                setlibrarian({ ...libraiandata, [e.target.id]: value });
+            } else {
+                seterr("No Strong Enough Please Make sure the password length is 8 and contain special character!!")
+            }
+            
         } else {
-            setpassword({ ...password, [e.target.id]: e.target.value });
+            setpassword({ ...password, [e.target.id]: value });
         }
     };
     const handleClose = () => {
@@ -1067,9 +1082,11 @@ export function DeleteDialog(props) {
                         : props.type === 'editlibrarian'
                         ? 'Change Librarian Informations'
                         : 'Change Password'}
+
                 </DialogTitle>
                 <form onSubmit={(e) => handleDelete(e, student)}>
                     {ctx.loading.delete && <Loading />}
+                    {errmess !== '' && <h3 className='err font-bold text-red-400 text-lg pl-5 w-full'>{errmess}</h3>}
                     <DialogContent>
                         {props.type === 'editlibrarian' ? (
                             <>

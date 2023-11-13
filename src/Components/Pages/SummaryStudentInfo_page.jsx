@@ -316,7 +316,7 @@ const SummaryStudentInfopage = () => {
     return (
         <div className="summary_container">
             {loading && <Loading/>}
-            <h1 className="title">Summary Student Information</h1>
+            <h1 className="title font-black bg-black p-2 text-white rounded-md">Summary Student Information</h1>
             <div className="filter_input">
                 <FormControl sx={{ m: 1, width: '100%' }}>
                     <InputLabel id="demo-multiple-checkbox-label">Filter</InputLabel>

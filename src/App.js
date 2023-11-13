@@ -23,34 +23,39 @@ import SummaryStudentInfopage from './Components/Pages/SummaryStudentInfo_page';
 function App() {
     const ctx = useContext(Mycontext);
     const [haslogin, sethaslogin] = useState(false);
-    const user = Cookies.get('user');
+    let user = Cookies.get('user');
    
-    const getbook = async () => {
+    const getbook =  () => {
         ctx.setloading({...ctx.loading, booklist: true})
-        const res = await axios({
+        axios({
             method: 'get',
             url: env.api + 'getbook',
             headers: {
                 Authorization: `Bearer ${ctx.user.token.accessToken}`
             }
-        });
-        const books = res.data;
-        if(res.data) {
+        }).then((res) =>  {
             ctx.setloading({...ctx.loading, booklist: false})
-        }
-        let allcategories = books.allcategories.filter((arr, index) => {
-            return (
-                index ===
-                books.allcategories.findIndex((inner) => {
-                    return inner.toString().toLowerCase() === arr.toString().toLowerCase();
-                })
-            );
+            const books = res.data;
+       
+            let allcategories = books.allcategories.filter((arr, index) => {
+                return (
+                    index ===
+                    books.allcategories.findIndex((inner) => {
+                        return inner.toString().toLowerCase() === arr.toString().toLowerCase();
+                    })
+                );
+            });
+            let filteredbook = books.books.filter((obj, index, self) => index === self.findIndex((o) => o.title === obj.title)) 
+            ctx.setbook({
+                allcategories: allcategories ,
+                allbooks: filteredbook
+            })
+            
+           
+        
         });
-        let filteredbook = books.books.filter((obj, index, self) => index === self.findIndex((o) => o.title === obj.title)) 
-        ctx.setbook({
-            allcategories: allcategories ,
-            allbooks: filteredbook
-        })
+        
+       
     };
     const getDepartment = () => {
         axios({
@@ -62,10 +67,14 @@ function App() {
         }).then((res) => ctx.setdep(res.data));
     };
     useEffect(() => {
+        ctx.setloading({...ctx.loading, booklist: false})
+        
         if(user) {
+            
             sethaslogin(true)
             getDepartment()
             getbook();
+           
         } else {
             sethaslogin(false)
         }

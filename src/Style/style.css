@@ -15,10 +15,13 @@
   }
 }
 .Menu_Animated {
-  animation: slide_in 0.5s ease-in-out;
+  animation: slide_in 0.3s ease;
   animation-fill-mode: forwards;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   width: 100%;
   background-color: white;
@@ -57,8 +60,7 @@ body {
   align-items: center;
   justify-content: space-evenly;
   height: 100%;
-  flex-grow: 1;
-  width: 10%;
+  width: 30%;
 }
 .NavBar_container .first_sec .resizeinput {
   position: fixed;
@@ -82,39 +84,17 @@ body {
 .NavBar_container .first_sec .menu_btn:hover, .NavBar_container .first_sec .menu_btn:active {
   background-color: #e2e2e2;
 }
-@media screen and (max-width: 800px) {
-  .NavBar_container .first_sec {
-    flex-grow: 2;
-  }
-}
-@media screen and (max-width: 500px) {
-  .NavBar_container .first_sec {
-    flex-grow: 0;
-    width: 30%;
-  }
-}
 .NavBar_container .second_sec {
-  flex-grow: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 600px;
+  width: 80%;
   padding: 10px;
-}
-@media screen and (max-width: 800px) {
-  .NavBar_container .second_sec {
-    flex-grow: 0;
-    border: 0;
-    width: 50px;
-  }
-  .NavBar_container .second_sec .logo {
-    transform: translateX(10%);
-  }
 }
 .NavBar_container .second_sec .search {
   font-family: Arial, Helvetica, sans-serif;
   font-size: medium;
-  width: 500px;
+  width: 100%;
   padding: 10px;
   padding-left: 35px;
   border: 1px solid lightgray;
@@ -124,39 +104,23 @@ body {
   position: relative;
   left: 30px;
 }
-@media screen and (max-width: 1190px) {
+@media screen and (max-width: 800px) {
   .NavBar_container .second_sec {
-    width: 30%;
+    width: 40%;
+    justify-content: center;
   }
 }
-@media screen and (max-width: 910px) {
+@media screen and (max-width: 400px) {
   .NavBar_container .second_sec {
-    width: 20%;
-  }
-}
-@media screen and (max-width: 500px) {
-  .NavBar_container .second_sec {
-    flex-grow: 0;
-    width: 50%;
-  }
-  .NavBar_container .second_sec .logo {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 80%;
   }
 }
 .NavBar_container .third_sec {
-  flex-grow: 4;
   display: flex;
   flex-direction: row;
-  align-items: right;
   padding-right: 20px;
-  justify-content: right;
-}
-@media screen and (max-width: 800px) {
-  .NavBar_container .third_sec {
-    flex-grow: 2;
-  }
+  justify-content: flex-end;
+  width: 30%;
 }
 .NavBar_container .third_sec .profile_sec {
   background-color: #4682B4;
@@ -164,7 +128,12 @@ body {
   padding: 10px;
   border-radius: 10px;
   font-weight: 700;
+  text-align: center;
   transition: 0.5s;
+  width: 35%;
+  min-width: 100px;
+  height: 43px;
+  text-overflow: ellipsis;
   cursor: pointer;
   user-select: none;
 }
@@ -175,16 +144,21 @@ body {
   position: fixed;
   top: 70px;
   width: 170px;
-  right: 0;
+  right: 0px;
   height: 300px;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   background-color: white;
   padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+@media screen and (max-width: 600px) {
+  .NavBar_container .third_sec .drop_down {
+    right: 0;
+  }
 }
 .NavBar_container .third_sec .drop_down .link_page {
   width: 100%;
@@ -239,6 +213,7 @@ body {
   cursor: pointer;
   font-size: 35px;
   transition: 0.5s;
+  left: -20%;
 }
 .NavBar_container .third_sec #bell .cart-count {
   position: relative;
@@ -250,8 +225,26 @@ body {
   color: white;
   left: -15px;
 }
-.NavBar_container .third_sec #bell:hover {
+.NavBar_container .third_sec #bell:hover, .NavBar_container .third_sec #bell:active {
   transform: translateY(-10px);
+}
+@media screen and (max-width: 1150px) {
+  .NavBar_container .third_sec #bell {
+    left: 10px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .NavBar_container .third_sec #bell {
+    position: fixed;
+    top: 20%;
+    left: 85%;
+    font-size: 20px;
+    z-index: 2;
+  }
+  .NavBar_container .third_sec #bell .cart-count {
+    font-size: 12px;
+    top: 12px;
+  }
 }
 .NavBar_container .third_sec .bellanimated {
   animation: popup 0.5s ease;
@@ -267,21 +260,17 @@ body {
     transform: translateY(0);
   }
 }
-@media screen and (max-width: 500px) {
-  .NavBar_container .third_sec {
-    flex-grow: 0;
-    width: 30%;
-    padding: 10px;
-  }
-}
 @media screen and (max-width: 400px) {
+  .NavBar_container .third_sec {
+    width: 25%;
+    justify-content: flex-start;
+  }
   .NavBar_container .third_sec .library_status {
     width: 50px;
-    font-size: 10px;
-    overflow-wrap: break-word;
+    text-overflow: clip;
   }
   .NavBar_container .third_sec .profile_sec {
-    font-size: x-small;
+    font-size: 15px;
   }
 }
 .NavBar_container .secondsec_resize {
@@ -642,9 +631,9 @@ body {
 .filter-icon {
   position: fixed;
   z-index: 9;
-  right: 10%;
+  left: 85%;
   top: 10%;
-  padding: 15px;
+  padding: 10px;
   background-color: white;
   border-radius: 25px;
   transition: 0.5s;
@@ -693,7 +682,7 @@ body {
   flex-direction: column;
   align-items: center;
   position: fixed;
-  z-index: 9;
+  z-index: 0;
   background-color: white;
   padding: 10px;
   padding-bottom: 100px;
@@ -796,7 +785,7 @@ body {
   max-height: 60px;
   font-weight: 700;
   font-size: 20px;
-  overflow-y: scroll;
+  overflow: auto;
 }
 .allbook_container .book .book_container .detail {
   font-weight: 400;
@@ -805,7 +794,7 @@ body {
 .allbook_container .book .book_container .book_cover {
   width: 200px;
   height: 280px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -821,7 +810,8 @@ body {
 }
 @media screen and (max-width: 570px) {
   .allbook_container .pagination_container {
-    width: 90%;
+    width: 80%;
+    padding-left: 52px;
     height: 50px;
   }
 }
@@ -849,8 +839,8 @@ body {
 }
 .bookdetail_contianer .firstsec .book_cover {
   width: 250px;
-  height: 300px;
-  object-fit: cover;
+  height: 350px;
+  object-fit: fill;
   background-color: 0;
   padding: 5px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
@@ -869,7 +859,7 @@ body {
   max-height: 500px;
   max-width: 400px;
   overflow-wrap: break-word;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .bookdetail_contianer .firstsec .detail .des {
@@ -972,18 +962,24 @@ body {
   font-size: 25px;
   color: red;
 }
+@media screen and (max-width: 420px) {
+  .scanentry_container .scan_instruction h1, .scanentry_container .scan_instruction h2 {
+    font-size: 20px;
+  }
+}
 .scanentry_container .qrcode_reader {
   width: 600px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  overflow: hidden;
 }
 @media screen and (max-width: 598px) {
   .scanentry_container .qrcode_reader {
-    width: 100%;
+    width: 400px;
   }
 }
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 400px) {
   .scanentry_container .qrcode_reader {
-    width: 100%;
+    width: 100vw;
   }
 }
 .scanentry_container .track_manually {
@@ -1058,15 +1054,21 @@ body {
   background-color: #e2e2e2;
   padding: 5px;
   width: 100%;
+  border-radius: 5px;
+}
+.datatable_container .datatable_header {
+  height: max-content;
+  background-color: white;
 }
 .datatable_container .table-btn {
   background-color: #4682B4;
-  font-weight: 900;
+  font-weight: 700;
   padding: 10px;
   color: white;
   font-size: small;
   height: 100%;
   transition: 0.5s;
+  border-radius: 10px;
 }
 .datatable_container .table-btn:hover {
   background-color: black;
@@ -1133,7 +1135,7 @@ body {
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  width: 90%;
+  width: 100%;
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -1159,20 +1161,37 @@ body {
 .checkout_container .book_container .book .trash:active {
   transform: translateY(-10px);
 }
+@media screen and (max-width: 820px) {
+  .checkout_container .book_container .book {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .checkout_container .book_container .book .book_detail {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
 .checkout_container .btn {
   position: relative;
   margin-top: 20px;
   background-color: black;
+  border: 0;
+  border-radius: 10px;
   padding: 10px;
   color: white;
   font-size: 15px;
   font-weight: 900;
   transition: 0.5s;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 .checkout_container .btn:hover {
   background-color: white;
   color: black;
+}
+.checkout_container .btn-red {
+  background-color: lightcoral;
 }
 
 .checked_container {
@@ -1191,6 +1210,7 @@ body {
   width: 100%;
   height: 100%;
   background-color: white;
+  z-index: 10;
 }
 .borrowedbook_container h1 {
   font-size: 25px;
@@ -1220,8 +1240,8 @@ body {
 }
 .check_book_container img {
   width: 200px;
-  height: 250px;
-  object-fit: cover;
+  height: 300px;
+  object-fit: fill;
 }
 .check_book_container .book_detail {
   width: 300px;
@@ -1233,6 +1253,14 @@ body {
 .check_book_container .book_detail p {
   text-align: left;
   font-weight: 600;
+}
+@media screen and (max-width: 630px) {
+  .check_book_container {
+    flex-direction: column;
+  }
+  .check_book_container .book_detail {
+    text-align: center;
+  }
 }
 
 .entry {

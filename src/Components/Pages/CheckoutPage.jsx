@@ -92,7 +92,7 @@ const CheckoutPage = () => {
                     {ctx.bookcart.length > 0 ? (
                         <>
                             {' '}
-                            <button onClick={handleCancel} className="btn">
+                            <button onClick={handleCancel} className="btn btn-red">
                                 CANCEL
                             </button>
                             <button onClick={handleCheckout} className="btn">
@@ -100,7 +100,7 @@ const CheckoutPage = () => {
                             </button>{' '}
                         </>
                         
-                    ) : <h1 style={{color:"red"}}>Cart is empty</h1>}
+                    ) : <h1 className='cart_info' style={{color:"red"}}>Cart is empty</h1>}
                 </div>
             )}
         </div>

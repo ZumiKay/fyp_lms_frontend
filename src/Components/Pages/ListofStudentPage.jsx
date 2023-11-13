@@ -63,7 +63,7 @@ const ListofStudentPage = () => {
            {loading && <Loading />}
             <div className="header_sec">
             
-                <h1>List of Students</h1>
+                <h1 className='titlepage font-black border-b-4 border-[#4682B4] p-2'>List of Students</h1>
             </div>
             <div className="table_data">
                 

@@ -15,7 +15,7 @@
   }
 }
 .Menu_Animated {
-  animation: slide_in 0.5s ease-in-out;
+  animation: slide_in 0.3s ease;
   animation-fill-mode: forwards;
 }
 

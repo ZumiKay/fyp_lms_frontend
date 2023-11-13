@@ -20,6 +20,7 @@ const NavigationBar = () => {
     const ref = useRef(null);
     const profref = useRef(null)
     const navigate = useNavigate();
+    const location = useLocation()
     const handleClick = (e) => setopenmenu(!openmenu);
     const handleresize = () => {
         if (window.innerWidth > 800) {
@@ -29,6 +30,7 @@ const NavigationBar = () => {
         }
     };
     const handleSearch = (e) => {
+        
         ctx.setsearch(e.target.value);
     };
     useEffect(() => {
@@ -43,9 +45,10 @@ const NavigationBar = () => {
             }
             if (profref.current && !profref.current.contains(e.target)) {
                 setopenprofile(false);
+                
             }
         };
-
+        
         window.addEventListener('mousedown', handleref);
         window.addEventListener('resize', handleresize);
         return () => {
@@ -75,11 +78,13 @@ const NavigationBar = () => {
                 </div>            
                 <div className="second_sec">
                     <i className="fa-solid fa-magnifying-glass" id="search_icon"></i>
-                    <input className="search" onClick={() => navigate('/')} onChange={handleSearch} type="text" placeholder="Search by title,author,ISBN" />
+                    <input className="search" onClick={() => {
+                        window.scrollTo({top: 0 , behavior: "smooth"})
+                        navigate('/')}} onChange={handleSearch} type="text" placeholder="Search by title,author,ISBN" />
                 </div>
 
                 <div className="third_sec">
-                    {ctx.user.user.role === 'student' && (
+                    {ctx.user.user.role === 'student' && location.pathname !== '/bucket' &&  (
                         <i onClick={() => navigate('/bucket')} className={ctx.added ? 'fa-solid fa-cart-shopping bellanimated' : 'fa-solid fa-cart-shopping'} id={'bell'}>
                             <span className={'cart-count'}>{ctx.bookcart.filter(({ userid }) => userid === ctx.user.user.ID).length}</span>
                         </i>
@@ -89,10 +94,11 @@ const NavigationBar = () => {
                             onClick={() => {
                                 
                                 setopenprofile(!openprofile);
+                                
                             }}
                             className="Account_Detail"
                         >
-                            {ctx.user.user.role !== 'librarian' ? `${ctx.user.user.firstname + ' ' + ctx.user.user.lastname}` : `${ctx.user.user?.fullname}`}
+                            {convertToPascalCase(ctx.user.user.role)}
                         </p>
                     </div>
 
@@ -154,7 +160,7 @@ const NavigationBar = () => {
             </div>
 
             <div className="third_sec">
-                    {ctx.user.user.role === 'student' && (
+                    {ctx.user.user.role === 'student' && (location.pathname === '/' || location.pathname.includes("/book")) && (
                         <i onClick={() => navigate('/bucket')} className={ctx.added ? 'fa-solid fa-cart-shopping bellanimated' : 'fa-solid fa-cart-shopping'} id={'bell'}>
                             <span className={'cart-count'}>{ctx.bookcart.filter(({ userid }) => userid === ctx.user.user.ID).length}</span>
                         </i>
@@ -167,7 +173,7 @@ const NavigationBar = () => {
                             }}
                             className="Account_Detail"
                         >
-                            {ctx.user.user.role !== 'librarian' ? `${ctx.user.user.firstname + ' ' + ctx.user.user.lastname}` : `${ctx.user.user?.fullname}`}
+                            {convertToPascalCase(ctx.user.user.role)}
                         </p>
                     </div>
 
@@ -280,18 +286,6 @@ const MenuItemformobile = (props) => {
     const user_data = ctx.user;
     const [openreport, setopenreport] = useState(false);
 
-    const handleLogout = () => {
-        ctx.setloading({ ...ctx.loading, logout: true });
-        axios({
-            method: 'post',
-            url: env.api + 'logout',
-            data: user_data.token.refreshToken
-        }).then(() => {
-            ctx.setloading({ ...ctx.loading, logout: true });
-            Cookies.remove('user');
-            window.location.reload();
-        });
-    };
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (userref.current && !userref.current.contains(event.target)) {

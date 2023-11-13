@@ -92,14 +92,15 @@ const SliderContainer = ({ title, book, type }) => {
        
         let filteredbook = book?.allbooks?.filter((book) => {
             if(book?.categories[0].trim().toLowerCase().includes(title?.trim().toLowerCase())) {
-                return book
+                return true
             } else if(book?.title.trim().toLowerCase().includes(title?.trim().toLowerCase())) {
-                return book
+                return true
             } else if(book?.author[0].trim().toLowerCase().includes(title?.trim().toLowerCase())) {
-                return book
+                return true
             } else if (book?.ISBN[0].identifier.trim().includes(title?.trim())) {
-                return book
+                return true
             }
+            return false
         })
         setfilter(filteredbook)
     } , [book , title])
@@ -201,3 +202,5 @@ const Popularbook = (props) => {
     )
 
 }
+
+

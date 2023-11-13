@@ -21,13 +21,16 @@ export const LoginRoute = ({isSignedin , children}) => {
 export const LibrarianRoute = ({isSignedin, isLibrarian, children}) => {
   if(isSignedin && isLibrarian) {
     return children
-  } else return <Navigate to={'/'} replace/>
+  } else {
+   
+    return <Navigate to={'/'} replace/>}
 }
 
 export const LibrarianandHD = ({isSignedin , isLibrarian , isHD , children}) => {
   if(isSignedin && (isLibrarian || isHD)) {
     return children
   } else {
+    
     return <Navigate to={'/'} replace/>
   }
 }
