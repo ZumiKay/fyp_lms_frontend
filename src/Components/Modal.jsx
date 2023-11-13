@@ -452,11 +452,18 @@ export function FormDialog(props) {
 
         setborrowbooked(bookdata);
     };
-    useEffect(() => {}, []);
+   
     const handleConfirm = (e) => {
         ctx.setloading({ ...ctx.loading, formdialog: true });
-        e.preventDefault();
-
+        e.preventDefault()  
+        borrowbooked.forEach((item) => {
+            item.bookdetail.forEach((detail) => {
+              if (returned.includes(detail.id)) {
+                detail.confirm = true;
+              }
+            });
+          });
+        
         axios({
             method: 'POST',
             url: env.api + 'ir',
@@ -474,10 +481,11 @@ export function FormDialog(props) {
                 let borrowbook = [];
                 data?.map((i) => borrowbook.push(createBorrowedDatas(i.borrow_id, i.student, i.Books, i.status, i.borrow_date, i.return_date, i.expect_return_date, i.qrcode)));
                 ctx.setborrowedrequest(borrowbook);
-                window.location.reload()
+               setreturned([])
             })
             .catch((err) => {
                 ctx.setloading({ ...ctx.loading, formdialog: false });
+                setreturned([])
                 toast.error(err.response.data.message, { duration: 2000 });
             });
     };
@@ -681,8 +689,8 @@ export function FormDialog(props) {
                                     </>
                                 ) : (
                                     <>
-                                        {' '}
-                                        {borrowbooked
+                                        
+                                        {borrowbooked.length > 0 && borrowbooked
                                             ?.filter((f) => !f.bookdetail.every(({ status }) => status === 'available'))
                                             .map((i, index) => (
                                                 <div key={index} className="returnbook_table">
@@ -729,6 +737,7 @@ export function FormDialog(props) {
                                                     </div>
                                                 </div>
                                             ))}
+                                            {borrowbooked.every(book => book.status === 'Returned') && <h3 className='error text-lg text-red-400 font-black w-full text-center'>No Book To Return</h3>}
                                     </>
                                 )}
                             </>
@@ -857,7 +866,7 @@ export function FormDialog(props) {
                                 BACK
                             </Button>
                         )}
-                        {(returned.length > 0 || returnedall.length > 0) && (
+                        {(returned.length > 0) && (
                             <>
                                 <Button onClick={handleConfirm} type="submit">
                                     CONFIRM
@@ -869,15 +878,14 @@ export function FormDialog(props) {
                                         let resetbook;
                                         if (returned.length > 0) {
                                             resetbook = borrowbooked.map((i) => {
-                                                i.bookdetail.map((j) => {
-                                                    returned.map((k) => {
-                                                        if (k === j.id && j?.return_date !== null) {
-                                                            j.status = 'unavailable';
-                                                        }
-                                                    });
+                                                i.bookdetail.forEach((j) => {
+                                                    if(returned.includes(j.id) && !j.confirm) {
+                                                        j.status = 'unavailable';
+                                                    }
                                                 });
                                                 return i;
                                             });
+
                                             setreturned([]);
                                         } else if (returnedall.length > 0) {
                                             resetbook = borrowbooked?.map((i) => {

@@ -204,9 +204,10 @@ export default function DataTable(props) {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead className="datatable_header">
                         <TableRow>
-                            <TableCell colSpan={1}></TableCell>
+                            <TableCell colSpan={2}><h3 className='total text-lg font-black w-full'>Total: {props.data?.length}</h3></TableCell>
 
                             <TableCell align="center" colSpan={2} className="datatable_header_1">
+                                
                                 <input type="text" className="search_input" placeholder="Search" onChange={handleChange} />
                             </TableCell>
                             {(props.type === 'booklist' || props.type === 'borrowedbook') && (
@@ -287,7 +288,7 @@ export default function DataTable(props) {
                                 )}
                                 {ctx.user.user.role === 'librarian' && props.type === 'borrowedbook' && selected.length === 0 && (
                                     <button style={{ marginLeft: '20px' }} onClick={() => ctx.setMenu({ ...ctx.openMenu, returnbook: true })} className="table-btn">
-                                        RETURN BOOKS
+                                        RETURN BOOK
                                     </button>
                                 )}
                                 {ctx.openMenu.returnbook && <FormDialog type={'returnbook'} borrowedbook={props.data} />}
